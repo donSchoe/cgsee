@@ -156,7 +156,7 @@ void Viewer::on_phongShadingAction_triggered()
 
 void Viewer::on_gouraudShadingAction_triggered()
 {
-    (m_qtCanvas->painter())->setShading('g');
+    m_qtCanvas->painter()->setShading('g');
 }
 
 void Viewer::on_flatShadingAction_triggered()

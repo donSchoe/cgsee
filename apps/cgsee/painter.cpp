@@ -24,6 +24,8 @@ static const QString LIGHT_UNIFORM   ("light");
 static const QString LIGHT_UNIFORM2   ("light2");
 static const QString MATERIAL_UNIFORM   ("material");
 static const QString LIGHTPOSITION_UNIFORM   ("lightposition");
+//gooch
+static const QString WARMCOLDCOLOR_UNIFORM   ("warmcoldcolor");
 
 Painter::Painter()
 :   AbstractPainter()
@@ -194,9 +196,17 @@ void Painter::setUniforms()
         m_useProgram->setUniform(MATERIAL_UNIFORM, materialCoeff);
     }
 
-    else
+    else if(m_useProgram == m_gooch)
     {
         m_useProgram->setUniform(LIGHTPOSITION_UNIFORM, glm::vec3(-2.0,0.0,2.0));
+
+        glm::mat4 warmColdColor;
+
+        warmColdColor[0] = glm::vec4(0.75, 0.75, 0.75, 0.0);    //surface color
+        warmColdColor[1] = glm::vec4(0.6, 0.6, 0.0, 0.0);    //warm color
+        warmColdColor[2] = glm::vec4(0.0, 0.0, 0.6, 0.0);    //cold color
+        warmColdColor[3] = glm::vec4(0.45,0.45,0,0);            //Diffuse Warm, DiffuseCool
+        m_useProgram->setUniform(WARMCOLDCOLOR_UNIFORM, warmColdColor);
     }
 }
 

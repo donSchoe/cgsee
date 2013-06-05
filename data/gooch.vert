@@ -17,7 +17,7 @@ out vec3 position;
 
 void main()
 {
-	gl_Position = transform * vec4(a_vertex, 1.0);
-	normal=a_normal;
-	position = vec3(view * vec4(a_vertex, 1.0));
+    gl_Position = transform * vec4(a_vertex, 1.0);
+    normal=a_normal;
+    position = vec3(view * vec4(a_vertex, 1.0));
 }
