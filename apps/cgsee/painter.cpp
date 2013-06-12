@@ -73,7 +73,7 @@ const bool Painter::initialize()
 {
     AutoTimer t("Initialization of Painter");
 
-    m_group = ObjIO::groupFromObjFile("data/suzanneVN.obj");
+    m_group = ObjIO::groupFromObjFile("data/ironman/Iron_Man.obj");
 
     if(!m_group)
     {
