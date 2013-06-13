@@ -58,9 +58,10 @@ set(SOURCES
     gpuquery.cpp
     group.h
     group.cpp
+    materialattribute.h
+    mathmacros.h
     messagehandler.h
     messagehandler.cpp
-    mathmacros.h
     node.h
     node.cpp
     objio.h
@@ -75,6 +76,10 @@ set(SOURCES
     screenquad.cpp
     shader.h
     shader.cpp
+    texture2d.h
+    texture2d.cpp
+    textureloader.h
+    textureloader.cpp
     timer.h
     timer.cpp
 	vertexcacheoptimizer.h

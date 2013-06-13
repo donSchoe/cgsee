@@ -1,23 +1,20 @@
 #pragma once
 
+#include <GL/glew.h>
 #include <GL/gl.h>
+#include "program.h"
 #include "materialattribute.h"
 
 class CGSEE_API Texture2D : public MaterialAttribute
 {
 public:
 
-    Texture2D();
+    Texture2D(GLuint gTexId);
     ~Texture2D();
 
-    void bindTo(Program & program);
-
-    GLuint glTex() const;
-    void setGlTex(GLuint glTex);
-
+    void bind(const Program &program, const std::string &samplerName = "texture");
 
 private:
 
-    GLuint m_glTex;
-
+    GLuint m_gTexId;
 };

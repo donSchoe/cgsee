@@ -1,16 +1,17 @@
 #include "textureloader.h"
 #include "texture2d.h"
 #include <assert.h>
+#include <IL/il.h>
 
 Texture2D *TextureLoader::loadTexture2D(const std::string &path)
 {
-    Ilboolean re;
-    ILuint ilTexture;
-    GLuint glTexture;
+    ILboolean re;
+    ILuint iTexture;
+    GLuint gTexture;
     Texture2D *texture;
 
-    ilGenImages(1, &ilTexture);
-    ilBindImage(ilTexture);
+    ilGenImages(1, &iTexture);
+    ilBindImage(iTexture);
 
     re = ilLoadImage(path.c_str());
     if(!re) {
@@ -26,15 +27,15 @@ Texture2D *TextureLoader::loadTexture2D(const std::string &path)
     re = ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
     if(!re) {
         assert(0);
-        switch(ilGetError) {
+        switch(ilGetError()) {
             case IL_ILLEGAL_OPERATION: break;
-            case IL_INVALID_CONVERSIONv
+            case IL_INVALID_CONVERSION: break;
             case IL_OUT_OF_MEMORY: break;
         }
     }
 
-    glGenTextures(1, &glTexture);
-    glBindTexture(GL_TEXTURE_2D, glTexture);
+    glGenTextures(1, &gTexture);
+    glBindTexture(GL_TEXTURE_2D, gTexture);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -43,6 +44,10 @@ Texture2D *TextureLoader::loadTexture2D(const std::string &path)
                     ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
                     0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,  ilGetData());
 
+    texture = new Texture2D(gTexture);
+
     ilBindImage(0);
     glBindTexture(GL_TEXTURE_2D, 0);
+
+    return texture;
 }
