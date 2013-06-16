@@ -6,10 +6,13 @@ class CGSEE_API MaterialAttribute
 {
 public:
 
-    virtual ~MaterialAttribute() = 0;
+    MaterialAttribute(const std::string &name);
+    virtual ~MaterialAttribute();
 
-    virtual void bind(const Program &program, const std::string &matName) = 0;
+    virtual void bind(Program &program) = 0;
 
-private:
 
+protected:
+
+    const std::string m_name;
 };

@@ -1,3 +1,5 @@
+#version 150 core
+
 in vec2 fTexPos;
 uniform sampler2D texture;
 

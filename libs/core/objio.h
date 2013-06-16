@@ -8,6 +8,7 @@
 #include "declspec.h"
 
 #include "common.h"
+#include "material.h"
 
 
 class Group;
@@ -45,9 +46,11 @@ protected:
         t_vec3s vs;
         t_vec2s vts;
         t_vec3s vns;
+        Material *material;
 
         t_groups groups;
 
+        ObjObject();
         ~ObjObject();
     };
 
@@ -85,7 +88,7 @@ protected:
     ,   t_objects & objects);
     static void parseG(
         std::istringstream & line
-    ,   ObjObject & object); 
+    ,   ObjObject & object);
 
     static const e_FaceFormat parseFaceFormat(const std::istringstream & line);
 };

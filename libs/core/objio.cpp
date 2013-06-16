@@ -14,14 +14,15 @@
 #include "group.h"
 #include "polygonaldrawable.h"
 #include "polygonalgeometry.h"
-
+#include "textureloader.h"
+#include "texture2d.h"
 
 using namespace std;
 
 // http://stackoverflow.com/questions/216823/whats-the-best-way-to-trim-stdstring
 
 // trim from start
-static inline void trim(std::string & str) 
+static inline void trim(std::string & str)
 {
     // trim trailing spaces
     const size_t endpos = str.find_last_not_of(" \t");
@@ -32,6 +33,12 @@ static inline void trim(std::string & str)
     const size_t startpos = str.find_first_not_of(" \t");
     if(string::npos != startpos)
         str.substr(startpos).swap(str);
+}
+
+ObjIO::ObjObject::ObjObject():
+    material(nullptr)
+{
+
 }
 
 ObjIO::ObjObject::~ObjObject()
@@ -102,6 +109,13 @@ Group * ObjIO::groupFromObjFile(const QString & filePath)
             parseF (s, object);
         else if("g " == type)
             parseG (s, object);
+
+        // Add textures
+        Material *material = new Material;
+        Texture2D *texture = TextureLoader::loadTexture2D("data/ironman/IronMan_S.tga");
+        material->addAttribute(texture);
+
+        object.material = material;
     }
     stream.close();
 
@@ -212,7 +226,7 @@ inline void ObjIO::parseF(
             group.vtis.push_back(--i);
 
             break;
-             
+
         case FF_VN: // v0//vn0 v1//vn1 ...
 
             line.ignore(2); // ignore slashes
@@ -347,6 +361,8 @@ PolygonalDrawable * ObjIO::createPolygonalDrawable(
 
     if(!usesNormalIndices)
         geom->retrieveNormals();
+
+    geom->setMaterial(object.material);
 
     PolygonalDrawable * drawable(new PolygonalDrawable(object.qname()));
     drawable->setGeometry(geom);

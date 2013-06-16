@@ -1,4 +1,5 @@
 #include <glm/glm.hpp>
+#include <IL/il.h>
 
 #include <QMetaType>
 #include "cgsee.h"

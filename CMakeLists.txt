@@ -74,6 +74,7 @@ install(FILES ${CMAKE_BINARY_DIR}/revision DESTINATION .)
 # THIRD PARTIES
 
 find_package(OpenGL REQUIRED)
+find_package(DEVIL REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 
@@ -98,6 +99,7 @@ find_package(Qt5Widgets REQUIRED) # this is important in order to get uic workin
 include_directories(
     ${CMAKE_BINARY_DIR} # for Meta.h
     ${OPENGL_INCLUDE_DIR}
+    ${DEVIL_INCLUDE_DIR}
     ${GLM_INCLUDE_PATH}
     ${GLEW_INCLUDE_PATH}
     ${CMAKE_SOURCE_DIR}/libs)

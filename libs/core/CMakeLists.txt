@@ -58,6 +58,9 @@ set(SOURCES
     gpuquery.cpp
     group.h
     group.cpp
+    material.cpp
+    material.h
+    materialattribute.cpp
     materialattribute.h
     mathmacros.h
     messagehandler.h
@@ -102,6 +105,7 @@ qt5_use_modules(${target} Widgets OpenGL)
 
 target_link_libraries(${target}
     ${OPENGL_LIBRARIES}
+    ${DEVIL_LIBRARY}
     ${GLEW_LIBRARY}
     ${EXTRA_LIBS}
 )

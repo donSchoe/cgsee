@@ -34,6 +34,7 @@ Painter::Painter(Camera * camera)
 :   AbstractPainter()
 ,   m_group(nullptr)
 ,   m_quad(nullptr)
+,   m_textured(nullptr)
 ,   m_normals(nullptr)
 ,   m_normalz(nullptr)
 ,   m_wireframe(nullptr)
@@ -56,6 +57,7 @@ Painter::~Painter()
     delete m_group;
     delete m_quad;
 
+    delete m_textured;
     delete m_normals;
     delete m_normalz;
     delete m_flat;
@@ -93,6 +95,10 @@ const bool Painter::initialize()
 
     m_quad = new ScreenQuad();
 
+    // TEXTURED
+    m_textured = new Program();
+    m_textured->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/textured.vert"));
+    m_textured->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/textured.frag"));
 
     // NORMALS
     m_normals = new Program();
@@ -177,7 +183,7 @@ const bool Painter::initialize()
          new FileAssociatedShader(GL_VERTEX_SHADER, "data/gooch.vert"));
 
     //set UNIFORMS for selected shader
-    m_useProgram = m_flat;
+    m_useProgram = m_textured;
     setUniforms();
 
     // Post Processing Shader

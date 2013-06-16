@@ -8,6 +8,7 @@
 
 #include "node.h"
 #include "common.h"
+#include "material.h"
 #include "datacore/datablock.h"
 
 class CGSEE_API PolygonalGeometry : public Node
@@ -20,7 +21,7 @@ public:
     void setMode(const GLenum mode);
 
     t_vec3s vertices() const;
-    //t_vec3s & vertices();  
+    //t_vec3s & vertices();
     void setVertex(int i, glm::vec3 const& data);
     t_vec3s normals() const;
     //t_vec3s & normals();
@@ -31,6 +32,8 @@ public:
     t_uints indices() const;
     //t_uints & indices();
     void setIndex(int i, unsigned int data);
+
+    void setMaterial(Material *material);
 
     void resize(unsigned int size);
 
@@ -52,6 +55,7 @@ public:
 protected:
     DataBlockRegistry m_registry;
     QString m_vertListName, m_indicesName;
+    Material *m_material;
     //t_vec3s m_vertices;
     //t_vec3s m_normals;
     //t_vec2s m_texcs;

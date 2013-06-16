@@ -8,6 +8,7 @@ PolygonalGeometry::PolygonalGeometry(const QString & name)
 :   Node(name)
 ,   m_registry("MyRegistry")
 ,   m_mode(GL_TRIANGLES)
+,   m_material(nullptr)
 {
     m_vertListName = "VERTICES";
     m_indicesName = "INDICES";
@@ -23,6 +24,8 @@ PolygonalGeometry::PolygonalGeometry(const QString & name)
 
 PolygonalGeometry::~PolygonalGeometry()
 {
+    if(m_material != nullptr)
+        delete m_material;
 }
 
 const GLenum PolygonalGeometry::mode() const
@@ -131,6 +134,14 @@ void PolygonalGeometry::setIndex(int i, unsigned int data)
     inds->setSingleIndex(i, data);
 }
 
+void PolygonalGeometry::setMaterial(Material *material)
+{
+    if(m_material != nullptr)
+        delete m_material;
+
+    m_material = material;
+}
+
 const AxisAlignedBoundingBox PolygonalGeometry::boundingBox() const
 {
     if(m_aabb.valid())
@@ -159,7 +170,7 @@ void PolygonalGeometry::retrieveNormals()
     if(myVList->isAttributeUsed("normal"))
         qDebug("Normals of %s will be replaced.", qPrintable(name()));
 
-    inds->foreachTriangle<glm::vec3>(0, inds->size(), "position", 
+    inds->foreachTriangle<glm::vec3>(0, inds->size(), "position",
         [&](int i, const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3)
         {
             glm::vec3 a = glm::normalize(v3-v1);

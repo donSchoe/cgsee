@@ -9,10 +9,10 @@ class CGSEE_API Texture2D : public MaterialAttribute
 {
 public:
 
-    Texture2D(GLuint gTexId);
+    Texture2D(GLuint gTexId, const std::string &name = "texture");
     ~Texture2D();
 
-    void bind(const Program &program, const std::string &samplerName = "texture");
+    void bind(Program &program);
 
 private:
 
