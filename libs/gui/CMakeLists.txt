@@ -10,6 +10,10 @@ set(SOURCES
     canvasexporter.ui
     canvasexportconfig.h
     canvasexportconfig.cpp
+    fileExplorer.h
+    fileExplorer.cpp
+    fileNavigator.h
+    fileNavigator.cpp
     viewer.h
     viewer.cpp
     viewer.ui

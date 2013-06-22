@@ -1,4 +1,3 @@
-
 #include <GL/glew.h>
 
 #include <cassert>
@@ -9,20 +8,27 @@
 #include <QOpenGLContext>
 #include <QSettings>
 #include <QTextStream>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDockWidget>
+#include <QMenu>
 
 #include "ui_viewer.h"
 #include "viewer.h"
 #include "canvas.h"
 #include "canvasexporter.h"
+#include "fileNavigator.h"
+#include "fileExplorer.h"
 
 #include <core/abstractnavigation.h>
 #include <core/flightnavigation.h>
 #include <core/fpsnavigation.h>
 #include <core/arcballnavigation.h>
 
-#include <core/abstractpainter.h>
+#include <core/abstractscenepainter.h>
 #include <core/fileassociatedshader.h>
 #include <core/glformat.h>
+#include <core/assimploader.h>
 
 
 namespace
@@ -41,6 +47,12 @@ Viewer::Viewer(
 ,   m_ui(new Ui_Viewer)
 ,   m_qtCanvas(nullptr)
 ,   m_saved_views(4)
+
+,   m_dockLeft(new QDockWidget(tr("Navigator")))
+,   m_dockBottom(new QDockWidget(tr("Explorer")))
+,   m_navigator(new FileNavigator(m_dockLeft))
+,   m_explorer(new FileExplorer(m_dockBottom))
+,   m_loader(new AssimpLoader())
 {
     m_ui->setupUi(this);
     
@@ -51,10 +63,47 @@ Viewer::Viewer(
     restoreState(s.value(SETTINGS_STATE).toByteArray());
 
     restoreViews(s);
-
-
+    initializeNavigation();
 };
 
+void Viewer::initializeNavigation()
+{
+    this->initializeDockWidgets(m_dockLeft, m_navigator, Qt::LeftDockWidgetArea);
+    this->initializeDockWidgets(m_dockBottom, m_explorer, Qt::BottomDockWidgetArea);
+
+    m_explorer->setAllLoadableTypes(m_loader->allLoadableTypes());
+        
+    QObject::connect(
+        m_navigator, SIGNAL(clickedDirectory(const QString &)),
+        m_explorer, SLOT(setRoot(const QString &)));
+
+    QObject::connect(
+        m_explorer, SIGNAL(activatedItem(const QString &)),
+        this, SLOT(on_loadFile(const QString &)));
+
+    QObject::connect(
+        m_ui->openFileDialogAction, SIGNAL(changed()),
+        this, SLOT(on_openFileDialogAction_triggered()));
+}
+
+void Viewer::initializeDockWidgets(QDockWidget * dockWidget, QWidget * widget, Qt::DockWidgetArea area)
+{
+    dockWidget->setWidget(widget);
+    this->addDockWidget(area, dockWidget);
+    
+#ifdef __APPLE__
+    /** 
+     THIS IS A BUG WORKAROUND
+     The bug lies somewhere in Canvas::Canvas().
+     When called in Viewer::createQtContext(), the widgets get messed up.
+    **/
+    static int count = 0;
+    dockWidget->setFloating(true);
+    dockWidget->setAllowedAreas(Qt::NoDockWidgetArea);
+    
+    dockWidget->move(this->pos() - QPoint(dockWidget->width()+5, count-- * (dockWidget->height()+20)));
+#endif
+}
 
 #ifdef WIN32
 const HGLRC Viewer::currentContextHandle()
@@ -128,9 +177,13 @@ Viewer::~Viewer()
     s.setValue(SETTINGS_STATE, saveState());
 
     delete m_qtCanvas;
+
+    delete m_dockLeft;
+    delete m_dockBottom;
+    delete m_loader;
 }
 
-void Viewer::setPainter(AbstractPainter * painter)
+void Viewer::setPainter(AbstractScenePainter * painter)
 {
     if(!m_qtCanvas)
         return;
@@ -138,7 +191,7 @@ void Viewer::setPainter(AbstractPainter * painter)
     m_qtCanvas->setPainter(painter);
 }
 
-AbstractPainter * Viewer::painter()
+AbstractScenePainter * Viewer::painter()
 {
     if(!m_qtCanvas)
         return nullptr;
@@ -149,6 +202,7 @@ AbstractPainter * Viewer::painter()
 
 void Viewer::on_captureAsImageAction_triggered()
 {
+    m_dockLeft->show();
     assert(m_qtCanvas);
     CanvasExporter::save(*m_qtCanvas, this);
 }
@@ -162,6 +216,40 @@ void Viewer::on_captureAsImageAdvancedAction_triggered()
 void Viewer::on_reloadAllShadersAction_triggered()
 {
     FileAssociatedShader::reloadAll();
+}
+
+void Viewer::on_openFileDialogAction_triggered()
+{
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), 
+        QDir::homePath(), m_loader->namedLoadableTypes().join(";;"), 
+        0, QFileDialog::HideNameFilterDetails);
+    if (fileName.isEmpty())
+        return;
+    
+    on_loadFile(fileName);
+}
+
+void Viewer::on_loadFile(const QString & path)
+{
+    Group * scene = m_loader->importFromFile(path);
+    if (!scene)
+        QMessageBox::critical(this, "Loading failed", "The loader was not able to load from \n" + path);
+    else {
+        this->painter()->assignScene(scene);
+        this->m_qtCanvas->update();
+    }
+}
+
+void Viewer::on_toggleNavigator_triggered()
+{
+    bool visible = m_dockLeft->isVisible();
+    m_dockLeft->setVisible(!visible);
+}
+
+void Viewer::on_toggleExplorer_triggered()
+{
+    bool visible = m_dockBottom->isVisible();
+    m_dockBottom->setVisible(!visible);
 }
 
 void Viewer::on_phongShadingAction_triggered()

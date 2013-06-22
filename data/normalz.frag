@@ -1,7 +1,7 @@
 #version 330
 
 in vec4 gl_FragCoord;
-out vec4 gl_FragColor;
+out vec4 fragColor;
 
 in vec3 normal;
 
@@ -23,5 +23,5 @@ void main()
 	// simplyfied with wolfram alpha
 	z = - znear * z / (zfar * z - zfar - znear * z);
 
-	gl_FragColor = vec4(n, z);
+	fragColor = vec4(n, z);
 }

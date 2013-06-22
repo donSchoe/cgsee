@@ -26,8 +26,10 @@ CGSee is actively developed on all major platforms (Windows, Mac, Linux).
 ### Dependencies
 
 The following dev-libraries and programs need to be provided for correct CMake configuration:
+
 * C++11 compatible compiler
 * Qt5: http://qt-project.org/
 * CMake 2.8.9 (waiting for 2.8.11): http://www.cmake.org/
 * OpenGL Extension Wrangler (GLEW): http://glew.sourceforge.net/
 * OpenGL Mathematics >= 0.9.4.3 (GLM): http://glm.g-truc.net/
+* Assimp 3.0: http://assimp.sourceforge.net

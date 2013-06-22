@@ -1,6 +1,7 @@
 
 #pragma once
 
+
 #include <core/abstractapplication.h>
 
 class Viewer;

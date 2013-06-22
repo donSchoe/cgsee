@@ -3,7 +3,7 @@
 # GLEW_INCLUDE_PATH
 # GLEW_LIBRARY
 
-IF(X64)
+IF(X64 AND NOT APPLE)
 
     FIND_PATH(GLEW_INCLUDE_PATH GL/glew.h
         ${PROJECT_SOURCE_DIR}/3rdparty/glew-1.9.0-win64/include

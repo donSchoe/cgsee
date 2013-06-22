@@ -17,7 +17,7 @@ in vec3 normal;
 in vec3 position;
 
 
-out vec4 gl_FragColor;
+out vec4 fragColor;
 
 void main()
 {
@@ -44,5 +44,5 @@ void main()
     float spec = max(dot(nreflect, nview), 0.0);
     spec = pow(spec, 50.0);
 
-    gl_FragColor = vec4(min(kfinal + spec, 1.0), 1.0);
+    fragColor = vec4(min(kfinal + spec, 1.0), 1.0);
 }

@@ -6,18 +6,25 @@
 #include <QString>
 
 #include "declspec.h"
-
 #include "common.h"
 #include "material.h"
+#include "abstractmodelloader.h"
 
 
 class Group;
 class PolygonalDrawable;
 
-class CGSEE_API ObjIO
+class CGSEE_API ObjLoader : public AbstractModelLoader
 {
 public:
-    static Group * groupFromObjFile(const QString & filePath);
+    ObjLoader();
+    virtual ~ObjLoader();
+
+    virtual QStringList namedLoadableTypes() const;
+    virtual Group * importFromFile(const QString & filePath) const;
+
+protected:
+    virtual QStringList loadableExtensions() const;
 
 protected:
 

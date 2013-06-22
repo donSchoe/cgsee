@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>734</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="canvasMenu">
@@ -53,6 +53,7 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <addaction name="openFileDialogAction"/>
     <addaction name="separator"/>
     <addaction name="quitAction"/>
    </widget>
@@ -141,8 +142,16 @@
     <addaction name="separator"/>
     <addaction name="normalsAction"/>
    </widget>
+   <widget class="QMenu" name="menuView">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="toggleNavigator"/>
+    <addaction name="toggleExplorer"/>
+   </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
+   <addaction name="menuView"/>
    <addaction name="navigationMenu"/>
    <addaction name="canvasMenu"/>
    <addaction name="shadingMenu"/>
@@ -210,6 +219,20 @@
    </property>
    <property name="menuRole">
     <enum>QAction::AboutRole</enum>
+   </property>
+  </action>
+  <action name="openFileDialogAction">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Open ...</string>
+   </property>
+   <property name="menuRole">
+    <enum>QAction::NoRole</enum>
    </property>
   </action>
   <action name="quitAction">
@@ -419,6 +442,16 @@
    </property>
    <property name="shortcut">
     <string>F5</string>
+   </property>
+  </action>
+  <action name="toggleNavigator">
+   <property name="text">
+    <string>Show/Hide Navigator</string>
+   </property>
+  </action>
+  <action name="toggleExplorer">
+   <property name="text">
+    <string>Show/Hide Explorer</string>
    </property>
   </action>
   <action name="actionFrontView">

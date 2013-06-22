@@ -4,7 +4,7 @@
 //partly from http://www.opengl.org/sdk/docs/tutorials/TyphoonLabs/Chapter_4.pdf
 
 in vec4 gl_FragCoord;
-out vec4 gl_FragColor;
+out vec4 fragColor;
 
 in vec3 normal;
 in vec3 position;
@@ -24,5 +24,5 @@ void main()
 {
 	vec3 n = normal;
 	
-	gl_FragColor=phongLighting(n, position, cameraposition, lightdir, lightdir2, light, light2, lightambientglobal, material);
+	fragColor=phongLighting(n, position, cameraposition, lightdir, lightdir2, light, light2, lightambientglobal, material);
 }

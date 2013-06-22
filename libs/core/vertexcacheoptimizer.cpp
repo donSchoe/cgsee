@@ -171,6 +171,17 @@ int VertexCacheOptimizer::findGreatestTriangle(const std::vector<Triangle> &tria
     return greatestTriangleIndex;
 }
 
+
+void VertexCacheOptimizer::applyOn(t_VertexIndexListP vertexIndices, t_VertexListP vertexData)
+{
+    t_uints indices = vertexIndices->getIndices();
+    const uint numVertices = vertexData->size();
+
+    VertexCacheOptimizer::applyOptimization(indices, numVertices);
+
+    vertexIndices->setMultipleIndices(0, indices.size(), std::bind(&t_uints::at, &indices, std::placeholders::_1));
+}
+
 void VertexCacheOptimizer::applyOptimization(t_uints &indices, const uint numVertices)
 {
     int scanPos = 0;

@@ -5,7 +5,8 @@
 #include <QString>
 #include <QMap>
 
-#include <core/abstractpainter.h>
+#include <core/abstractscenepainter.h>
+
 
 
 
@@ -15,10 +16,11 @@ class ScreenQuad;
 class Program;
 class FrameBufferObject;
 
-class Painter : public AbstractPainter
+class Painter : public AbstractScenePainter
 {
 public:
     Painter(Camera * camera);
+    Painter(Group * scene);
     virtual ~Painter();
 
     virtual void paint();
@@ -46,7 +48,6 @@ protected:
         const t_samplerByName & sampler);
 
 protected:
-    Group * m_group;
     ScreenQuad * m_quad;
 
     Program * m_textured;

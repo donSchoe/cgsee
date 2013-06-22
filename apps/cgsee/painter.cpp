@@ -1,5 +1,6 @@
 
 #include <glm/gtc/matrix_transform.hpp>
+#include <QDebug>
 
 #include "painter.h"
 
@@ -11,7 +12,8 @@
 #include <core/framebufferobject.h>
 #include <core/gpuquery.h>
 #include <core/group.h>
-#include <core/objio.h>
+#include <core/objloader.h>
+#include <core/assimploader.h>
 #include <core/program.h>
 #include <core/screenquad.h>
 #include "core/arcballnavigation.h"
@@ -31,8 +33,7 @@ static const QString LIGHTPOSITION_UNIFORM ("lightposition");
 static const QString WARMCOLDCOLOR_UNIFORM ("warmcoldcolor");
 
 Painter::Painter(Camera * camera)
-:   AbstractPainter()
-,   m_group(nullptr)
+:   AbstractScenePainter()
 ,   m_quad(nullptr)
 ,   m_textured(nullptr)
 ,   m_normals(nullptr)
@@ -49,12 +50,20 @@ Painter::Painter(Camera * camera)
 ,   m_flush(nullptr)
 ,   m_camera(camera)
 {
+}
 
+Painter::Painter(Group * scene)
+:   AbstractScenePainter(scene)
+,   m_quad(nullptr)
+,   m_normalz(nullptr)
+,   m_fboNormalz(nullptr)
+,   m_flush(nullptr)
+,   m_camera(nullptr)
+{
 }
 
 Painter::~Painter()
 {
-    delete m_group;
     delete m_quad;
 
     delete m_textured;
@@ -76,22 +85,17 @@ const bool Painter::initialize()
     AutoTimer t("Initialization of Painter");
 
     m_group = ObjIO::groupFromObjFile("data/ironman/Iron_Man.obj");
-
-    if(!m_group)
-    {
-        qWarning("Have you set the Working Directory?");
-        return false;
-    }
-
-    glm::mat4 transform(1.f);
-
-    transform *= glm::scale(glm::mat4(1.f), glm::vec3(0.5f));
-    transform *= glm::rotate(glm::mat4(1.f), 180.f, glm::vec3(0.f, 1.f, 0.f));
-
-    m_group->setTransform(transform);
-
-    // Camera Setup
-    m_camera->append(m_group);
+    if (m_scene) {
+        glm::mat4 transform(1.f);
+        
+        transform *= glm::scale(glm::mat4(1.f), glm::vec3(0.02f));
+        transform *= glm::rotate(glm::mat4(1.f), 180.f, glm::vec3(0.f, 1.f, 0.f));
+        transform *= glm::rotate(glm::mat4(1.f), -90.f, glm::vec3(1.f, 0.f, 0.f));
+        transform *= glm::rotate(glm::mat4(1.f), 25.f, glm::vec3(0.f, 0.f, 1.f));
+        
+        m_scene->setTransform(transform);
+        m_camera->append(m_scene);
+    } 
 
     m_quad = new ScreenQuad();
 

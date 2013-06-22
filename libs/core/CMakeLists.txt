@@ -17,8 +17,12 @@ set(SOURCES
     abstractapplication.h
     abstractapplication.cpp
     abstractglparent.h
+    abstractmodelloader.cpp
+    abstractmodelloader.h
     abstractpainter.h
     abstractpainter.cpp
+    abstractscenepainter.h
+    abstractscenepainter.cpp
 
     datacore/datablock.h
     datacore/datablock.cpp
@@ -35,6 +39,8 @@ set(SOURCES
     datacore/vertexlist_impl.inl
     datacore/datablock_impl.inl
     abstracttimer.h
+    assimploader.h
+    assimploader.cpp
     autotimer.h
     autotimer.cpp
     bufferobject.h
@@ -52,6 +58,7 @@ set(SOURCES
     fpsnavigation.cpp
     framebufferobject.h
     framebufferobject.cpp
+    geometryoptimizer.h
     glformat.h
     glformat.cpp
     gpuquery.h
@@ -67,8 +74,8 @@ set(SOURCES
     messagehandler.cpp
     node.h
     node.cpp
-    objio.h
-    objio.cpp
+    objloader.h
+    objloader.cpp
     polygonaldrawable.h
     polygonaldrawable.cpp
     polygonalgeometry.h
@@ -85,10 +92,10 @@ set(SOURCES
     textureloader.cpp
     timer.h
     timer.cpp
-	vertexcacheoptimizer.h
-	vertexcacheoptimizer.cpp
-	vertexreuse.h
-	vertexreuse.cpp
+    vertexcacheoptimizer.h
+    vertexcacheoptimizer.cpp
+    vertexreuse.h
+    vertexreuse.cpp
 )
 
 source_group_by_path(${CMAKE_CURRENT_SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$|\\\\.ui$|\\\\.inl$" 
@@ -104,6 +111,7 @@ add_library(${target} SHARED ${HEADERS} ${SOURCES})
 qt5_use_modules(${target} Widgets OpenGL)
 
 target_link_libraries(${target}
+    ${ASSIMP_LIBRARY}
     ${OPENGL_LIBRARIES}
     ${DEVIL_LIBRARY}
     ${GLEW_LIBRARY}
