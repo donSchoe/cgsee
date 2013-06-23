@@ -2,7 +2,10 @@
 #include "group.h"
 #include "polygonalgeometry.h"
 #include "polygonaldrawable.h"
+#include "textureloader.h"
 #include <iostream>
+
+using namespace std;
 
 AssimpLoader::AssimpLoader()
 : AbstractModelLoader()
@@ -92,8 +95,6 @@ Group * AssimpLoader::importFromFile(const QString & filePath) const
 
     Group * group = parseNode(*scene, drawables, *(scene->mRootNode));
 
-
-
     m_importer->FreeScene();
 
     return group;
@@ -132,20 +133,30 @@ void AssimpLoader::parseMeshes(aiMesh **meshes,
 }
 
 void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials) const {
+    aiString texPath;
+    Texture2D *tex2D;
+
     for(int m = 0; m < numMaterials; m++) {
         aiMaterial *material = materials[m];
 
-        for(int p = 0; p < material->mNumProperties; p++) {
-            aiMaterialProperty *property = material->mProperties[p];
+        if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+            material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
+            tex2D = TextureLoader::loadTexture2D(m_modelDir + texPath.C_str);
 
-            switch(property->mSemantic) {
-                case aiTextureType_NONE:
-                break;
-
-                default:
-                    std::cout << property->mKey.C_Str() << " loading " << property->mData << std::endl;
-            }
         }
+    }
+
+//        for(int p = 0; p < material->mNumProperties; p++) {
+//            aiMaterialProperty *property = material->mProperties[p];
+//
+//            switch(property->mSemantic) {
+//                case aiTextureType_NONE:
+//                break;
+//
+//                default:
+//                    std::cout << property->mKey.C_Str() << " loading " << property->mData << std::endl;
+//            }
+//        }
     }
 }
 
