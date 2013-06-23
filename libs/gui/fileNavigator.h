@@ -28,6 +28,7 @@ signals:
 
 public slots:
 	void emitClickedDirectory(const QModelIndex & index);
+    void on_activatedDir(const QString & path);
 
 protected:
 	void setRoot(const QString & rootPath);

@@ -12,7 +12,7 @@ FileNavigator::FileNavigator(
 	this->setModel(m_model);
 
 	setFilter(QDir::NoDotAndDotDot | QDir::AllDirs);
-	setRoot("");
+	setRoot(QDir::rootPath());
 
 	this->setColumnHidden(1, true);
 	this->setColumnHidden(2, true);
@@ -46,4 +46,19 @@ void FileNavigator::emitClickedDirectory(const QModelIndex & index)
 {
 	QString path = m_model->fileInfo(index).absoluteFilePath();
 	emit clickedDirectory(path);
+}
+
+#include <iostream>
+void FileNavigator::on_activatedDir(const QString & path)
+{
+    m_model->setRootPath(path);
+    QDir * dir = new QDir(m_model->rootDirectory());
+
+    while (dir->cdUp())
+    {
+        this->expand(m_model->index(m_model->rootPath()));
+        m_model->setRootPath(dir->path());
+    }
+
+    delete dir;
 }

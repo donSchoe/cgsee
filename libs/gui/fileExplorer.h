@@ -20,12 +20,14 @@ public:
 	virtual ~FileExplorer();
 
 	QMenu * menu();
+	QFileSystemModel * model();
 	QModelIndex clickedFile();
 
 	void setFilter(const QDir::Filters & filters);
 	void setAllLoadableTypes(const QStringList & types);
 
 signals:
+	void activatedDir(const QString & path);
 	void activatedItem(const QString & path);
 
 public slots:
