@@ -1,8 +1,8 @@
-
 #include "assimploader.h"
 #include "group.h"
 #include "polygonalgeometry.h"
 #include "polygonaldrawable.h"
+#include <iostream>
 
 AssimpLoader::AssimpLoader()
 : AbstractModelLoader()
@@ -87,12 +87,15 @@ Group * AssimpLoader::importFromFile(const QString & filePath) const
 
     QList<PolygonalDrawable *> drawables;
     drawables.reserve(scene->mNumMeshes);
-    this->parseMeshes(scene->mMeshes, scene->mNumMeshes, drawables);
-    
+    parseMeshes(scene->mMeshes, scene->mNumMeshes, drawables);
+    parseMaterials(scene->mMaterials, scene->mNumMaterials);
+
     Group * group = parseNode(*scene, drawables, *(scene->mRootNode));
-    
+
+
+
     m_importer->FreeScene();
-    
+
     return group;
 }
 
@@ -110,11 +113,13 @@ Group * AssimpLoader::parseNode(const aiScene & scene,
     );
     group->setTransform(transform);
 
-    for (int i = 0; i < node.mNumChildren; i++)
+    for (int i = 0; i < node.mNumChildren; i++) {
         group->append(parseNode(scene, drawables, *(node.mChildren[i])));
+    }
 
-    for (int i = 0; i < node.mNumMeshes; i++)
+    for (int i = 0; i < node.mNumMeshes; i++) {
         group->append(drawables[node.mMeshes[i]]);
+    }
 
     return group;
 }
@@ -126,20 +131,36 @@ void AssimpLoader::parseMeshes(aiMesh **meshes,
         drawables.insert(i, parseMesh(*meshes[i]));
 }
 
+void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials) const {
+    for(int m = 0; m < numMaterials; m++) {
+        aiMaterial *material = materials[m];
+
+        for(int p = 0; p < material->mNumProperties; p++) {
+            aiMaterialProperty *property = material->mProperties[p];
+
+            switch(property->mSemantic) {
+                case aiTextureType_NONE:
+                break;
+
+                default:
+                    std::cout << property->mKey.C_Str() << " loading " << property->mData << std::endl;
+            }
+        }
+    }
+}
+
 PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
 {
     PolygonalGeometry * geometry = new PolygonalGeometry(QString(mesh.mName.C_Str()) + " geometry");
-    
-    const bool usesNormalIndices(mesh.mNormals != NULL);
-    
+
     for (int i = 0; i < mesh.mNumVertices; i++) {
         glm::vec3 vector(
                          mesh.mVertices[i].x, mesh.mVertices[i].y, mesh.mVertices[i].z
                          );
         geometry->setVertex(i, vector);
     }
-    
-    if (usesNormalIndices) {
+
+    if (mesh.HasNormals()) {
         for (int i = 0; i < mesh.mNumVertices; i++) {
             glm::vec3 vector(
                              mesh.mNormals[i].x, mesh.mNormals[i].y, mesh.mNormals[i].z
@@ -147,7 +168,16 @@ PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
             geometry->setNormal(i, vector);
         }
     }
-    
+
+    if (mesh.HasTextureCoords(0)) {
+        for (int i = 0; i < mesh.mNumVertices; i++) {
+            glm::vec2 vector(
+                             mesh.mTextureCoords[0][i].x, mesh.mTextureCoords[0][i].y
+                             );
+            geometry->setTexC(i, vector);
+        }
+    }
+
     unsigned int currentIndex = 0;
     for (int i = 0; i < mesh.mNumFaces; i++) {
         if (mesh.mFaces[i].mNumIndices != 3)
@@ -156,11 +186,11 @@ PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
             for (int j = 0; j < mesh.mFaces[i].mNumIndices; j++)
                 geometry->setIndex(currentIndex++, mesh.mFaces[i].mIndices[j]);
     }
-    
+
     geometry->setMode(GL_TRIANGLES);
-    if (!usesNormalIndices)
+    if (!mesh.HasNormals())
         geometry->retrieveNormals();
-    
+
     PolygonalDrawable * drawable = new PolygonalDrawable(mesh.mName.C_Str());
     drawable->setGeometry(geometry);
     return drawable;

@@ -34,7 +34,7 @@ QStringList ObjLoader::namedLoadableTypes() const
     return QStringList("Wavefront Object (*.obj)");
 }
 
-ObjIO::ObjObject::ObjObject():
+ObjLoader::ObjObject::ObjObject():
     material(nullptr)
 {
 

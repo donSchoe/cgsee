@@ -21,13 +21,13 @@ class CGSEE_API AssimpLoader : public AbstractModelLoader
 public:
     AssimpLoader();
     virtual ~AssimpLoader();
-    
+
     virtual QStringList namedLoadableTypes() const;
     virtual Group * importFromFile(const QString & filePath) const;
-    
+
 protected:
     virtual QStringList loadableExtensions() const;
-    
+
 protected:
     Group * parseNode(const aiScene & scene,
         const QList<PolygonalDrawable *> &drawables, const aiNode & node) const;
@@ -35,8 +35,10 @@ protected:
     void parseMeshes(aiMesh ** meshes,
         const unsigned int numMeshes, QList<PolygonalDrawable *> & drawables) const;
 
+    void parseMaterials(aiMaterial **materials, const unsigned int numMaterials) const;
+
     PolygonalDrawable * parseMesh(const aiMesh & mesh) const;
-    
+
 protected:
     Assimp::Importer * m_importer;
 };
