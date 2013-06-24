@@ -12,7 +12,7 @@ class CGSEE_API AbstractModelLoader
 public:
     AbstractModelLoader();
     virtual ~AbstractModelLoader();
-    
+
     bool canLoad(const QString & extension) const;
     bool canSave(const QString & extension) const;
 
@@ -22,7 +22,7 @@ public:
     virtual QStringList namedSaveableTypes() const;
     QStringList allSaveableTypes() const;
 
-    virtual Group * importFromFile(const QString & filePath) const;
+    virtual Group * importFromFile(const QString & filePath);
     virtual bool exportToFile(const Group & group,
         const QString & filePath, const QString & extension) const;
 protected:

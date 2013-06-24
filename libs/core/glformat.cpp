@@ -1,4 +1,3 @@
-
 #include <GL/glew.h>
 
 #include <cassert>
@@ -13,10 +12,10 @@
 #endif
 
 
-const GLFormat::t_minorsByMajor GLFormat::m_validGLVersions 
+const GLFormat::t_minorsByMajor GLFormat::m_validGLVersions
     = GLFormat::validGLVersions();
 
-const GLFormat::t_profileIdentifier GLFormat::m_validProfileIdentifier 
+const GLFormat::t_profileIdentifier GLFormat::m_validProfileIdentifier
     = GLFormat::validProfileIdentifier();
 
 
@@ -70,13 +69,13 @@ GLFormat::GLFormat(const QGLFormat & format)
     {
     default:
     case QGLFormat::NoProfile:
-        m_profile = NoProfile; 
+        m_profile = NoProfile;
         break;
     case QGLFormat::CoreProfile:
-        m_profile = CoreProfile; 
+        m_profile = CoreProfile;
         break;
     case QGLFormat::CompatibilityProfile:
-        m_profile = CompatibilityProfile; 
+        m_profile = CompatibilityProfile;
         break;
     };
 }
@@ -90,18 +89,18 @@ const QGLFormat GLFormat::asQGLFormat() const
     QGLFormat format;
 
     format.setVersion(m_majorVersion, m_minorVersion);
-    
+
     switch(m_profile)
     {
     default:
     case NoProfile:
-        format.setProfile(QGLFormat::NoProfile); 
+        format.setProfile(QGLFormat::NoProfile);
         break;
     case CoreProfile:
-        format.setProfile(QGLFormat::CoreProfile); 
+        format.setProfile(QGLFormat::CoreProfile);
         break;
     case CompatibilityProfile:
-        format.setProfile(QGLFormat::CompatibilityProfile); 
+        format.setProfile(QGLFormat::CompatibilityProfile);
         break;
     };
 
@@ -125,7 +124,7 @@ const unsigned int GLFormat::majorVersion() const
 {
     return m_majorVersion;
 }
- 
+
 const unsigned int GLFormat::minorVersion() const
 {
     return m_minorVersion;
@@ -137,7 +136,7 @@ const GLFormat::t_minorsByMajor GLFormat::validGLVersions()
 
     // valid pairs are taken from:
     // http://qt-project.org/doc/qt-5.0/qtopengl/qglformat.html
-    
+
     minorsByMajor.insertMulti(1, 0);
     minorsByMajor.insertMulti(1, 1);
     minorsByMajor.insertMulti(1, 2);
@@ -358,7 +357,7 @@ const GLFormat::t_profileIdentifier GLFormat::validProfileIdentifier()
 const bool GLFormat::verify(const QGLFormat & format) const
 {
     GLFormat current(format);
- 
+
     bool valid(true);
 
     valid &= verifyVersionAndProfile(*this, current);
@@ -384,7 +383,7 @@ const bool GLFormat::verifyVersionAndProfile(
         qWarning("%s", qPrintable(info));
     }
 
-    if(requested.majorVersion() != current.majorVersion() 
+    if(requested.majorVersion() != current.majorVersion()
     || requested.minorVersion() != current.minorVersion())
     {
         qWarning("A context with a different OpenGL Version as requested was created:");
@@ -430,7 +429,7 @@ const bool GLFormat::verifyExtensions(const GLFormat & requested)
 
     foreach(const QString & extension, unsupported)
         qWarning("%s", qPrintable(extension));
-    
+
     qWarning("");
 
     return false;
@@ -533,7 +532,7 @@ const bool GLFormat::verifyPixelFormat(
             issues << QString("Stencil Buffer requested, but none created.");
         else
             verifyBufferSize(requested.stencilBufferSize(), current.stencilBufferSize()
-                , "Stencil Buffer", issues);             
+                , "Stencil Buffer", issues);
     }
 
     if(requested.stereo() && !current.stereo())
@@ -548,7 +547,7 @@ const bool GLFormat::verifyPixelFormat(
             issues << QString("Sample Buffers requested, but none initialized.");
         else
             verifyBufferSize(requested.samples(), current.samples()
-                , "Samples ", issues);             
+                , "Samples ", issues);
     }
 
     if(issues.isEmpty())

@@ -2,7 +2,9 @@
 
 #include "declspec.h"
 
+#include <list>
 #include "node.h"
+#include "material.h"
 
 class PolygonalDrawable;
 class Program;
@@ -37,6 +39,8 @@ public:
         const t_nodes::iterator & before
     ,   PolygonalDrawable * drawable);
 
+    void addManagedMaterial(Material *material);
+
 
     // both removals delete the node if parents are empty
     void removeFirst();
@@ -60,4 +64,6 @@ protected:
 
 protected:
     t_nodes m_children;
+    std::list<Material*> m_managedMaterials;
 };
+

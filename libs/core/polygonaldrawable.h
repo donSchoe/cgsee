@@ -50,5 +50,5 @@ protected:
     t_bufferObjects m_elementArrayBOs;
 
     typedef QMap<QString, BufferObject *> t_bufferObjectsByAttribute;
-    t_bufferObjectsByAttribute m_arrayBOsByAttribute;    
+    t_bufferObjectsByAttribute m_arrayBOsByAttribute;
 };

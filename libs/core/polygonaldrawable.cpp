@@ -130,15 +130,18 @@ void PolygonalDrawable::draw(
     glBindVertexArray(m_vao);
     glError();
 
-    t_bufferObjects::const_iterator e(m_elementArrayBOs.begin());
-    const t_bufferObjects::const_iterator eEnd(m_elementArrayBOs.end());
+    if(m_geometry->material()) {
+         m_geometry->material()->bind(program);
+    }
+
 
     glEnable(GL_DEPTH_TEST);
     //glEnable(GL_CULL_FACE);
     //glCullFace(GL_BACK);
 
-    for(; e != eEnd; ++e)
-        (*e)->draw(m_geometry->mode());
+    for(auto e : m_elementArrayBOs) {
+        e->draw(m_geometry->mode());
+    }
 
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);

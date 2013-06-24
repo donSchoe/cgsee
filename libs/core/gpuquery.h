@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <GL/glew.h>
@@ -30,7 +29,7 @@ public:
     static const QString glewError(const GLenum penum);
 
     // Extension Info
-    
+
     static const bool extensionSupported(const char * extension);
     static const bool extensionSupported(const QString & extension);
 

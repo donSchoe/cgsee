@@ -5,14 +5,19 @@
 #include <iostream>
 #include <IL/il.h>
 
-std::map<std::string, GLuint> TextureLoader::m_loadedTextures;
+using namespace std;
 
-Texture2D *TextureLoader::loadTexture2D(const std::string &path)
+
+std::map<QString, GLuint> TextureLoader::m_loadedTextures;
+
+Texture2D *TextureLoader::loadTexture2D(const QString &path)
 {
     ILboolean re;
     ILuint iTexture;
     GLuint gTexture;
     Texture2D *texture;
+
+    cout << "Loading texture from " << path.toStdString() << endl;
 
     auto i = m_loadedTextures.find(path);
 
@@ -20,7 +25,7 @@ Texture2D *TextureLoader::loadTexture2D(const std::string &path)
         ilGenImages(1, &iTexture);
         ilBindImage(iTexture);
 
-        re = ilLoadImage(path.c_str());
+        re = ilLoadImage(path.toStdString().c_str());
         if(!re) {
             assert(0);
             switch(ilGetError()) {

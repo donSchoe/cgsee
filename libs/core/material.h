@@ -13,7 +13,7 @@ public:
 
     void addAttribute(MaterialAttribute *attribute);
 
-    void bind(Program &program);
+    void bind(const Program &program);
 
 protected:
 

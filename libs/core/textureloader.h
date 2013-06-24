@@ -2,6 +2,7 @@
 
 #include <map>
 #include <string>
+#include <QString>
 #include <GL/glew.h>
 #include <GL/glext.h>
 #include <GL/gl.h>
@@ -9,16 +10,16 @@
 
 class Texture2D;
 
-// TODO: But this into some kind of singleton
+// TODO: Put this into some kind of singleton
 class CGSEE_API TextureLoader
 {
 public:
 
-    static Texture2D *loadTexture2D(const std::string &path);
+    static Texture2D *loadTexture2D(const QString &path);
 
 
 protected:
 
-    static std::map<std::string, GLuint> m_loadedTextures;
+    static std::map<QString, GLuint> m_loadedTextures;
 };
 

@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <GL/glew.h>
@@ -23,7 +22,7 @@ public:
 protected:
     void initialize(const Program & program) const;
 
-protected:  
+protected:
     mutable GLuint m_vao;
     mutable BufferObject * m_vertexBO;
 };

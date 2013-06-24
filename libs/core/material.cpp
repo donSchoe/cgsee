@@ -18,7 +18,7 @@ void Material::addAttribute(MaterialAttribute *attribute)
     m_attributes.push_back(attribute);
 }
 
-void Material::bind(Program &program)
+void Material::bind(const Program &program)
 {
     for(auto attribute : m_attributes) {
         attribute->bind(program);

@@ -35,6 +35,7 @@ public:
     void setIndex(int i, unsigned int data);
 
     void setMaterial(Material *material);
+    Material *material();
 
     void resize(unsigned int size);
 

@@ -12,7 +12,7 @@ public:
     Texture2D(GLuint gTexId, const std::string &name = "texture");
     ~Texture2D();
 
-    void bind(Program &program);
+    void bind(const Program &program);
 
 private:
 

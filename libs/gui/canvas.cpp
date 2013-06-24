@@ -1,4 +1,3 @@
-
 #include <GL/glew.h>
 
 #include <cassert>
@@ -33,7 +32,7 @@ Canvas::Canvas(
     setMinimumSize(1, 1);
 
     // Important for overdraw, not occluding the scene.
-    setAutoFillBackground(false); 
+    setAutoFillBackground(false);
 }
 
 Canvas::~Canvas()
@@ -63,7 +62,7 @@ void Canvas::initializeGL()
 
     // http://stackoverflow.com/questions/10857335/opengl-glgeterror-returns-invalid-enum-after-call-to-glewinit
     // use glGetError instead of userdefined glError, to avoid console/log output
-    glGetError();   
+    glGetError();
     glError();
 
     if(GLEW_OK != error)
@@ -126,13 +125,13 @@ void Canvas::resizeGL(
 
 void Canvas::paintGL()
 {
-    glError();  
+    glError();
     if(m_painter)
         m_painter->paint();
-    else 
+    else
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-     
-    glError();  
+
+    glError();
 }
 
 void Canvas::timerEvent(QTimerEvent *event)

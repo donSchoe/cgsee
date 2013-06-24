@@ -1,4 +1,3 @@
-
 #include <GL/glew.h>
 
 #include <map>
@@ -41,7 +40,7 @@ Shader::Shader(const GLenum type)
     m_shader = glCreateShader(type);
     glError();
 }
-    
+
 Shader::~Shader()
 {
     if(isShader())

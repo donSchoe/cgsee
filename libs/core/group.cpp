@@ -14,6 +14,10 @@ Group::~Group()
 {
     while(!m_children.empty())
         removeLast();
+
+    for(auto material : m_managedMaterials) {
+        delete material;
+    }
 }
 
 void Group::draw(
@@ -64,6 +68,10 @@ void Group::insert(
         node->parents().insert(this);
 
     m_children.insert(before, node);
+}
+
+void Group::addManagedMaterial(Material *material) {
+    m_managedMaterials.push_back(material);
 }
 
 void Group::prepend(Group * group)

@@ -9,7 +9,7 @@ public:
     MaterialAttribute(const std::string &name);
     virtual ~MaterialAttribute();
 
-    virtual void bind(Program &program) = 0;
+    virtual void bind(const Program &program) = 0;
 
 
 protected:

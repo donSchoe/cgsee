@@ -46,10 +46,11 @@ protected:
 
     static void releaseSampler(
         const t_samplerByName & sampler);
-   
+
 protected:
     ScreenQuad * m_quad;
 
+    Program * m_textured;
     Program * m_normalz;
     Program * m_normals;
     Program * m_wireframe;

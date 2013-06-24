@@ -35,6 +35,7 @@ static const QString WARMCOLDCOLOR_UNIFORM ("warmcoldcolor");
 Painter::Painter(Camera * camera)
 :   AbstractScenePainter()
 ,   m_quad(nullptr)
+,   m_textured(nullptr)
 ,   m_normals(nullptr)
 ,   m_normalz(nullptr)
 ,   m_wireframe(nullptr)
@@ -65,6 +66,7 @@ Painter::~Painter()
 {
     delete m_quad;
 
+    delete m_textured;
     delete m_normals;
     delete m_normalz;
     delete m_flat;
@@ -84,17 +86,22 @@ const bool Painter::initialize()
 
     if (m_scene) {
         glm::mat4 transform(1.f);
-        
+
         transform *= glm::scale(glm::mat4(1.f), glm::vec3(0.02f));
         transform *= glm::rotate(glm::mat4(1.f), 180.f, glm::vec3(0.f, 1.f, 0.f));
         transform *= glm::rotate(glm::mat4(1.f), -90.f, glm::vec3(1.f, 0.f, 0.f));
         transform *= glm::rotate(glm::mat4(1.f), 25.f, glm::vec3(0.f, 0.f, 1.f));
-        
+
         m_scene->setTransform(transform);
         m_camera->append(m_scene);
-    } 
+    }
 
     m_quad = new ScreenQuad();
+
+    // Textured
+    m_textured = new Program();
+    m_textured->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/textured.frag"));
+    m_textured->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/textured.vert"));
 
 
     // NORMALS
@@ -180,7 +187,7 @@ const bool Painter::initialize()
          new FileAssociatedShader(GL_VERTEX_SHADER, "data/gooch.vert"));
 
     //set UNIFORMS for selected shader
-    m_useProgram = m_flat;
+    m_useProgram = m_textured;
     setUniforms();
 
     // Post Processing Shader

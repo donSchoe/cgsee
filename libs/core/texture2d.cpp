@@ -13,7 +13,7 @@ Texture2D::~Texture2D()
 
 }
 
-void Texture2D::bind(Program &program)
+void Texture2D::bind(const Program &program)
 {
     GLint location;
 

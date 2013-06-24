@@ -1,4 +1,3 @@
-
 #pragma once
 
 #include <GL/glew.h>
@@ -44,7 +43,7 @@ protected:
 
     QString m_source;
     QString m_log;
-    
+
     bool m_compiled;
 
     t_programs m_programs;

@@ -1,14 +1,11 @@
 #version 150 core
 
-layout(location = 0) in vec3 inPos;
-layout(location = 1) in vec2 vTexPos;
+in vec3 a_vertex;
+in vec3 a_normal;
 
 uniform mat4 transform;
-uniform sampler2D texture;
-
-out vec2 fTexPos;
 
 void main(void) {
-    fTexPos = vTexPos;
-    gl_Position = transform * vec4(inPos, 1);
+    vec3 n = normalize(a_normal);
+    gl_Position = transform * vec4(a_vertex, 1.0);
 }

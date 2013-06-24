@@ -136,10 +136,11 @@ void PolygonalGeometry::setIndex(int i, unsigned int data)
 
 void PolygonalGeometry::setMaterial(Material *material)
 {
-    if(m_material != nullptr)
-        delete m_material;
-
     m_material = material;
+}
+
+Material *PolygonalGeometry::material() {
+    return m_material;
 }
 
 const AxisAlignedBoundingBox PolygonalGeometry::boundingBox() const

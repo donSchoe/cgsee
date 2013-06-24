@@ -2,8 +2,12 @@
 #include "group.h"
 #include "polygonalgeometry.h"
 #include "polygonaldrawable.h"
+#include "texture2d.h"
+#include "materialattribute.h"
 #include "textureloader.h"
+#include <QFileInfo>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -76,12 +80,13 @@ QStringList AssimpLoader::loadableExtensions() const
     return extensions;
 }
 
-Group * AssimpLoader::importFromFile(const QString & filePath) const
+Group * AssimpLoader::importFromFile(const QString & filePath)
 {
     qDebug("Reading geometry with Assimp from \"%s\".", qPrintable(filePath));
 
-    const aiScene * scene = m_importer->ReadFile(filePath.toStdString(),
-                                              aiProcess_Triangulate);
+    m_modelDir = QFileInfo(filePath).dir().path();
+
+    const aiScene * scene = m_importer->ReadFile(filePath.toStdString(), aiProcess_Triangulate);
 
     if (!scene) {
         qCritical("Assimp couldn't load %s", qPrintable(filePath));
@@ -90,10 +95,16 @@ Group * AssimpLoader::importFromFile(const QString & filePath) const
 
     QList<PolygonalDrawable *> drawables;
     drawables.reserve(scene->mNumMeshes);
-    parseMeshes(scene->mMeshes, scene->mNumMeshes, drawables);
+
+    // Materials have to be loaded before the meshes using them for now
     parseMaterials(scene->mMaterials, scene->mNumMaterials);
+    parseMeshes(scene->mMeshes, scene->mNumMeshes, drawables);
 
     Group * group = parseNode(*scene, drawables, *(scene->mRootNode));
+
+    for(auto material : m_materials) {
+        group->addManagedMaterial(material);
+    }
 
     m_importer->FreeScene();
 
@@ -132,31 +143,21 @@ void AssimpLoader::parseMeshes(aiMesh **meshes,
         drawables.insert(i, parseMesh(*meshes[i]));
 }
 
-void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials) const {
-    aiString texPath;
-    Texture2D *tex2D;
-
+void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials) {
     for(int m = 0; m < numMaterials; m++) {
-        aiMaterial *material = materials[m];
+        Texture2D *tex2D;
+        aiString texPath;
 
-        if(material->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
-            material->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
-            tex2D = TextureLoader::loadTexture2D(m_modelDir + texPath.C_str);
+        aiMaterial *aMaterial = materials[m];
+        Material *material = new Material;
 
+        if(aMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
+            aMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
+            tex2D = TextureLoader::loadTexture2D((m_modelDir + texPath.C_Str()));
+            material->addAttribute(tex2D);
         }
-    }
 
-//        for(int p = 0; p < material->mNumProperties; p++) {
-//            aiMaterialProperty *property = material->mProperties[p];
-//
-//            switch(property->mSemantic) {
-//                case aiTextureType_NONE:
-//                break;
-//
-//                default:
-//                    std::cout << property->mKey.C_Str() << " loading " << property->mData << std::endl;
-//            }
-//        }
+        m_materials.push_back(material);
     }
 }
 
@@ -201,6 +202,9 @@ PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
     geometry->setMode(GL_TRIANGLES);
     if (!mesh.HasNormals())
         geometry->retrieveNormals();
+
+    assert(mesh.mMaterialIndex < m_materials.size());
+    geometry->setMaterial(m_materials[mesh.mMaterialIndex]);
 
     PolygonalDrawable * drawable = new PolygonalDrawable(mesh.mName.C_Str());
     drawable->setGeometry(geometry);

@@ -1,4 +1,3 @@
-
 #include "abstractscenepainter.h"
 #include "group.h"
 #include "camera.h"
