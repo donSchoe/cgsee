@@ -80,13 +80,13 @@ void BufferObject::draw(const GLenum mode)
     switch(m_target)
     {
     case GL_ELEMENT_ARRAY_BUFFER:
-        glDrawElements(mode, m_count, m_type, 0);
+        glDrawElements(mode, m_count, m_type, 0); glError();
         break;
     case GL_ARRAY_BUFFER:
-        glDrawArrays(mode, 0, m_count);
+        glDrawArrays(mode, 0, m_count); glError();
         break;
     };
-    glError();
+
 }
 
 void BufferObject::release(const GLint attributeLocation)

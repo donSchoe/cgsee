@@ -1,6 +1,8 @@
 #include "textureloader.h"
 #include "texture2d.h"
+#include "gpuquery.h"
 #include <algorithm>
+#include <GL/gl.h>
 #include <assert.h>
 #include <iostream>
 #include <IL/il.h>
@@ -27,13 +29,13 @@ Texture2D *TextureLoader::loadTexture2D(const QString &path)
 
         re = ilLoadImage(path.toStdString().c_str());
         if(!re) {
-            assert(0);
             switch(ilGetError()) {
                 case IL_COULD_NOT_OPEN_FILE: break;
                 case IL_ILLEGAL_OPERATION: break;
                 case IL_INVALID_EXTENSION:break;
                 case IL_INVALID_PARAM: break;
             }
+            assert(0);
         }
 
         re = ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
@@ -46,17 +48,18 @@ Texture2D *TextureLoader::loadTexture2D(const QString &path)
             assert(0);
         }
 
-        glGenTextures(1, &gTexture);
-        glBindTexture(GL_TEXTURE_2D, gTexture);
+        glGenTextures(1, &gTexture); glError();
 
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glBindTexture(GL_TEXTURE_2D, gTexture); glError();
 
-        glTexImage2D(   GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_BPP),
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); glError();
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); glError();
+
+        glTexImage2D(   GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT),
                         ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
-                        0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,  ilGetData());
+                        0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,  ilGetData()); glError();
         ilBindImage(0);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        glBindTexture(GL_TEXTURE_2D, 0); glError();
 
         m_loadedTextures[path] = gTexture;
     }

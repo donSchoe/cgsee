@@ -48,3 +48,5 @@ protected:
 
 #define glError() GPUQuery::error(__FILE__, __LINE__)
 #define glIsError() GPUQuery::error(__FILE__, __LINE__)
+
+

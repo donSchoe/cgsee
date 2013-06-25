@@ -73,24 +73,27 @@ void PolygonalDrawable::initialize(const Program & program)
     glError();
 
     // Apply vertex deduplication
-
     m_geometry->applyOptimizer(new VertexReuse());
     // Apply Vertex Cache Optimization
     m_geometry->applyOptimizer(new VertexCacheOptimizer());
 
     // setup element array buffers
-
     BufferObject * indexBO(new BufferObject(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW));
     indexBO->data<GLuint>(m_geometry->indices(), GL_UNSIGNED_INT, 1);
 
     m_elementArrayBOs.push_back(indexBO);
 
     // setup array buffers
-
 	BufferObject * vertexBO(new BufferObject(GL_ARRAY_BUFFER, GL_STATIC_DRAW));
 	vertexBO->data<glm::vec3>(m_geometry->vertices(), GL_FLOAT, 3);
 
     m_arrayBOsByAttribute["a_vertex"] = vertexBO;
+
+    // setup array buffers
+	BufferObject * texcBO(new BufferObject(GL_ARRAY_BUFFER, GL_STATIC_DRAW));
+	texcBO->data<glm::vec2>(m_geometry->texcs(), GL_FLOAT, 2);
+
+    m_arrayBOsByAttribute["a_texc"] = texcBO;
 
     // TODO: the geometry should provide this information.
 

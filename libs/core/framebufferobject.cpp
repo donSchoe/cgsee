@@ -1,9 +1,10 @@
-
+#include <iostream>
 #include "framebufferobject.h"
 
 #include "gpuquery.h"
 #include "program.h"
 
+using namespace std;
 
 // http://www.swiftless.com/tutorials/opengl/framebuffer.html
 
@@ -97,7 +98,7 @@ void FrameBufferObject::bindTexture2D(
     glBindTexture(GL_TEXTURE_2D, m_texture);
     glError();
 
-    program.setUniform(uniform, slot);  
+    program.setUniform(uniform, slot);
 }
 
 void FrameBufferObject::releaseTexture2D() const
@@ -177,10 +178,10 @@ void FrameBufferObject::resize() const
         glTexImage2D(GL_TEXTURE_2D, 0, m_internal, m_size.x, m_size.y, 0, m_format, m_type, 0);
         glError();
 
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);  
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);  
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);  
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
         glBindTexture(GL_TEXTURE_2D, 0);
         glError();

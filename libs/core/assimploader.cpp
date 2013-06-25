@@ -153,7 +153,7 @@ void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int num
 
         if(aMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
             aMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
-            tex2D = TextureLoader::loadTexture2D((m_modelDir + texPath.C_Str()));
+            tex2D = TextureLoader::loadTexture2D((m_modelDir + "/" + texPath.C_Str()));
             material->addAttribute(tex2D);
         }
 
