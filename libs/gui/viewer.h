@@ -139,8 +139,8 @@ protected:
     Camera * m_camera;
     QVector<glm::mat4> m_saved_views;
 
-    QDockWidget * m_dockLeft;
-    QDockWidget * m_dockBottom;
+    QDockWidget * m_dockNavigator;
+    QDockWidget * m_dockExplorer;
 
     FileNavigator * m_navigator;
     FileExplorer * m_explorer;
