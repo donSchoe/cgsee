@@ -1,7 +1,7 @@
 #include <glm/gtx/transform.hpp>
 
 #include "arcballnavigation.h"
-#include "camera.h"
+#include "../camera.h"
 
 ArcballNavigation::ArcballNavigation(Camera * camera) 
     : AbstractNavigation(camera)

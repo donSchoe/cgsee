@@ -3,7 +3,7 @@
 #include <glm/gtc/matrix_access.hpp>
 
 #include "flightnavigation.h"
-#include "camera.h"
+#include "../camera.h"
 
 
 float speed = 0.003f;

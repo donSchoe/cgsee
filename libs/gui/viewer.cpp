@@ -22,10 +22,10 @@
 #include "fileNavigator.h"
 #include "fileExplorer.h"
 
-#include <core/abstractnavigation.h>
-#include <core/flightnavigation.h>
-#include <core/fpsnavigation.h>
-#include <core/arcballnavigation.h>
+#include <core/navigation/abstractnavigation.h>
+#include <core/navigation/flightnavigation.h>
+#include <core/navigation/fpsnavigation.h>
+#include <core/navigation/arcballnavigation.h>
 
 #include <core/abstractscenepainter.h>
 #include <core/fileassociatedshader.h>
@@ -251,6 +251,7 @@ void Viewer::on_loadFile(const QString & path)
         QMessageBox::critical(this, "Loading failed", "The loader was not able to load from \n" + path);
     else {
         this->painter()->assignScene(scene);
+        this->m_qtCanvas->navigation()->sceneChanged(scene);
         this->m_qtCanvas->update();
     }
 }

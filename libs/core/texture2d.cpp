@@ -20,15 +20,12 @@ Texture2D::~Texture2D()
 
 void Texture2D::bind(const Program &program)
 {
-    GLint location;
-
+    glActiveTexture(GL_TEXTURE0 + 1);
     glError();
 
-    location = glGetUniformLocation(program.program(), m_name.c_str()); glError();
+    glBindTexture(GL_TEXTURE_2D, m_gTexId);
+    glError();
 
-    glUniform1i(location, GL_TEXTURE1); glError();
-
-    glActiveTexture(GL_TEXTURE1); // TODO - dynamically choose TexUnit?
-    glBindTexture(GL_TEXTURE_2D, m_gTexId); glError();
+    program.setUniform(QString::fromStdString(m_name), 1);
 }
 

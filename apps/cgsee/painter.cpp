@@ -16,8 +16,8 @@
 #include <core/assimploader.h>
 #include <core/program.h>
 #include <core/screenquad.h>
-#include "core/arcballnavigation.h"
-#include "core/flightnavigation.h"
+#include "core/navigation/arcballnavigation.h"
+#include "core/navigation/flightnavigation.h"
 
 
 //for phong, flat and gouraud

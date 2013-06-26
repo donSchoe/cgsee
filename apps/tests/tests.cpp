@@ -79,7 +79,7 @@ void DataCoreTest::writeReadTest()
     // Try to read using SFML function (single function multiple data)
     unsigned int readTimes = 0;
     vertexList->foreachVertexAttribute<glm::vec3>(0, vertexList->size(), "position", nullptr,
-        [&](int i, const glm::vec3 &value)
+        [&](unsigned int i, const glm::vec3 &value)
         {
             QVERIFY(i < vertexList->size());
             QVERIFY(glm::distance(value, pointsArray[i]) < 0.0001);

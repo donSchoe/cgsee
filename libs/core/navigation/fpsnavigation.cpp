@@ -2,7 +2,7 @@
 #include <glm/gtx/rotate_vector.hpp>
 
 #include "fpsnavigation.h"
-#include "camera.h"
+#include "../camera.h"
 
 float fspeed = 0.002f;
 

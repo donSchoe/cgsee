@@ -6,9 +6,9 @@
 #include <QBasicTimer>
 
 #include "canvas.h"
-#include "core/abstractnavigation.h"
-#include "core/flightnavigation.h"
-#include "core/arcballnavigation.h"
+#include "core/navigation/abstractnavigation.h"
+#include "core/navigation/flightnavigation.h"
+#include "core/navigation/arcballnavigation.h"
 
 #include <core/abstractscenepainter.h>
 #include <core/gpuquery.h>

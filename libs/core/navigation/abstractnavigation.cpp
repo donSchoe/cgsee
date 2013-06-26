@@ -7,7 +7,7 @@
 #include <QGLWidget>
 
 #include "abstractnavigation.h"
-#include "camera.h"
+#include "../camera.h"
 
 const float AbstractNavigation::TIMER_MS = 1000.f / 60.f;
 
@@ -24,7 +24,7 @@ AbstractNavigation::AbstractNavigation(Camera * camera)
     , m_timer_requests(0)
     , m_animation_active(false)
 {
-
+    m_frontView = glm::lookAt(glm::vec3(0.f, 0.f, 2.f), glm::vec3(0), glm::vec3(0.f, 1.f, 0.f));
 }
 
 
@@ -181,9 +181,9 @@ glm::mat4 AbstractNavigation::defaultView()
     return frontview();
 }
 
-glm::mat4 AbstractNavigation::frontview() // TODO calculate AABB dependent
+glm::mat4 AbstractNavigation::frontview()
 {
-    return glm::lookAt(glm::vec3(0.f, 0.f, -2.f), glm::vec3(0), glm::vec3(0.f, 1.f, 0.f));
+    return m_frontView;
 }
 
 glm::mat4 AbstractNavigation::rightview()
@@ -214,4 +214,12 @@ glm::mat4 AbstractNavigation::bottomview()
 glm::mat4 AbstractNavigation::topRightView()
 {
     return frontview() * glm::rotate(45.f, glm::vec3(0,1,0)) * glm::rotate(-45.f, glm::vec3(1,0,0));
+}
+
+void AbstractNavigation::sceneChanged(Group * scene)
+{
+    AxisAlignedBoundingBox bb = scene->boundingBox();
+    //m_frontView = glm::lookAt(-glm::vec3(0.f, 0.f, bb.radius()*2) + bb.center(), bb.center(), glm::vec3(0.f, 1.f, 0.f));
+    setFromMatrix(m_frontView);
+    updateCamera();
 }
