@@ -22,14 +22,14 @@ CGSee::CGSee(int & argc, char ** argv)
     Camera * camera = new Camera();
     camera->setFovy (45.0f);
     camera->setZNear( 1.0f);
-    camera->setZFar (10.0f);
+    camera->setZFar (1000.0f);
     m_viewer->setCamera(camera);
 
     m_painter = new Painter(camera);
     m_viewer->setPainter(m_painter);
 
     AbstractNavigation * navigation = new ArcballNavigation(camera);
-    navigation->reset(); // initialize view matrix 
+    navigation->reset(); // initialize view matrix
     m_viewer->setNavigation(navigation);
 
     // AssimpLoader loader;
@@ -42,7 +42,7 @@ CGSee::CGSee(int & argc, char ** argv)
 
 CGSee::~CGSee()
 {
-    // NOTE: painter must be destroyed before viewer, since viewer deletes context, 
+    // NOTE: painter must be destroyed before viewer, since viewer deletes context,
     // and painter deinitializes all opengl handles...
 
     delete m_painter;

@@ -24,8 +24,7 @@ PolygonalGeometry::PolygonalGeometry(const QString & name)
 
 PolygonalGeometry::~PolygonalGeometry()
 {
-    if(m_material != nullptr)
-        delete m_material;
+
 }
 
 const GLenum PolygonalGeometry::mode() const
