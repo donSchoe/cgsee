@@ -20,12 +20,12 @@ const bool AxisAlignedBoundingBox::extend(const glm::vec3 & vertex)
     m_llf = glm::min(vertex, m_llf);
     m_urb = glm::max(vertex, m_urb);
 
-    const bool extended(urb != m_urb && llf != m_llf);
+    const bool extended(urb != m_urb || llf != m_llf);
 
     if(extended)
     {
-        m_center =  m_llf + (m_urb - m_llf) * .5f;
-        m_radius = (m_urb - m_llf).length() * .5f;
+        m_center = (m_urb + m_llf) * .5f;
+        m_radius = glm::length(m_urb - m_llf) * .5f;
 
         if(m_invalidated)
             m_invalidated = false;
@@ -86,19 +86,18 @@ const bool AxisAlignedBoundingBox::valid() const
     return !m_invalidated;
 }
 
-const AxisAlignedBoundingBox & AxisAlignedBoundingBox::operator*(const glm::mat4 & rhs) const
+const AxisAlignedBoundingBox AxisAlignedBoundingBox::operator*(const glm::mat4 & rhs) const
 {
     return AxisAlignedBoundingBox(*this) *= rhs;
 }
 
 AxisAlignedBoundingBox & AxisAlignedBoundingBox::operator*=(const glm::mat4 & rhs)
 {
-
     m_urb = glm::vec3(glm::vec4(m_urb, 1.f) * rhs);
     m_llf = glm::vec3(glm::vec4(m_llf, 1.f) * rhs);
 
-    m_center =  m_llf + (m_urb - m_llf) * .5f;
-    m_radius = (m_urb - m_llf).length() * .5f;
+    m_center = (m_urb + m_llf) * .5f;
+    m_radius = glm::length(m_urb - m_llf) * .5f;
 
     return *this;
 }

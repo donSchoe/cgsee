@@ -25,7 +25,7 @@ public:
     const void invalidate();
     const bool valid() const;
 
-    const AxisAlignedBoundingBox & operator*(const glm::mat4 & rhs) const;
+    const AxisAlignedBoundingBox operator*(const glm::mat4 & rhs) const;
     AxisAlignedBoundingBox & operator*=(const glm::mat4 & rhs);
 
 protected:
