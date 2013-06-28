@@ -35,7 +35,8 @@ Texture2D *TextureLoader::loadTexture2D(const QString &path)
                 case IL_INVALID_EXTENSION:break;
                 case IL_INVALID_PARAM: break;
             }
-            assert(0);
+            ilDeleteImage(iTexture);
+            return nullptr;
         }
 
         re = ilConvertImage(IL_RGB, IL_UNSIGNED_BYTE);
@@ -45,7 +46,8 @@ Texture2D *TextureLoader::loadTexture2D(const QString &path)
                 case IL_INVALID_CONVERSION: assert(0); break;
                 case IL_OUT_OF_MEMORY: assert(0); break;
             }
-            assert(0);
+            ilDeleteImage(iTexture);
+            return nullptr;
         }
 
         glGenTextures(1, &gTexture); glError();
@@ -58,6 +60,8 @@ Texture2D *TextureLoader::loadTexture2D(const QString &path)
         glTexImage2D(   GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT),
                         ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
                         0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,  ilGetData()); glError();
+
+        ilDeleteImage(iTexture);
         ilBindImage(0);
         glBindTexture(GL_TEXTURE_2D, 0); glError();
 

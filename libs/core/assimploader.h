@@ -24,6 +24,8 @@ public:
     AssimpLoader();
     virtual ~AssimpLoader();
 
+    void clear();
+
     virtual QStringList namedLoadableTypes() const;
     virtual Group * importFromFile(const QString & filePath);
 

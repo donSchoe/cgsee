@@ -22,6 +22,11 @@ AssimpLoader::~AssimpLoader()
     delete m_importer;
 }
 
+void AssimpLoader::clear() {
+    m_modelDir.clear();
+    m_materials.clear();
+}
+
 QStringList AssimpLoader::namedLoadableTypes() const
 {
     QStringList types = AbstractModelLoader::namedLoadableTypes();
@@ -82,6 +87,7 @@ QStringList AssimpLoader::loadableExtensions() const
 
 Group * AssimpLoader::importFromFile(const QString & filePath)
 {
+    clear();
     qDebug("Reading geometry with Assimp from \"%s\".", qPrintable(filePath));
 
     m_modelDir = QFileInfo(filePath).dir().path();
@@ -146,15 +152,23 @@ void AssimpLoader::parseMeshes(aiMesh **meshes,
 void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials) {
     for(int m = 0; m < numMaterials; m++) {
         Texture2D *tex2D;
-        aiString texPath;
+        aiString aTexPath;
+        QString texPath;
 
         aiMaterial *aMaterial = materials[m];
         Material *material = new Material;
 
         if(aMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
-            aMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &texPath);
-            tex2D = TextureLoader::loadTexture2D((m_modelDir + "/" + texPath.C_Str()));
-            material->addAttribute(tex2D);
+            aMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aTexPath);
+            texPath = m_modelDir + "/" + aTexPath.C_Str();
+            tex2D = TextureLoader::loadTexture2D(texPath);
+
+            if(tex2D == nullptr) {
+                qCritical("Couldn't load texture %s", texPath.toStdString().c_str());
+            }
+            else {
+                material->addAttribute(tex2D);
+            }
         }
 
         m_materials.push_back(material);
