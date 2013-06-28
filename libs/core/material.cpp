@@ -10,7 +10,6 @@ Material::Material()
 
 Material::~Material()
 {
-
     for(auto attribute : m_attributes) {
         delete attribute;
     }

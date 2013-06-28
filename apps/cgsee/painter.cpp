@@ -187,7 +187,7 @@ const bool Painter::initialize()
          new FileAssociatedShader(GL_VERTEX_SHADER, "data/gooch.vert"));
 
     //set UNIFORMS for selected shader
-    m_useProgram = m_textured;
+    m_useProgram = m_phong;
     setUniforms();
 
     // Post Processing Shader
@@ -280,7 +280,6 @@ void Painter::resize(  //probably never called anywhere?
     m_fboNormalz->resize(width, height);
 
     postShaderRelinked();
-
 }
 
 void Painter::setShading(char shader)
