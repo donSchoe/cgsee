@@ -7,6 +7,7 @@
 #include "cgsee.h"
 
 static void init() {
+    qRegisterMetaType<glm::vec3>("glm::vec4");
     qRegisterMetaType<glm::vec3>("glm::vec3");
     qRegisterMetaType<glm::vec2>("glm::vec2");
 

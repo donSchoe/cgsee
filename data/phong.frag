@@ -21,18 +21,10 @@ uniform mat4 material;
 
 uniform sampler2D texture;
 
-vec4 phongLighting(vec3 n, vec3 v_pos, vec3 cameraposition, vec3 lightdir, vec3 lightdir2, mat4 light, mat4 light2, vec4 lightambientglobal, mat4 material);
+vec4 phongLighting(vec3 normal, vec3 v_pos, vec3 cameraposition, vec3 lightdir, vec3 lightdir2, mat4 light, mat4 light2, vec4 lightambientglobal, vec2 texc);
+
 
 void main()
 {
-	vec3 n = normal;
-
-//	mat4 tmaterial;
-//
-//	tmaterial[0] = texture2D(texture, texc);
-//	tmaterial[1] = texture2D(texture, texc);
-//	tmaterial[2] = texture2D(texture, texc);
-//	tmaterial[3] = vec4(0);
-
-	fragColor=phongLighting(n, position, cameraposition, lightdir, lightdir2, light, light2, lightambientglobal, material);
+	fragColor = phongLighting(normal, position, cameraposition, lightdir, lightdir2, light, light2, lightambientglobal, texc);
 }

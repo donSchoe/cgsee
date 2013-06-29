@@ -6,7 +6,7 @@
 using namespace std;
 
 
-Texture2D::Texture2D(GLuint gTexId, const std::string &name):
+Texture2D::Texture2D(GLuint gTexId, const QString &name):
     MaterialAttribute(name),
     m_gTexId(gTexId)
 {
@@ -26,6 +26,6 @@ void Texture2D::bind(const Program &program)
     glBindTexture(GL_TEXTURE_2D, m_gTexId);
     glError();
 
-    program.setUniform(QString::fromStdString(m_name), 1);
+    program.setUniform(m_name, 1);
 }
 

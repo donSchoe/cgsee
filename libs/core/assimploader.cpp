@@ -149,30 +149,53 @@ void AssimpLoader::parseMeshes(aiMesh **meshes,
         drawables.insert(i, parseMesh(*meshes[i]));
 }
 
-void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials) {
+void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials)
+{
+    const aiTextureType TEXTURE_TYPES[] = {aiTextureType_DIFFUSE, aiTextureType_SPECULAR, aiTextureType_AMBIENT,  aiTextureType_EMISSIVE};
+    const char *TEXTURE_NAMES[] = {"diffuseTex", "specularTex", "ambientTex", "emissionTex"};
+
     for(int m = 0; m < numMaterials; m++) {
-        Texture2D *tex2D;
-        aiString aTexPath;
-        QString texPath;
+        Texture2D *textures[4];
 
         aiMaterial *aMaterial = materials[m];
         Material *material = new Material;
 
-        if(aMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
-            aMaterial->GetTexture(aiTextureType_DIFFUSE, 0, &aTexPath);
-            texPath = m_modelDir + "/" + aTexPath.C_Str();
-            tex2D = TextureLoader::loadTexture2D(texPath);
-
-            if(tex2D == nullptr) {
-                qCritical("Couldn't load texture %s", texPath.toStdString().c_str());
+        for(int t = 0; t < 4; t++) {
+            if(aMaterial->GetTextureCount(TEXTURE_TYPES[t]) > 0) {
+                Texture2D *tex = loadTexture(aMaterial, TEXTURE_TYPES[t]);
+                if(tex == nullptr) {
+                    // Load default texture
+                    qCritical("There is no %s\n", TEXTURE_NAMES[t]);
+                }
+                else {
+                    tex->setName(QString(TEXTURE_NAMES[t]));
+                    material->addAttribute(tex);
+                }
             }
             else {
-                material->addAttribute(tex2D);
+                qCritical("There is no %s\n", TEXTURE_NAMES[t]);
+                // Load default texture
             }
         }
-
         m_materials.push_back(material);
     }
+}
+
+Texture2D *AssimpLoader::loadTexture(aiMaterial *material, aiTextureType type)
+{
+    Texture2D *tex;
+    aiString aTexPath;
+    QString texPath;
+
+    material->GetTexture(type, 0, &aTexPath);
+    texPath = m_modelDir + "/" + aTexPath.C_Str();
+    tex = TextureLoader::loadTexture2D(texPath);
+
+    if(tex == nullptr) {
+        qCritical("Couldn't load texture %s", texPath.toStdString().c_str());
+    }
+
+    return tex;
 }
 
 PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const

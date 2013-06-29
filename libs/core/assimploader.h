@@ -14,6 +14,7 @@
 
 class Group;
 class PolygonalDrawable;
+class Texture2D;
 struct aiNode;
 struct aiScene;
 struct aiMesh;
@@ -33,15 +34,12 @@ protected:
     virtual QStringList loadableExtensions() const;
 
 protected:
-    Group * parseNode(const aiScene & scene,
-        const QList<PolygonalDrawable *> &drawables, const aiNode & node) const;
-
-    void parseMeshes(aiMesh ** meshes,
-        const unsigned int numMeshes, QList<PolygonalDrawable *> & drawables) const;
-
+    Group * parseNode(const aiScene & scene, const QList<PolygonalDrawable *> &drawables, const aiNode & node) const;
+    void parseMeshes(aiMesh ** meshes, const unsigned int numMeshes, QList<PolygonalDrawable *> & drawables) const;
     void parseMaterials(aiMaterial **materials, const unsigned int numMaterials);
-
     PolygonalDrawable * parseMesh(const aiMesh & mesh) const;
+
+    Texture2D *loadTexture(aiMaterial *material, aiTextureType type);
 
 protected:
     Assimp::Importer * m_importer;

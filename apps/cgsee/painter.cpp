@@ -148,30 +148,25 @@ const bool Painter::initialize()
 
 
 
-    FileAssociatedShader *phongLighting = new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/phongLighting.frag");
+    FileAssociatedShader *phongLighting = new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/phongLighting.glsl");
 
     //FLAT
     m_flat = new Program();
-    m_flat->attach(
-        new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/flat.frag"));
+    m_flat->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/flat.frag"));
     m_flat->attach(phongLighting);
-    m_flat->attach(
-        new FileAssociatedShader(GL_VERTEX_SHADER, "data/flat.vert"));
-    m_flat->attach(
-        new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/flat.geo"));
+    m_flat->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/flat.vert"));
+    m_flat->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/flat.geo"));
 
     //GOURAUD
-
-    m_gouraud = new Program();
-    m_gouraud->attach(
-        new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/gouraud.frag"));
-    m_gouraud->attach(
-        new FileAssociatedShader(GL_VERTEX_SHADER, "data/gouraud.vert"));
-    m_gouraud->attach(
-        new FileAssociatedShader(GL_VERTEX_SHADER, "data/phongLighting.vert"));
+//    m_gouraud = new Program();
+//    m_gouraud->attach(
+//        new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/gouraud.frag"));
+//    m_gouraud->attach(
+//        new FileAssociatedShader(GL_VERTEX_SHADER, "data/gouraud.vert"));
+//    m_gouraud->attach(
+//        new FileAssociatedShader(GL_VERTEX_SHADER, "data/phongLighting.vert"));
 
     //PHONG
-
     m_phong = new Program();
     m_phong->attach(
         new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/phong.frag"));
@@ -187,7 +182,7 @@ const bool Painter::initialize()
          new FileAssociatedShader(GL_VERTEX_SHADER, "data/gooch.vert"));
 
     //set UNIFORMS for selected shader
-    m_useProgram = m_phong;
+    m_useProgram = m_flat;
     setUniforms();
 
     // Post Processing Shader
@@ -212,20 +207,20 @@ void Painter::setUniforms()
         m_useProgram->setUniform(LIGHTDIR_UNIFORM, glm::vec3(0.0,6.5,7.5));
         m_useProgram->setUniform(LIGHTDIR_UNIFORM2, glm::vec3(0.0,-8.0,7.5));
 
-        m_useProgram->setUniform(LIGHTAMBIENTGLOBAL_UNIFORM, glm::vec4(0.0));
+        m_useProgram->setUniform(LIGHTAMBIENTGLOBAL_UNIFORM, glm::vec4(0.4));
 
         glm::mat4 lightMat;
         lightMat[0] = glm::vec4(0.0,0.0,0.0,1.0);    //ambient
-        lightMat[1] = glm::vec4(0.2,0.2,0.2,1.0);    //diffuse
+        lightMat[1] = glm::vec4(0.4,0.6,0.8,1.0);    //diffuse
         lightMat[2] = glm::vec4(0.0,0.0,0.8,1.0);    //specular
-        lightMat[3] = glm::vec4(0.002,0.002,0.0004,1.4);    //attenuation1, attenuation2, attenuation3, shininess
+        lightMat[3] = glm::vec4(0.000,0.000,0.0000,1.4);    //attenuation1, attenuation2, attenuation3, shininess
         m_useProgram->setUniform(LIGHT_UNIFORM, lightMat, false);
 
         glm::mat4 lightMat2;
         lightMat2[0] = glm::vec4(0.0,0.0,0.0,1.0);    //ambient
-        lightMat2[1] = glm::vec4(0.1,0.1,0.1,1.0);    //diffuse
+        lightMat2[1] = glm::vec4(0.9,0.5,0.5,1.0);    //diffuse
         lightMat2[2] = glm::vec4(0.8,0.0,0.0,1.0);    //specular
-        lightMat2[3] = glm::vec4(0.002,0.002,0.0004,1.4);    //attenuation1, attenuation2, attenuation3, shininess
+        lightMat2[3] = glm::vec4(0.000,0.000,0.0000,1.4);    //attenuation1, attenuation2, attenuation3, shininess
 
         m_useProgram->setUniform(LIGHT_UNIFORM2, lightMat2, false);
 
