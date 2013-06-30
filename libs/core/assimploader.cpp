@@ -11,6 +11,11 @@
 
 using namespace std;
 
+const char *DIFFUSE_TEX_NAME("diffuseTex");
+const char *AMBIENT_TEX_NAME("ambientTex");
+const char *SPECULAR_TEX_NAME("specularTex");
+const char *EMISSION_TEX_NAME("emissionTex");
+
 AssimpLoader::AssimpLoader()
 : AbstractModelLoader()
 , m_importer(new Assimp::Importer())
@@ -151,8 +156,9 @@ void AssimpLoader::parseMeshes(aiMesh **meshes,
 
 void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials)
 {
+    const int numTextureTypes = 4;
     const aiTextureType TEXTURE_TYPES[] = {aiTextureType_DIFFUSE, aiTextureType_SPECULAR, aiTextureType_AMBIENT,  aiTextureType_EMISSIVE};
-    const char *TEXTURE_NAMES[] = {"diffuseTex", "specularTex", "ambientTex", "emissionTex"};
+    const char *TEXTURE_NAMES[] = {DIFFUSE_TEX_NAME, SPECULAR_TEX_NAME, AMBIENT_TEX_NAME, EMISSION_TEX_NAME};
 
     for(int m = 0; m < numMaterials; m++) {
         Texture2D *textures[4];
@@ -160,11 +166,11 @@ void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int num
         aiMaterial *aMaterial = materials[m];
         Material *material = new Material;
 
-        for(int t = 0; t < 4; t++) {
+        // Try to load textures
+        for(int t = 0; t < numTextureTypes; t++) {
             if(aMaterial->GetTextureCount(TEXTURE_TYPES[t]) > 0) {
                 Texture2D *tex = loadTexture(aMaterial, TEXTURE_TYPES[t]);
                 if(tex == nullptr) {
-                    // Load default texture
                     qCritical("There is no %s\n", TEXTURE_NAMES[t]);
                 }
                 else {
@@ -172,11 +178,21 @@ void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int num
                     material->addAttribute(tex);
                 }
             }
-            else {
-                qCritical("There is no %s\n", TEXTURE_NAMES[t]);
-                // Load default texture
-            }
         }
+
+        // If certain textures are not available, set defaults
+        if(material->attribute<Texture2D>(DIFFUSE_TEX_NAME) == NULL && material->attribute<Texture2D>(AMBIENT_TEX_NAME) != NULL) {
+            Texture2D *diffuseTex = loadTexture(aMaterial, aiTextureType_AMBIENT);
+            diffuseTex->setName(DIFFUSE_TEX_NAME);
+            material->addAttribute(diffuseTex);
+        }
+        if(material->attribute<Texture2D>(AMBIENT_TEX_NAME) == NULL && material->attribute<Texture2D>(DIFFUSE_TEX_NAME) != NULL) {
+            Texture2D *ambientTex = loadTexture(aMaterial, aiTextureType_DIFFUSE);
+            ambientTex->setName(AMBIENT_TEX_NAME);
+            material->addAttribute(ambientTex);
+        }
+
+
         m_materials.push_back(material);
     }
 }

@@ -158,13 +158,13 @@ const bool Painter::initialize()
     m_flat->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/flat.geo"));
 
     //GOURAUD
-//    m_gouraud = new Program();
-//    m_gouraud->attach(
-//        new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/gouraud.frag"));
-//    m_gouraud->attach(
-//        new FileAssociatedShader(GL_VERTEX_SHADER, "data/gouraud.vert"));
-//    m_gouraud->attach(
-//        new FileAssociatedShader(GL_VERTEX_SHADER, "data/phongLighting.vert"));
+    m_gouraud = new Program();
+    m_gouraud->attach(
+        new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/gouraud.frag"));
+    m_gouraud->attach(
+        new FileAssociatedShader(GL_VERTEX_SHADER, "data/gouraud.vert"));
+    m_gouraud->attach(
+        new FileAssociatedShader(GL_VERTEX_SHADER, "data/phongLighting.vert"));
 
     //PHONG
     m_phong = new Program();

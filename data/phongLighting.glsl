@@ -56,9 +56,9 @@ vec4 phongLighting(vec3 n, vec3 v_pos, vec3 cameraposition, vec3 lightdir1, vec3
     // <<
 
     // calculate color from lighting coeff and material coeff
-    vec4 diffuseColor = texture2D(diffuseTex, texc);
+    vec4 diffuseColor  = texture2D(diffuseTex, texc);
     vec4 emissionColor = texture2D(emissionTex, texc);
-    vec4 ambientColor = diffuseColor;//texture2D(ambientTex, texc);
+    vec4 ambientColor  = texture2D(ambientTex, texc);
     vec4 specularColor = texture2D(specularTex, texc);
 
     vec4 color = lightambientglobal * ambientColor + emissionColor;

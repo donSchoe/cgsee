@@ -1,5 +1,6 @@
 #pragma once
 
+#include <QDebug>
 #include <list>
 #include "materialattribute.h"
 
@@ -12,9 +13,26 @@ public:
 
     void addAttribute(MaterialAttribute *attribute);
 
+    template<typename T> T *attribute(const QString &name) const;
+
     void bind(const Program &program);
 
 
 protected:
     std::list<MaterialAttribute*> m_attributes;
 };
+
+template<typename T>
+T *Material::attribute(const QString &name) const
+{
+    for(auto attribute : m_attributes) {
+        if(attribute->name() == name) {
+            T *re = dynamic_cast<T*>(attribute);
+            if(re == nullptr) {
+                qCritical("Couldn't cast to requested MaterialAttribute\n");
+            }
+            return re;
+        }
+    }
+    return nullptr;
+}
