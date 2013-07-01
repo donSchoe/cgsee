@@ -32,8 +32,8 @@ static const QString LIGHTPOSITION_UNIFORM ("lightposition");
 //gooch
 static const QString WARMCOLDCOLOR_UNIFORM ("warmcoldcolor");
 
-Painter::Painter(Camera * camera)
-:   AbstractScenePainter()
+Painter::Painter(Group * scene, Camera * camera):
+   AbstractScenePainter(scene)
 ,   m_quad(nullptr)
 ,   m_textured(nullptr)
 ,   m_normals(nullptr)
@@ -52,13 +52,14 @@ Painter::Painter(Camera * camera)
 {
 }
 
-Painter::Painter(Group * scene)
-:   AbstractScenePainter(scene)
-,   m_quad(nullptr)
-,   m_normalz(nullptr)
-,   m_fboNormalz(nullptr)
-,   m_flush(nullptr)
-,   m_camera(nullptr)
+Painter::Painter(Camera * camera):
+    Painter(nullptr, camera)
+{
+}
+
+
+Painter::Painter(Group * scene):
+    Painter(scene, nullptr)
 {
 }
 
@@ -97,6 +98,7 @@ const bool Painter::initialize()
     }
 
     m_quad = new ScreenQuad();
+
 
     // Textured
     m_textured = new Program();
@@ -164,7 +166,7 @@ const bool Painter::initialize()
     m_gouraud->attach(
         new FileAssociatedShader(GL_VERTEX_SHADER, "data/gouraud.vert"));
     m_gouraud->attach(
-        new FileAssociatedShader(GL_VERTEX_SHADER, "data/phongLighting.vert"));
+        new FileAssociatedShader(GL_VERTEX_SHADER, "data/phongLighting.glsl"));
 
     //PHONG
     m_phong = new Program();
@@ -204,20 +206,20 @@ void Painter::setUniforms()
     if(m_useProgram == m_flat || m_useProgram == m_gouraud || m_useProgram == m_phong)
     {
         m_useProgram->setUniform(CAMERAPOSITION_UNIFORM, camPos);
-        m_useProgram->setUniform(LIGHTDIR_UNIFORM, glm::vec3(0.0,6.5,7.5));
-        m_useProgram->setUniform(LIGHTDIR_UNIFORM2, glm::vec3(0.0,-8.0,7.5));
+        m_useProgram->setUniform(LIGHTDIR_UNIFORM, glm::vec3(0.0,0.0,7.5));
+        m_useProgram->setUniform(LIGHTDIR_UNIFORM2, glm::vec3(0.0,-8.0,0.0));
 
         m_useProgram->setUniform(LIGHTAMBIENTGLOBAL_UNIFORM, glm::vec4(0.4));
 
         glm::mat4 lightMat;
-        lightMat[0] = glm::vec4(0.0,0.0,0.0,1.0);    //ambient
+        lightMat[0] = glm::vec4(0.2,0.2,0.2,1.0);    //ambient
         lightMat[1] = glm::vec4(0.4,0.6,0.8,1.0);    //diffuse
         lightMat[2] = glm::vec4(0.0,0.0,0.8,1.0);    //specular
         lightMat[3] = glm::vec4(0.000,0.000,0.0000,1.4);    //attenuation1, attenuation2, attenuation3, shininess
         m_useProgram->setUniform(LIGHT_UNIFORM, lightMat, false);
 
         glm::mat4 lightMat2;
-        lightMat2[0] = glm::vec4(0.0,0.0,0.0,1.0);    //ambient
+        lightMat2[0] = glm::vec4(0.3,0.3,0.3,1.0);    //ambient
         lightMat2[1] = glm::vec4(0.9,0.5,0.5,1.0);    //diffuse
         lightMat2[2] = glm::vec4(0.8,0.0,0.0,1.0);    //specular
         lightMat2[3] = glm::vec4(0.000,0.000,0.0000,1.4);    //attenuation1, attenuation2, attenuation3, shininess
@@ -300,26 +302,22 @@ void Painter::postShaderRelinked()
 }
 
 void Painter::bindSampler(
-
-    const t_samplerByName & sampler
+    const t_samplerByName & samplers
 ,   const Program & program)
 {
-    t_samplerByName::const_iterator i(sampler.cbegin());
-    const t_samplerByName::const_iterator iEnd(sampler.cend());
-
-    for(glm::uint slot(0); i != iEnd; ++i, ++slot)
-        i.value()->bindTexture2D(program, i.key(), slot);
+    glm::uint slot = 0;
+    for(auto samplerKey : samplers.keys()) {
+        samplers[samplerKey]->bindTexture2D(program, samplerKey, slot);
+        slot++;
+    }
 }
 
 void Painter::releaseSampler(
-    const t_samplerByName & sampler)
+    const t_samplerByName & samplers)
 {
-    t_samplerByName::const_iterator i(sampler.begin());
-    const t_samplerByName::const_iterator iEnd(sampler.cend());
-
-    for(; i != iEnd; ++i)
-        i.value()->releaseTexture2D();
-
+    for(auto sampler : samplers) {
+        sampler->releaseTexture2D();
+    }
 }
 
 Camera * Painter::camera()

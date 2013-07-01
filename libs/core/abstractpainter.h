@@ -32,6 +32,8 @@ public:
     ,   const int height);
 
 
+
+
 protected:
     virtual const bool initialize() = 0;
     virtual Camera * camera() = 0;

@@ -28,7 +28,7 @@ FileAssociatedShader::FileAssociatedShader(
     if(setSourceFromFile(false))
         update();
 }
- 
+
 FileAssociatedShader::~FileAssociatedShader()
 {
     unregisterShader(m_filePath, this);

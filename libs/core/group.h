@@ -4,7 +4,7 @@
 
 #include <list>
 #include "node.h"
-#include "material.h"
+#include "material/material.h"
 
 class PolygonalDrawable;
 class Program;

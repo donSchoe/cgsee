@@ -8,7 +8,7 @@
 
 #include "node.h"
 #include "common.h"
-#include "material.h"
+#include "material/material.h"
 #include "datacore/datablock.h"
 #include "geometryoptimizer.h"
 

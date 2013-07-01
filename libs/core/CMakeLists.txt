@@ -8,18 +8,6 @@ set(SOURCES
 
     declspec.h
 
-    aabb.h
-    aabb.cpp
-    abstractapplication.h
-    abstractapplication.cpp
-    abstractglparent.h
-    abstractmodelloader.cpp
-    abstractmodelloader.h
-    abstractpainter.h
-    abstractpainter.cpp
-    abstractscenepainter.h
-    abstractscenepainter.cpp
-
     datacore/datablock.h
     datacore/datablock.cpp
     datacore/attributeiterator.h
@@ -34,6 +22,36 @@ set(SOURCES
     datacore/registertypeshere.h
     datacore/vertexlist_impl.inl
     datacore/datablock_impl.inl
+    
+    material/material.cpp
+    material/material.h
+    material/materialattribute.cpp
+    material/materialattribute.h
+    material/texture2d.h
+    material/texture2d.cpp
+    material/textureloader.h
+    material/textureloader.cpp
+    
+    navigation/abstractnavigation.h
+    navigation/abstractnavigation.cpp
+    navigation/arcballnavigation.h
+    navigation/arcballnavigation.cpp
+    navigation/flightnavigation.h
+    navigation/flightnavigation.cpp
+    navigation/fpsnavigation.h
+    navigation/fpsnavigation.cpp
+    
+    aabb.h
+    aabb.cpp
+    abstractapplication.h
+    abstractapplication.cpp
+    abstractglparent.h
+    abstractmodelloader.cpp
+    abstractmodelloader.h
+    abstractpainter.h
+    abstractpainter.cpp
+    abstractscenepainter.h
+    abstractscenepainter.cpp
     abstracttimer.h
     assimploader.h
     assimploader.cpp
@@ -57,21 +75,9 @@ set(SOURCES
     gpuquery.cpp
     group.h
     group.cpp
-    material.cpp
-    material.h
-    materialattribute.cpp
-    materialattribute.h
     mathmacros.h
     messagehandler.h
-    messagehandler.cpp
-    navigation/abstractnavigation.h
-    navigation/abstractnavigation.cpp
-    navigation/arcballnavigation.h
-    navigation/arcballnavigation.cpp
-    navigation/flightnavigation.h
-    navigation/flightnavigation.cpp
-    navigation/fpsnavigation.h
-    navigation/fpsnavigation.cpp
+    messagehandler.cpp   
     node.h
     node.cpp
     objloader.h
@@ -86,10 +92,6 @@ set(SOURCES
     screenquad.cpp
     shader.h
     shader.cpp
-    texture2d.h
-    texture2d.cpp
-    textureloader.h
-    textureloader.cpp
     timer.h
     timer.cpp
     vertexcacheoptimizer.h

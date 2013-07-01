@@ -9,7 +9,7 @@
 
 #include "declspec.h"
 #include "common.h"
-#include "material.h"
+#include "material/material.h"
 #include "abstractmodelloader.h"
 
 class Group;

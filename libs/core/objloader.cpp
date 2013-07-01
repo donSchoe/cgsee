@@ -14,8 +14,8 @@
 #include "group.h"
 #include "polygonaldrawable.h"
 #include "polygonalgeometry.h"
-#include "textureloader.h"
-#include "texture2d.h"
+#include "material/textureloader.h"
+#include "material/texture2d.h"
 
 using namespace std;
 

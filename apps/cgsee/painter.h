@@ -8,8 +8,6 @@
 #include <core/abstractscenepainter.h>
 
 
-
-
 class Camera;
 class Group;
 class ScreenQuad;
@@ -27,28 +25,26 @@ public:
 
     virtual void setShading(char shader);
 
-    virtual void resize(
-        const int width
-    ,   const int height);
+    virtual void resize(const int width, const int height);
+
+
 protected:
     virtual const bool initialize() override;
     virtual Camera * camera() override;
 
-protected:
     void postShaderRelinked();
     void setUniforms();
 
     typedef QMap<QString, FrameBufferObject *> t_samplerByName;
 
-    static void bindSampler(
-        const t_samplerByName & sampler
-    ,   const Program & program);
+    static void bindSampler(const t_samplerByName & samplers, const Program & program);
+    static void releaseSampler(const t_samplerByName & samplers);
 
-    static void releaseSampler(
-        const t_samplerByName & sampler);
 
 protected:
     ScreenQuad * m_quad;
+
+    QMap<QString, Program *> programs;
 
     Program * m_textured;
     Program * m_normalz;
@@ -63,10 +59,13 @@ protected:
     Program * m_useProgram;
     FrameBufferObject * m_fboNormalz;
 
-
     glm::vec3 camPos;
 
     Program * m_flush;
 
     Camera * m_camera;
+
+private:
+    Painter(Group * scene, Camera * camera);
 };
+

@@ -2,9 +2,9 @@
 #include "group.h"
 #include "polygonalgeometry.h"
 #include "polygonaldrawable.h"
-#include "texture2d.h"
-#include "materialattribute.h"
-#include "textureloader.h"
+#include "material/texture2d.h"
+#include "material/materialattribute.h"
+#include "material/textureloader.h"
 #include <QFileInfo>
 #include <iostream>
 #include <vector>
