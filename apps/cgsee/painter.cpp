@@ -232,6 +232,11 @@ const bool Painter::initialize()
     m_gooch = new Program();
     m_gooch->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/shading/gooch.frag"));
     m_gooch->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/shading/gooch.vert"));
+    
+    //GRID
+    m_pgrid = new Program();
+    m_pgrid->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/grid.frag"));
+    m_pgrid->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/grid.vert"));
 
     //set UNIFORMS for selected shader
     m_useProgram = m_flat;
@@ -257,7 +262,7 @@ const bool Painter::initialize()
     m_fboGrid = new FrameBufferObject(
         GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
     
-    m_fboActiveBuffer = &m_fboGrid;
+    m_fboActiveBuffer = &m_fboColor;
 
     return true;
 }
@@ -346,7 +351,7 @@ void Painter::paint()
     if(m_blurSSAO)
         addBlur(m_fboSSAO);
     
-    m_grid->draw( *m_flat, m_fboGrid);
+    m_grid->draw( *m_flat, m_fboColor);
 
     sampler.clear();
     sampler["source"] = *m_fboActiveBuffer;

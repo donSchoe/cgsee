@@ -44,6 +44,8 @@ protected:
     void createShadows();
     void createSSAO();
     void addBlur(FrameBufferObject * fbo);
+    
+    void addGrid(FrameBufferObject * fbo);
 
     static void bindSampler(
         const t_samplerByName & sampler
@@ -71,6 +73,7 @@ protected:
     Program * m_gouraud;
     Program * m_phong;
     Program * m_gooch;
+    Program * m_pgrid;
     Program * m_useProgram;
     
     FrameBufferObject * m_fboColor;

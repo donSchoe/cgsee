@@ -9,6 +9,7 @@
 class BufferObject;
 class Program;
 class FrameBufferObject;
+class Camera;
 
 class CGSEE_API Grid
 {
@@ -18,7 +19,7 @@ public:
     
     void draw(
               const Program & program
-              ,   FrameBufferObject * target = nullptr) const;
+              ,   FrameBufferObject * target = nullptr)  const;
     
 protected:
     void initialize(const Program & program) const;
@@ -27,4 +28,5 @@ protected:
     mutable GLuint m_vao;
     mutable BufferObject * m_vertexBO;
     mutable BufferObject * m_indicesBO;
+    mutable BufferObject * m_normalBO;
 };

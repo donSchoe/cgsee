@@ -6,6 +6,7 @@
 #include "program.h"
 #include "shader.h"
 #include "gpuquery.h"
+#include "camera.h"
 
 
 Grid::Grid()
@@ -34,18 +35,17 @@ void Grid::initialize(const Program & program) const
     
     static const GLfloat vertices[24] =
     {
-        -1.f,-1.f,-1.f,	// 0
-	    -1.f,-1.f, 1.f,	// 1
-		-1.f, 1.f,-1.f,	// 2
-		-1.f, 1.f, 1.f,	// 3
-        1.f,-1.f,-1.f,	// 4
-        1.f,-1.f, 1.f, // 5
-        1.f, 1.f,-1.f, // 6
-        1.f, 1.f, 1.f  // 7
+        0, 0, 0, 5,  //0
+        5, 0, 0, 0, //1
+        0,  0, 5,  0, //2
+        -5, 0, 0, 0, //3
+        0 , 0, -5,  0, //4
+        0, 1, 0 , 0
     };
+
     
-    static const GLubyte indices[14] = {
-        2, 0, 6, 4, 5, 0, 1, 2, 3, 6, 7, 5, 3, 1 };
+    static const GLubyte indices[12] = {
+         0,1,2, 0,2,3, 0,3,4, 0,4,1 };
     
     glGenVertexArrays(1, &m_vao);
     glError();
@@ -56,19 +56,19 @@ void Grid::initialize(const Program & program) const
     if(!m_indicesBO)
     {
         m_indicesBO = new BufferObject(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
-        m_indicesBO->data<GLubyte>(indices, 14, GL_UNSIGNED_BYTE, 3);
+        m_indicesBO->data<GLubyte>(indices, 12, GL_UNSIGNED_BYTE, 3);
     }
     
     if(!m_vertexBO)
     {
         m_vertexBO = new BufferObject(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-	    m_vertexBO->data<GLfloat>(vertices, 8, GL_FLOAT, 3);
+	    m_vertexBO->data<GLfloat>(vertices, 24, GL_FLOAT, 4);
     }
     
     // bind all buffers to their attributes
     
     m_vertexBO->bind(program.attributeLocation("a_vertex"));
-    
+
     glBindVertexArray(0);
     glError();
 }
@@ -82,6 +82,8 @@ void Grid::draw(
     
     if(target)
         target->bind();
+    
+    glm::vec3 normal (0,1,0);
     
     glClear(GL_COLOR_BUFFER_BIT);
     
