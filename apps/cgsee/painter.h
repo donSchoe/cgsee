@@ -10,6 +10,7 @@
 class Camera;
 class Group;
 class ScreenQuad;
+class Grid;
 class Program;
 class FrameBufferObject;
 
@@ -53,6 +54,8 @@ protected:
     void sceneChanged(Group * scene);
 protected:
     ScreenQuad * m_quad;
+    
+    Grid * m_grid;
 
     Program * m_normalz;
     Program * m_normals;
@@ -69,12 +72,14 @@ protected:
     Program * m_phong;
     Program * m_gooch;
     Program * m_useProgram;
+    
     FrameBufferObject * m_fboColor;
     FrameBufferObject * m_fboTemp;
     FrameBufferObject * m_fboSSAO;
     FrameBufferObject * m_fboShadows;
     FrameBufferObject * m_fboNormalz;
     FrameBufferObject * m_fboShadowMap;
+    FrameBufferObject * m_fboGrid;
     FrameBufferObject ** m_fboActiveBuffer;
 
     std::vector<glm::vec3> m_kernel;

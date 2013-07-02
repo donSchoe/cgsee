@@ -18,6 +18,7 @@
 #include <core/assimploader.h>
 #include <core/program.h>
 #include <core/screenquad.h>
+#include <core/grid.h>
 #include "core/navigation/arcballnavigation.h"
 #include "core/navigation/flightnavigation.h"
 
@@ -36,6 +37,7 @@ static const QString WARMCOLDCOLOR_UNIFORM ("warmcoldcolor");
 Painter::Painter(Camera * camera)
 :   AbstractScenePainter()
 ,   m_quad(nullptr)
+,   m_grid(nullptr)
 ,   m_normals(nullptr)
 ,   m_normalz(nullptr)
 ,   m_lightsource(nullptr)
@@ -57,6 +59,7 @@ Painter::Painter(Camera * camera)
 ,   m_fboShadows(nullptr)
 ,   m_fboSSAO(nullptr)
 ,   m_fboShadowMap(nullptr)
+,   m_fboGrid(nullptr)
 ,   m_fboActiveBuffer(nullptr)
 ,   m_flush(nullptr)
 ,   m_camera(camera)
@@ -103,6 +106,7 @@ Painter::Painter(Camera * camera)
 Painter::~Painter()
 {
     delete m_quad;
+    delete m_grid;
     delete m_normals;
     delete m_normalz;
     delete m_lightsource;
@@ -122,6 +126,7 @@ Painter::~Painter()
     delete m_fboShadows;
     delete m_fboShadowMap;
     delete m_fboSSAO;
+    delete m_fboGrid;
     delete m_flush;
 }
 
@@ -130,6 +135,8 @@ const bool Painter::initialize()
     AutoTimer t("Initialization of Painter");
 
     m_quad = new ScreenQuad();
+    
+    m_grid = new Grid();
 
     // NORMALS
     m_normals = new Program();
@@ -247,8 +254,10 @@ const bool Painter::initialize()
         GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
     m_fboSSAO = new FrameBufferObject(
         GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
+    m_fboGrid = new FrameBufferObject(
+        GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
     
-    m_fboActiveBuffer = &m_fboColor;
+    m_fboActiveBuffer = &m_fboGrid;
 
     return true;
 }
@@ -336,6 +345,8 @@ void Painter::paint()
 
     if(m_blurSSAO)
         addBlur(m_fboSSAO);
+    
+    m_grid->draw( *m_flat, m_fboGrid);
 
     sampler.clear();
     sampler["source"] = *m_fboActiveBuffer;
@@ -419,6 +430,7 @@ void Painter::resize(  //probably never called anywhere?
     m_fboShadows->resize(width, height);
     m_fboShadowMap->resize(width, height);
     m_fboSSAO->resize(width, height);
+    m_fboGrid->resize(width, height);
 
     postShaderRelinked();
 
