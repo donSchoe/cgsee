@@ -114,6 +114,7 @@ protected slots:
     void on_fboShadowsAction_triggered();
     void on_fboSSAOAction_triggered();
     void on_fboShadowMapAction_triggered();
+    void on_fboGridAction_triggered();
 
     void on_openFileDialogAction_triggered();
     void on_quitAction_triggered();
@@ -122,6 +123,7 @@ protected slots:
     
     void on_toggleNavigator_triggered();
     void on_toggleExplorer_triggered();
+    void on_toggleGrid_triggered();
 protected:
 
     void initializeExplorer();

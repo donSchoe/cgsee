@@ -36,6 +36,7 @@
      <addaction name="fboShadowsAction"/>
      <addaction name="fboShadowMapAction"/>
      <addaction name="fboSSAOAction"/>
+     <addaction name="fboGridAction"/>
      <addaction name="separator"/>
      <addaction name="showFrameBuffersAction"/>
     </widget>
@@ -157,6 +158,8 @@
     </property>
     <addaction name="toggleNavigator"/>
     <addaction name="toggleExplorer"/>
+      <addaction name="separator"/>
+    <addaction name="toggleGrid"/>
    </widget>
    <addaction name="fileMenu"/>
    <addaction name="editMenu"/>
@@ -481,6 +484,17 @@
     <string>Show/Hide Explorer</string>
    </property>
   </action>
+  <action name="toggleGrid">
+    <property name="text">
+     <string>Show/Hide Grid</string>
+    </property>
+      <property name="checkable">
+          <bool>true</bool>
+      </property>
+      <property name="checked">
+          <bool>true</bool>
+      </property>
+  </action>
   <action name="actionFrontView">
    <property name="text">
     <string>Front</string>
@@ -770,6 +784,14 @@
    <property name="text">
     <string>SSAO blur</string>
    </property>
+  </action>
+  <action name="fboGridAction">
+    <property name="checkable">
+     <bool>true</bool>
+    </property>
+    <property name="text">
+     <string>Grid</string>
+    </property>
   </action>
  </widget>
  <resources/>

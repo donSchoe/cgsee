@@ -343,6 +343,11 @@ void Viewer::on_ssaoBlurAction_triggered()
     m_qtCanvas->repaint();
 }
 
+void Viewer::on_toggleGrid_triggered()
+{
+    m_qtCanvas->painter()->setEffect(5, m_ui->toggleGrid->isChecked());
+    m_qtCanvas->repaint();
+}
 void Viewer::uncheckFboActions() {
     m_ui->fboColorAction->setChecked(false);
     m_ui->fboNormalzAction->setChecked(false);
@@ -390,6 +395,14 @@ void Viewer::on_fboSSAOAction_triggered()
     m_qtCanvas->painter()->setFrameBuffer(5);
     m_qtCanvas->repaint();
 }
+    
+void Viewer::on_fboGridAction_triggered()
+    {
+        uncheckFboActions();
+        m_ui->fboGridAction->setChecked(true);
+        m_qtCanvas->painter()->setFrameBuffer(6);
+        m_qtCanvas->repaint();
+    }
 
 void Viewer::setNavigation(AbstractNavigation * navigation)
 {

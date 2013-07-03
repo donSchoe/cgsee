@@ -55,8 +55,6 @@ set(SOURCES
     glformat.cpp
     gpuquery.h
     gpuquery.cpp
-    grid.h
-    grid.cpp
     group.h
     group.cpp
     messagehandler.h

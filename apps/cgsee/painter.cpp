@@ -67,6 +67,7 @@ Painter::Painter(Camera * camera)
 ,   m_useShadows(true)
 ,   m_useSSAO(true)
 ,   m_blurSSAO(true)
+,   m_useGrid(true)
 ,   m_kernel(128)
 ,   m_noise(16)
 ,   m_shadow_samples(128)
@@ -106,7 +107,6 @@ Painter::Painter(Camera * camera)
 Painter::~Painter()
 {
     delete m_quad;
-    delete m_grid;
     delete m_normals;
     delete m_normalz;
     delete m_lightsource;
@@ -118,6 +118,7 @@ Painter::~Painter()
     delete m_gouraud;
     delete m_phong;
     delete m_gooch;
+    delete m_grid;
     delete m_wireframe;
     delete m_primitiveWireframe;
     delete m_solidWireframe;
@@ -136,8 +137,6 @@ const bool Painter::initialize()
 
     m_quad = new ScreenQuad();
     
-    m_grid = new Grid();
-
     // NORMALS
     m_normals = new Program();
     m_normals->attach(
@@ -234,10 +233,10 @@ const bool Painter::initialize()
     m_gooch->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/shading/gooch.vert"));
     
     //GRID
-    m_pgrid = new Program();
-    m_pgrid->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/grid.frag"));
+    m_grid = new Program();
+    m_grid->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/grid.frag"));
  //   m_pgrid->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/grid.geo"));
-    m_pgrid->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/grid.vert"));
+    m_grid->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/grid.vert"));
 
     //set UNIFORMS for selected shader
     m_useProgram = m_flat;
@@ -264,7 +263,7 @@ const bool Painter::initialize()
         GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
     
     m_fboActiveBuffer = &m_fboColor;
-
+    
     return true;
 }
 
@@ -352,17 +351,21 @@ void Painter::paint()
     if(m_blurSSAO)
         addBlur(m_fboSSAO);
     
-    m_grid->draw( *m_useProgram, m_fboColor);
-
+    if(m_useGrid)
+        m_camera->draw(*m_grid, m_fboGrid);
+ 
     sampler.clear();
     sampler["source"] = *m_fboActiveBuffer;
     if(*m_fboActiveBuffer == m_fboColor) {
         sampler["shadows"] = m_fboShadows;
         sampler["ssao"] = m_fboSSAO;
+        sampler["grid"] = m_fboGrid;
+        
     } else { // dont render effects
         m_fboTemp->clear();
         sampler["shadows"] = m_fboTemp;
         sampler["ssao"] = m_fboTemp;
+        sampler["grid"] = m_fboTemp;
     }
 
     bindSampler(sampler, *m_flush);
@@ -450,10 +453,11 @@ void Painter::setShading(char shader)
         case 'g': m_useProgram = m_gouraud; std::printf("\nGouraud Shading\n"); break;
         case 'f': m_useProgram = m_flat; std::printf("\nFlat Shading\n"); break;
         case 'o': m_useProgram = m_gooch; std::printf("\nGooch Shading\n\n"); break;
-        case 'w': m_useProgram = m_pgrid; std::printf("\nWireframe Shading\n\n"); break;
+        case 'w': m_useProgram = m_wireframe; std::printf("\nWireframe Shading\n\n"); break;
         case 's': m_useProgram = m_solidWireframe; std::printf("\nWireframeSolid Shading\n\n"); break;
         case 'r': m_useProgram = m_primitiveWireframe; std::printf("\nprimitive Wireframe Shading\n\n"); break;
         case 'n': m_useProgram = m_normals; std::printf("\nNormals\n\n"); break;
+        case 'm': m_useProgram = m_grid, std::printf("\nNormals\n\n"); break;
     }
 
     setUniforms();
@@ -469,6 +473,7 @@ void Painter::setFrameBuffer(int frameBuffer)
         case 3: m_fboActiveBuffer = &m_fboShadows; std::printf("\nShadows Buffer\n"); break;
         case 4: m_fboActiveBuffer = &m_fboShadowMap; std::printf("\nShadowMap Buffer\n"); break;
         case 5: m_fboActiveBuffer = &m_fboSSAO; std::printf("\nSSAO Buffer\n"); break;
+        case 6: m_fboActiveBuffer = &m_fboGrid; std::printf("\nGrid Buffer\n"); break;
     }
 }
 
@@ -480,10 +485,12 @@ void Painter::setEffect( int effect, bool active )
         case 2: m_useShadows = active; std::printf("\nShadow toggled\n"); break;
         case 3: m_useSSAO = active; std::printf("\nSSAO toggled\n"); break;
         case 4: m_blurSSAO = active; std::printf("\nSSAO blur toggled\n"); break;
+        case 5: m_useGrid = active; std::printf("\n Grid toggled\n"); break;
     }
 
     m_fboShadows->clear();
     m_fboSSAO->clear();
+    m_fboGrid->clear();
 }
 
 

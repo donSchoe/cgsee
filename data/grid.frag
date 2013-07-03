@@ -9,8 +9,9 @@ void main()
 	float x = fract(position.x);
 	float z = fract(position.z);
 
-    float x1 = smoothstep (x, 0.99);
-    float z1 = smoothstep (z, 0.99);
+    float x1 = step (0.99,x);
+    float z1 = step (0.99,z);
 
-    fragColor = (z1 * x1) * vec4(1,1,1,1);
+    fragColor = sign(1-x1-z1)*vec4(1,1,1,1);
+
 }

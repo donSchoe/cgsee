@@ -10,7 +10,6 @@
 class Camera;
 class Group;
 class ScreenQuad;
-class Grid;
 class Program;
 class FrameBufferObject;
 
@@ -56,8 +55,6 @@ protected:
     void sceneChanged(Group * scene);
 protected:
     ScreenQuad * m_quad;
-    
-    Grid * m_grid;
 
     Program * m_normalz;
     Program * m_normals;
@@ -73,7 +70,7 @@ protected:
     Program * m_gouraud;
     Program * m_phong;
     Program * m_gooch;
-    Program * m_pgrid;
+    Program * m_grid;
     Program * m_useProgram;
     
     FrameBufferObject * m_fboColor;
@@ -99,4 +96,5 @@ protected:
     bool m_useShadows;
     bool m_useSSAO;
     bool m_blurSSAO;
+    bool m_useGrid;
 };
