@@ -315,11 +315,11 @@ void Painter::setUniforms()
 
     m_shadowMapping->setUniform("biasMatrix", glm::mat4(), false);
     m_shadowMapping->setUniform("samples", &m_shadow_samples[0], m_shadow_samples.size());
-    m_shadowMapping->setUniform("sample_count", 32);
+    m_shadowMapping->setUniform("sample_count", 16);
 
     m_SSAO->setUniform("kernel", &m_kernel[0], m_kernel.size());
     m_SSAO->setUniform("noise", &m_noise[0], m_noise.size());
-    m_SSAO->setUniform("sample_count", 64);
+    m_SSAO->setUniform("sample_count", 32);
 
 }
 
@@ -492,7 +492,6 @@ void Painter::setEffect( int effect, bool active )
     m_fboSSAO->clear();
     m_fboGrid->clear();
 }
-
 
 void Painter::postShaderRelinked()
 {
