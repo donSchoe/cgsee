@@ -9,18 +9,20 @@
 
 #include <QFile>
 
-#include "objloader.h"
+#include "datacore/datablock.h"
+#include "scenegraph/group.h"
+#include "scenegraph/polygonaldrawable.h"
+#include "scenegraph/polygonalgeometry.h"
 
-#include "group.h"
-#include "polygonaldrawable.h"
-#include "polygonalgeometry.h"
+#include "objloader.h"
 #include "material/textureloader.h"
 #include "material/texture2d.h"
 
 using namespace std;
 
-ObjLoader::ObjLoader()
+ObjLoader::ObjLoader( std::shared_ptr<DataBlockRegistry> registry )
 : AbstractModelLoader()
+, m_registry( registry )
 {
 }
 
@@ -118,7 +120,7 @@ Group * ObjLoader::importFromFile(const QString & filePath) const
     }
     stream.close();
 
-    Group * group = toGroup(objects);
+    Group * group = toGroup(objects, m_registry);
     group->setName(filePath);
 
     return group;
@@ -291,7 +293,7 @@ inline void ObjLoader::parseG(
     object.groups.push_back(group);
 }
 
-Group * ObjLoader::toGroup(const t_objects & objects)
+Group * ObjLoader::toGroup(const t_objects & objects, std::shared_ptr<DataBlockRegistry> registry)
 {
     std::vector<Group *> groups;
 
@@ -306,7 +308,7 @@ Group * ObjLoader::toGroup(const t_objects & objects)
         groups.push_back(group);
 
         if(!oobject.vis.empty())
-            group->append(createPolygonalDrawable(oobject, oobject));
+            group->append(createPolygonalDrawable(oobject, oobject, registry));
 
         t_groups::const_iterator ig(oobject.groups.cbegin());
         const t_groups::const_iterator igEnd(oobject.groups.cend());
@@ -316,7 +318,7 @@ Group * ObjLoader::toGroup(const t_objects & objects)
             const ObjGroup & ogroup(**ig);
 
             assert(!ogroup.vis.empty());
-            group->append(createPolygonalDrawable(oobject, ogroup));
+            group->append(createPolygonalDrawable(oobject, ogroup, registry));
         }
     }
 
@@ -338,7 +340,9 @@ Group * ObjLoader::toGroup(const t_objects & objects)
 
 PolygonalDrawable * ObjLoader::createPolygonalDrawable(
     const ObjObject & object
-,   const ObjGroup & group)
+,   const ObjGroup & group
+,   std::shared_ptr<DataBlockRegistry> registry
+)
 {
     if(group.vis.empty())
         return nullptr;
@@ -354,7 +358,7 @@ PolygonalDrawable * ObjLoader::createPolygonalDrawable(
     const bool usesTexCoordIndices(!group.vtis.empty());
     const bool usesNormalIndices(!group.vnis.empty());
 
-    PolygonalGeometry * geom(new PolygonalGeometry(object.qname() + " geometry"));
+    auto geom = make_shared<PolygonalGeometry>( registry );
 
     const GLuint size(static_cast<GLuint>(group.vis.size()));
     geom->resize(size);
@@ -376,16 +380,15 @@ PolygonalDrawable * ObjLoader::createPolygonalDrawable(
             geom->setNormal(i, object.vns[group.vnis[i]]);
     }
 
-    // TODO: support other modes here!
-    geom->setMode(GL_TRIANGLES);
-
     if(!usesNormalIndices)
         geom->retrieveNormals();
 
-    geom->setMaterial(object.material);
+//    geom->setMaterial(object.material);
 
     PolygonalDrawable * drawable(new PolygonalDrawable(object.qname()));
     drawable->setGeometry(geom);
+    // TODO: support other modes here!
+    drawable->setMode(GL_TRIANGLES);
 
     return drawable;
 }

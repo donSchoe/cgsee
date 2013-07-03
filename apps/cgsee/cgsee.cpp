@@ -1,6 +1,7 @@
 #include "cgsee.h"
 #include "painter.h"
 
+#include <core/datacore/datablock.h>
 #include <core/assimploader.h>
 #include <gui/canvas.h>
 #include <gui/viewer.h>
@@ -10,12 +11,14 @@
 
 CGSee::CGSee(int & argc, char ** argv)
 :   AbstractApplication(argc, argv)
+,   m_registry(nullptr)
 ,   m_viewer(nullptr)
 ,   m_painter(nullptr)
 {
-    // Create Viewer
-
-    m_viewer = new Viewer();
+    
+    m_registry = std::make_shared<DataBlockRegistry>();
+    
+    m_viewer = new Viewer( m_registry );
     m_viewer->setWindowTitle(title());
     m_viewer->initialize(format());
 
@@ -32,7 +35,7 @@ CGSee::CGSee(int & argc, char ** argv)
     navigation->reset(); // initialize view matrix
     m_viewer->setNavigation(navigation);
 
-    // AssimpLoader loader;
+    // AssimpLoader loader( registry );
     // m_painter->assignScene(loader.importFromFile("data/mario.dae"));
 
     // Start

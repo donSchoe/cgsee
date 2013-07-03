@@ -2,12 +2,15 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <memory>
+
 #include <QString>
 #include <QMap>
 
 #include <core/abstractscenepainter.h>
 
 
+class DataBlockRegistry;
 class Camera;
 class Group;
 class ScreenQuad;
@@ -42,6 +45,11 @@ protected:
 
 
 protected:
+// <<<<<<< HEAD
+//     std::shared_ptr<DataBlockRegistry> m_registry;
+//     Group * m_group;
+// =======
+// >>>>>>> master
     ScreenQuad * m_quad;
 
     QMap<QString, Program *> programs;

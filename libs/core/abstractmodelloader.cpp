@@ -1,6 +1,6 @@
 
 #include "abstractpainter.h"
-#include "group.h"
+#include "scenegraph/group.h"
 #include "abstractmodelloader.h"
 
 AbstractModelLoader::AbstractModelLoader()

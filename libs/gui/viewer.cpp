@@ -42,6 +42,7 @@ namespace
 
 
 Viewer::Viewer(
+    std::shared_ptr<DataBlockRegistry> registry,
     QWidget  * parent,
     Qt::WindowFlags flags)
 
@@ -54,8 +55,9 @@ Viewer::Viewer(
 ,   m_dockExplorer(new QDockWidget(tr("Explorer")))
 ,   m_navigator(new FileNavigator(m_dockNavigator))
 ,   m_explorer(new FileExplorer(m_dockExplorer))
-,   m_loader(new AssimpLoader())
+,   m_loader(new AssimpLoader( registry ))
 {
+
     m_ui->setupUi(this);
     
     QSettings::setDefaultFormat(QSettings::IniFormat);

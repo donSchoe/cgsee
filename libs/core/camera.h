@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 
 #include "declspec.h"
-#include "group.h"
+#include "scenegraph/group.h"
 
 
 class Program;
@@ -17,13 +17,7 @@ public:
 
     virtual Camera * asCamera();
 
-    virtual void draw(
-        const Program & program
-    ,   FrameBufferObject * target = nullptr);
-    virtual void draw(
-        const Program & program
-    ,   const glm::mat4 & transform);
-
+    virtual void draw( const Program & program, const glm::mat4 & transform) override;
 
     const glm::ivec2 & viewport() const;
     void setViewport(const glm::ivec2 & size);

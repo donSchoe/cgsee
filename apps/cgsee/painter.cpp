@@ -1,4 +1,3 @@
-
 #include <glm/gtc/matrix_transform.hpp>
 #include <QDebug>
 
@@ -11,7 +10,10 @@
 #include <core/fileassociatedshader.h>
 #include <core/framebufferobject.h>
 #include <core/gpuquery.h>
-#include <core/group.h>
+#include <core/datacore/datablock.h>
+#include <core/scenegraph/group.h>
+#include <core/scenegraph/scenetraverser.h>
+#include <core/scenegraph/drawvisitor.h>
 #include <core/objloader.h>
 #include <core/assimploader.h>
 #include <core/program.h>
@@ -253,7 +255,12 @@ void Painter::paint()
 
     t_samplerByName sampler;
 
-    m_camera->draw(*m_useProgram, m_fboNormalz);
+//     m_camera->draw(*m_useProgram, m_fboNormalz);
+    m_fboNormalz->bind();
+    SceneTraverser traverser;
+    DrawVisitor drawVisitor( m_useProgram, m_camera->transform() );
+    traverser.traverse( *m_camera, drawVisitor );
+    m_fboNormalz->release();
 
     sampler.clear();
     sampler["source"] = m_fboNormalz;

@@ -1,11 +1,10 @@
 
-#include "group.h"
+#include <core/program.h>
 
 #include "polygonaldrawable.h"
-#include "program.h"
+#include "group.h"
 
-
-Group::Group(const QString & name)
+Group::Group( const QString & name )
 :   Node(name)
 {
 }
@@ -15,27 +14,13 @@ Group::~Group()
     while(!m_children.empty())
         removeLast();
 
-    for(auto material : m_managedMaterials) {
-        delete material;
-    }
+//    for(auto material : m_managedMaterials) {
+//        delete material;
+//    }
 }
 
-void Group::draw(
-    const Program & program
-,   const glm::mat4 & transform)
+void Group::draw( const Program & program, const glm::mat4 & transform )
 {
-    t_nodes::const_iterator i(m_children.begin());
-    const t_nodes::const_iterator iEnd(m_children.end());
-
-    for(; i != iEnd; ++i)
-    {
-        Node * node(*i);
-
-        if(RF_Absolute == m_rf)
-            node->draw(program, this->transform());
-        else
-            node->draw(program, transform * this->transform());
-    }
 }
 
 const bool Group::contains(Node * node) const
@@ -43,23 +28,17 @@ const bool Group::contains(Node * node) const
     return m_children.contains(node);
 }
 
-void Group::insert(
-    const Group::t_nodes::iterator & before
-,   Group * group)
+void Group::insert( const Group::t_children::iterator & before, Group * group )
 {
     return insert(before, dynamic_cast<Node *>(group));
 }
 
-void Group::insert(
-    const Group::t_nodes::iterator & before
-,   PolygonalDrawable * drawable)
+void Group::insert( const Group::t_children::iterator & before, PolygonalDrawable * drawable )
 {
     return insert(before, dynamic_cast<Node *>(drawable));
 }
 
-void Group::insert(
-    const Group::t_nodes::iterator & before
-,   Node * node)
+void Group::insert( const Group::t_children::iterator & before, Node * node )
 {
     if(!node)
         return;
@@ -70,21 +49,21 @@ void Group::insert(
     m_children.insert(before, node);
 }
 
-void Group::addManagedMaterial(Material *material) {
-    m_managedMaterials.push_back(material);
-}
+//void Group::addManagedMaterial(Material *material) {
+//    m_managedMaterials.push_back(material);
+//}
 
-void Group::prepend(Group * group)
+void Group::prepend( Group * group )
 {
     return prepend(dynamic_cast<Node *>(group));
 }
 
-void Group::prepend(PolygonalDrawable * drawable)
+void Group::prepend( PolygonalDrawable * drawable )
 {
     return prepend(dynamic_cast<Node *>(drawable));
 }
 
-void Group::prepend(Node * node)
+void Group::prepend( Node * node )
 {
     if(!node)
         return;
@@ -95,17 +74,17 @@ void Group::prepend(Node * node)
     m_children.push_front(node);
 }
 
-void Group::append(Group * group)
+void Group::append( Group * group )
 {
     return append(dynamic_cast<Node *>(group));
 }
 
-void Group::append(PolygonalDrawable * drawable)
+void Group::append( PolygonalDrawable * drawable )
 {
     return append(dynamic_cast<Node *>(drawable));
 }
 
-void Group::append(Node * node)
+void Group::append( Node * node )
 {
     if(!node)
         return;
@@ -144,9 +123,7 @@ void Group::removeLast()
         delete node;
 }
 
-const void Group::remove(
-    Node * node
-,   const bool deleteIfParentsEmpty)
+const void Group::remove( Node * node, const bool deleteIfParentsEmpty )
 {
     if(!contains(node))
         node->parents().remove(this);
@@ -157,18 +134,13 @@ const void Group::remove(
         delete node;
 }
 
-const Group::t_nodes & Group::children() const
-{
-    return m_children;
-}
-
 const AxisAlignedBoundingBox Group::boundingBox() const
 {
     if(m_aabb.valid())
         return m_aabb;
 
-    t_nodes::const_iterator i(m_children.begin());
-    const t_nodes::const_iterator iEnd(m_children.end());
+    t_children::const_iterator i(m_children.begin());
+    const t_children::const_iterator iEnd(m_children.end());
 
     if(RF_Relative == m_rf)
         for(; i != iEnd; ++i)

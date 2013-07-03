@@ -2,6 +2,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include <QString>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -12,6 +13,7 @@
 #include "material/material.h"
 #include "abstractmodelloader.h"
 
+class DataBlockRegistry;
 class Group;
 class PolygonalDrawable;
 class Texture2D;
@@ -22,7 +24,7 @@ struct aiMesh;
 class CGSEE_API AssimpLoader : public AbstractModelLoader
 {
 public:
-    AssimpLoader();
+    AssimpLoader(std::shared_ptr<DataBlockRegistry> registry = nullptr);
     virtual ~AssimpLoader();
 
     void clear();
@@ -42,6 +44,7 @@ protected:
     Texture2D *loadTexture(aiMaterial *material, aiTextureType type);
 
 protected:
+    std::shared_ptr<DataBlockRegistry> m_registry;
     Assimp::Importer * m_importer;
 
     QString m_modelDir;

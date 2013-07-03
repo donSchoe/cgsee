@@ -1,8 +1,9 @@
 #include "assimploader.h"
-#include "group.h"
-#include "polygonalgeometry.h"
-#include "polygonaldrawable.h"
+#include "datacore/datablock.h"
+#include "scenegraph/group.h"
+#include "scenegraph/polygonalgeometry.h"
 #include "material/texture2d.h"
+#include "scenegraph/polygonaldrawable.h"
 #include "material/materialattribute.h"
 #include "material/textureloader.h"
 #include <QFileInfo>
@@ -18,10 +19,13 @@ const char *EMISSION_TEX_NAME("emissionTex");
 const char *NORMALS_TEX_NAME("normalsTex");
 const char *SHININESS_TEX_NAME("shininessTex");
 
-AssimpLoader::AssimpLoader()
+AssimpLoader::AssimpLoader(std::shared_ptr<DataBlockRegistry> registry)
 : AbstractModelLoader()
+, m_registry(registry)
 , m_importer(new Assimp::Importer())
 {
+    if( m_registry == nullptr )
+        m_registry = std::make_shared<DataBlockRegistry>();
 }
 
 AssimpLoader::~AssimpLoader()
@@ -115,9 +119,9 @@ Group * AssimpLoader::importFromFile(const QString & filePath)
 
     Group * group = parseNode(*scene, drawables, *(scene->mRootNode));
 
-    for(auto material : m_materials) {
-        group->addManagedMaterial(material);
-    }
+//    for(auto material : m_materials) {
+//        group->addManagedMaterial(material);
+//    }
 
     m_importer->FreeScene();
 
@@ -220,7 +224,7 @@ Texture2D *AssimpLoader::loadTexture(aiMaterial *material, aiTextureType type)
 
 PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
 {
-    PolygonalGeometry * geometry = new PolygonalGeometry(QString(mesh.mName.C_Str()) + " geometry");
+    auto geometry = std::make_shared<PolygonalGeometry>(m_registry);
 
     for (unsigned int i = 0; i < mesh.mNumVertices; i++) {
         glm::vec3 vector(
@@ -256,14 +260,14 @@ PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
                 geometry->setIndex(currentIndex++, mesh.mFaces[i].mIndices[j]);
     }
 
-    geometry->setMode(GL_TRIANGLES);
     if (!mesh.HasNormals())
         geometry->retrieveNormals();
 
     assert(mesh.mMaterialIndex < m_materials.size());
-    geometry->setMaterial(m_materials[mesh.mMaterialIndex]);
+//    geometry->setMaterial(m_materials[mesh.mMaterialIndex]);
 
     PolygonalDrawable * drawable = new PolygonalDrawable(mesh.mName.C_Str());
     drawable->setGeometry(geometry);
+    drawable->setMode(GL_TRIANGLES);
     return drawable;
 }

@@ -33,6 +33,7 @@ class FileExplorer;
 class Viewer;
 class AbstractModelLoader;
 class Group;
+class DataBlockRegistry;
 
 
 class CGSEE_API Viewer : public QMainWindow
@@ -41,6 +42,7 @@ class CGSEE_API Viewer : public QMainWindow
 
 public:
     Viewer(
+        std::shared_ptr<DataBlockRegistry> registry = nullptr,
         QWidget * parent = nullptr
     ,   Qt::WindowFlags flags = nullptr);
 
