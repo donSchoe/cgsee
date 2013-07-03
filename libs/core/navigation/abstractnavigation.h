@@ -65,6 +65,7 @@ protected:
 
     void updateCamera();
     virtual void onCameraChanged(); // override to get notified for camera changes
+    
 
 protected:
     int m_width;
@@ -72,6 +73,7 @@ protected:
     float m_fovy;
     glm::mat4 m_viewmatrix;
 
+    Camera * m_camera;
     static const float TIMER_MS;
 
 private:
@@ -79,7 +81,6 @@ private:
 
     void finishTransition();
     void updateTransition();
-    Camera * m_camera;
     QWidget * m_canvas;
     QBasicTimer m_timer;
     int m_timer_requests;

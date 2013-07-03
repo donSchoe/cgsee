@@ -1,4 +1,4 @@
-
+#include <iostream>
 #include <cassert>
 
 #include <QFile>
@@ -81,6 +81,7 @@ void FileAssociatedShader::unregisterShader(
 {
     t_shadersByFilePath::iterator f(shadersByFilePath.find(filePath));
 
+    cout << "unregisterShader(): " << filePath.toStdString() << endl;
     assert(shadersByFilePath.end() != f);
 
     t_shaders * shaders(f.value());

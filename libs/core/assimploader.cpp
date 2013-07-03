@@ -15,6 +15,8 @@ const char *DIFFUSE_TEX_NAME("diffuseTex");
 const char *AMBIENT_TEX_NAME("ambientTex");
 const char *SPECULAR_TEX_NAME("specularTex");
 const char *EMISSION_TEX_NAME("emissionTex");
+const char *NORMALS_TEX_NAME("normalsTex");
+const char *SHININESS_TEX_NAME("shininessTex");
 
 AssimpLoader::AssimpLoader()
 : AbstractModelLoader()
@@ -156,27 +158,29 @@ void AssimpLoader::parseMeshes(aiMesh **meshes,
 
 void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials)
 {
-    const int numTextureTypes = 4;
-    const aiTextureType TEXTURE_TYPES[] = {aiTextureType_DIFFUSE, aiTextureType_SPECULAR, aiTextureType_AMBIENT,  aiTextureType_EMISSIVE};
-    const char *TEXTURE_NAMES[] = {DIFFUSE_TEX_NAME, SPECULAR_TEX_NAME, AMBIENT_TEX_NAME, EMISSION_TEX_NAME};
+    const int numTextureTypes = 6;
+    const aiTextureType TEXTURE_TYPES[] = {aiTextureType_DIFFUSE, aiTextureType_SPECULAR, aiTextureType_AMBIENT,  aiTextureType_EMISSIVE, aiTextureType_NORMALS, aiTextureType_SHININESS};
+    const char *TEXTURE_NAMES[] = {DIFFUSE_TEX_NAME, SPECULAR_TEX_NAME, AMBIENT_TEX_NAME, EMISSION_TEX_NAME, NORMALS_TEX_NAME, SHININESS_TEX_NAME};
 
     for(int m = 0; m < numMaterials; m++) {
-        Texture2D *textures[4];
-
         aiMaterial *aMaterial = materials[m];
         Material *material = new Material;
-
+        cout << "Loading Material " << m << endl;
         // Try to load textures
         for(int t = 0; t < numTextureTypes; t++) {
             if(aMaterial->GetTextureCount(TEXTURE_TYPES[t]) > 0) {
+                cout << "Material has " << TEXTURE_NAMES[t] << endl;
                 Texture2D *tex = loadTexture(aMaterial, TEXTURE_TYPES[t]);
                 if(tex == nullptr) {
-                    qCritical("There is no %s\n", TEXTURE_NAMES[t]);
+                    qCritical("  Failed to load %s\n", TEXTURE_NAMES[t]);
                 }
                 else {
                     tex->setName(QString(TEXTURE_NAMES[t]));
                     material->addAttribute(tex);
                 }
+            }
+            else {
+                cout << "Material has no " << TEXTURE_NAMES[t] << endl;
             }
         }
 

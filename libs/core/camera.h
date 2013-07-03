@@ -49,6 +49,11 @@ public:
 
     // updates camera matrices
     void update();
+    
+    //
+    glm::vec3 getEye();
+    glm::vec3 getUp();
+    glm::vec3 getCenter();
 
 protected:
     void invalidate();

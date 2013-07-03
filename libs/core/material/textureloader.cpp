@@ -19,7 +19,7 @@ Texture2D *TextureLoader::loadTexture2D(const QString &path)
     GLuint gTexture;
     Texture2D *texture;
 
-    cout << "Loading texture from " << path.toStdString() << endl;
+    cout << "  Loading " << path.toStdString() << endl;
 
     auto i = m_loadedTextures.find(path);
 
