@@ -6,7 +6,6 @@
 #include "../camera.h"
 
 
-float speed = 0.003f;
 float angle = 0.05f;
 
 FlightNavigation::FlightNavigation(Camera * camera) 
@@ -187,6 +186,7 @@ void FlightNavigation::sideward(float speed){
 }
 
 void FlightNavigation::onTimerEvent(){
+    float speed = m_BBRadius * 0.01;
     if (m_direction.y && m_direction.x) {
         forward(m_direction.y * speed * TIMER_MS /sqrt(2.0));
         sideward(m_direction.x * speed * TIMER_MS /sqrt(2.0));

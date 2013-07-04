@@ -33,9 +33,8 @@ static const QString LIGHTPOSITION_UNIFORM ("lightposition");
 //gooch
 static const QString WARMCOLDCOLOR_UNIFORM ("warmcoldcolor");
 
-Painter::Painter(Group * scene, Camera * camera):
-   AbstractScenePainter(scene)
-,   m_quad(nullptr)
+Painter::Painter(Camera * camera):
+   m_quad(nullptr)
 ,   m_textured(nullptr)
 ,   m_normals(nullptr)
 ,   m_normalz(nullptr)
@@ -53,21 +52,9 @@ Painter::Painter(Group * scene, Camera * camera):
 {
 }
 
-Painter::Painter(Camera * camera):
-    Painter(nullptr, camera)
-{
-}
-
-
-Painter::Painter(Group * scene):
-    Painter(scene, nullptr)
-{
-}
-
 Painter::~Painter()
 {
     delete m_quad;
-
     delete m_textured;
     delete m_normals;
     delete m_normalz;
@@ -86,20 +73,11 @@ const bool Painter::initialize()
 {
     AutoTimer t("Initialization of Painter");
 
-    if (m_scene) {
-        glm::mat4 transform(1.f);
-
-        transform *= glm::scale(glm::mat4(1.f), glm::vec3(0.02f));
-        transform *= glm::rotate(glm::mat4(1.f), 180.f, glm::vec3(0.f, 1.f, 0.f));
-        transform *= glm::rotate(glm::mat4(1.f), -90.f, glm::vec3(1.f, 0.f, 0.f));
-        transform *= glm::rotate(glm::mat4(1.f), 25.f, glm::vec3(0.f, 0.f, 1.f));
-
-        m_scene->setTransform(transform);
+    if(m_scene) {
         m_camera->append(m_scene);
     }
 
     m_quad = new ScreenQuad();
-
 
     // Textured
     m_textured = new Program();

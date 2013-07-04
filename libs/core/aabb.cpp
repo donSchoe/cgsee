@@ -35,6 +35,8 @@ const bool AxisAlignedBoundingBox::extend(const glm::vec3 & vertex)
 
 const bool AxisAlignedBoundingBox::extend(const AxisAlignedBoundingBox & aabb)
 {
+    if (!aabb.valid())
+        return false;
     return extend(aabb.m_llf) | extend(aabb.m_urb);
 }
 

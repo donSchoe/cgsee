@@ -44,7 +44,6 @@ public:
     void setViewPort(const int width, const int height);
     void sceneChanged(Group * scene);
 
-
     glm::mat4 defaultView();
     glm::mat4 frontview();
     glm::mat4 rightview();
@@ -53,7 +52,9 @@ public:
     glm::mat4 topview();
     glm::mat4 bottomview();
     glm::mat4 topRightView();
-
+    
+    float getBBRadius();
+    void setBBRadius(float radius);
 
 protected:
     void startTimer();
@@ -70,6 +71,9 @@ protected:
 protected:
     int m_width;
     int m_height;
+    
+    float m_BBRadius;
+
     float m_fovy;
     glm::mat4 m_viewmatrix;
 

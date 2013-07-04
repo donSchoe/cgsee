@@ -189,10 +189,15 @@ AbstractNavigation * Canvas::navigation()
 
 void Canvas::setNavigation( AbstractNavigation * navigation )
 {
-    if (m_navigation)
+    float bbRadius = 0;
+    if (m_navigation){
+        bbRadius = m_navigation->getBBRadius();
         delete m_navigation;
+    }
     m_navigation = navigation;
     m_navigation->setCanvas(this);
+    if (bbRadius != 0)
+        m_navigation->setBBRadius(bbRadius);
 }
 
 void Canvas::mousePressEvent( QMouseEvent * event )

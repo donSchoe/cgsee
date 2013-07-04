@@ -17,16 +17,20 @@ class ScreenQuad;
 class Program;
 class FrameBufferObject;
 
-class Painter : public AbstractScenePainter
+
+class RealisticPainter : public AbstractScenePainter
 {
 public:
-    Painter(Camera * camera);
-    Painter(Group * scene);
-    virtual ~Painter();
+    enum e_Program
+    {
+        FLAT, GROURAUD, PHONG, GOOCH
+    }
+
+public:
+    RealisticPainter(Camera * camera);
+    virtual ~RealisticPainter();
 
     virtual void paint();
-
-    virtual void setShading(char shader);
 
     virtual void resize(const int width, const int height);
 
@@ -45,35 +49,15 @@ protected:
 
 
 protected:
-// <<<<<<< HEAD
-//     std::shared_ptr<DataBlockRegistry> m_registry;
-//     Group * m_group;
-// =======
-// >>>>>>> master
     ScreenQuad * m_quad;
 
-    QMap<QString, Program *> programs;
-
-    Program * m_textured;
-    Program * m_normalz;
-    Program * m_normals;
-    Program * m_wireframe;
-    Program * m_primitiveWireframe;
-    Program * m_solidWireframe;
-    Program * m_flat;
-    Program * m_gouraud;
-    Program * m_phong;
-    Program * m_gooch;
-    Program * m_useProgram;
-    FrameBufferObject * m_fboNormalz;
-
-    glm::vec3 camPos;
-
+    QMap<e_Program, Program *> m_programs;
     Program * m_flush;
 
-    Camera * m_camera;
+    Program * m_useProgram;
 
-private:
-    Painter(Group * scene, Camera * camera);
+    FrameBufferObject * m_fboNormalz;
+
+    Camera * m_camera;
 };
 

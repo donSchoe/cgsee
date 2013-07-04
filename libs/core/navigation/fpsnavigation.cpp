@@ -4,7 +4,6 @@
 #include "fpsnavigation.h"
 #include "../camera.h"
 
-float fspeed = 0.002f;
 
 
 FpsNavigation::FpsNavigation(Camera * camera)
@@ -111,13 +110,14 @@ void FpsNavigation::forward(float speed){
 
 void FpsNavigation::onTimerEvent()
 {
+    float speed = m_BBRadius*0.01;
     if (m_direction.x && m_direction.y) {
-        forward(m_direction.y * fspeed * TIMER_MS / sqrt(2));
-        sideward(m_direction.x * fspeed * TIMER_MS / sqrt(2));
+        forward(m_direction.y * speed * TIMER_MS / sqrt(2));
+        sideward(m_direction.x * speed * TIMER_MS / sqrt(2));
     }
     else if (m_direction.x || m_direction.y) {
-        forward(m_direction.y * fspeed * TIMER_MS);
-        sideward(m_direction.x * fspeed * TIMER_MS);
+        forward(m_direction.y * speed * TIMER_MS);
+        sideward(m_direction.x * speed * TIMER_MS);
     }
     
 }

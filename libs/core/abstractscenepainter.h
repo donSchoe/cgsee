@@ -8,7 +8,6 @@ class CGSEE_API AbstractScenePainter : public AbstractPainter
 {
 public:
     AbstractScenePainter();
-    AbstractScenePainter(Group * scene);
     virtual ~AbstractScenePainter();
 
     void assignScene(Group * scene);

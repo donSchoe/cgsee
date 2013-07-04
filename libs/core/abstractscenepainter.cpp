@@ -8,12 +8,6 @@ AbstractScenePainter::AbstractScenePainter()
 {
 }
 
-AbstractScenePainter::AbstractScenePainter(Group * scene)
-: AbstractPainter()
-, m_scene(scene)
-{
-}
-
 AbstractScenePainter::~AbstractScenePainter()
 {
     delete m_scene;

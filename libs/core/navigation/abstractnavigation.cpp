@@ -16,6 +16,7 @@ static const float DURATION = 333.f;
 AbstractNavigation::AbstractNavigation(Camera * camera)
     : m_width(camera->viewport().x)
     , m_height(camera->viewport().y)
+    , m_BBRadius(0)
     , m_fovy(camera->fovy())
     , m_viewmatrix(camera->view())
     , m_camera(camera)
@@ -219,7 +220,18 @@ glm::mat4 AbstractNavigation::topRightView()
 void AbstractNavigation::sceneChanged(Group * scene)
 {
     AxisAlignedBoundingBox bb = scene->boundingBox();
-    m_frontView = glm::lookAt(bb.center() + glm::vec3(0.f, 0.f, bb.radius()*1.5), bb.center(), glm::vec3(0.f, 1.f, 0.f));
+    
+    m_BBRadius = bb.radius();
+    
+    m_frontView = glm::lookAt(bb.center() + glm::vec3(0.f, 0.f, bb.radius()*2.5), bb.center(), glm::vec3(0.f, 1.f, 0.f));
     setFromMatrix(m_frontView);
     updateCamera();
+}
+
+float AbstractNavigation::getBBRadius(){
+    return m_BBRadius;
+}
+
+void AbstractNavigation::setBBRadius(float radius){
+    m_BBRadius = radius;
 }
