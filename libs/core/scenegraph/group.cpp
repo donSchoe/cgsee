@@ -1,6 +1,6 @@
-
 #include <core/program.h>
 
+#include "../abstractscenepainter.h"
 #include "polygonaldrawable.h"
 #include "group.h"
 
@@ -21,6 +21,12 @@ Group::~Group()
 
 void Group::draw( const Program & program, const glm::mat4 & transform )
 {
+
+}
+
+void Group::drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform)
+{
+    painter.draw(*this, transform);
 }
 
 const bool Group::contains(Node * node) const

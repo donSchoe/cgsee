@@ -5,6 +5,7 @@
 #include "node.h"
 
 class PolygonalDrawable;
+class Painter;
 class Program;
 
 class CGSEE_API Group : public Node
@@ -16,6 +17,7 @@ public:
     virtual Group * asGroup();
 
     virtual void draw( const Program & program, const glm::mat4 & transform);
+    virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform);
 
     const bool contains( Node * node ) const;
 

@@ -7,8 +7,8 @@ set(SOURCES
     cgsee.h
     cgsee.cpp
     main.cpp
-    painter.h
-    painter.cpp
+    realisticpainter.h
+    realisticpainter.cpp
 )
 
 source_group_by_path(${CMAKE_CURRENT_SOURCE_DIR} "\\\\.cpp$|\\\\.c$|\\\\.h$|\\\\.hpp$|\\\\.ui$" 

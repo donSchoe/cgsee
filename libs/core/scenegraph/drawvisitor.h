@@ -10,17 +10,17 @@
 #include "ISceneVisitor.h"
 
 
-class Program;
+class AbstractScenePainter;
 class Node;
 
 class CGSEE_API DrawVisitor : public ISceneVisitor
 {
 public:
-    DrawVisitor( Program * p, glm::mat4 t );
+    DrawVisitor( AbstractScenePainter &painter, glm::mat4 t );
     virtual bool operator() ( Node & node ) override;
 
 private:
-    Program * m_program;
+    AbstractScenePainter &m_painter;
     glm::mat4 m_transform;
 };
 

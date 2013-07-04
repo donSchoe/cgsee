@@ -3,14 +3,15 @@
 #include "drawvisitor.h"
 
 
-DrawVisitor::DrawVisitor( Program * p, glm::mat4 t ) 
-: m_program(p)
+DrawVisitor::DrawVisitor( AbstractScenePainter &painter, glm::mat4 t )
+: m_painter(painter)
 , m_transform(t)
-{}
+{
+}
 
 bool DrawVisitor::operator() ( Node & node )
 {
-    node.draw( *m_program, m_transform );
+    node.drawDispatch( m_painter, m_transform );
     if( Node::RF_Relative == node.referenceFrame() )
         m_transform *= node.transform();
     return true;

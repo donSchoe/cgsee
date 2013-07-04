@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 
 #include "polygonaldrawable.h"
+#include "../abstractscenepainter.h"
 
 #include <core/aabb.h>
 #include <core/bufferobject.h>
@@ -40,7 +41,7 @@ const AxisAlignedBoundingBox PolygonalDrawable::boundingBox() const
 //     for( const auto & pos : m_geometry->vertices() ){
 //         m_aabb.extend( pos );
 //     }
-   
+
     t_VertexListP myVList = m_geometry->vertices();
     AxisAlignedBoundingBox & aabb = m_aabb;
     myVList->foreachVertexAttribute<glm::vec3>(0, myVList->size(), "position", nullptr,
@@ -76,7 +77,7 @@ void PolygonalDrawable::draw(
     glEnable(GL_DEPTH_TEST);
 //     glEnable(GL_CULL_FACE);
 //     glCullFace(GL_BACK);
- 
+
     for( const auto & bo : m_geometry->elementArrayBOs() )
         bo->draw( mode() );
 
@@ -88,3 +89,10 @@ void PolygonalDrawable::draw(
 
     program.release();
 }
+
+void PolygonalDrawable::drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform)
+{
+    painter.draw(*this, transform);
+}
+
+

@@ -130,17 +130,6 @@
     <property name="title">
      <string>&amp;Shading</string>
     </property>
-    <addaction name="flatShadingAction"/>
-    <addaction name="gouraudShadingAction"/>
-    <addaction name="phongShadingAction"/>
-    <addaction name="separator"/>
-    <addaction name="goochShadingAction"/>
-    <addaction name="separator"/>
-    <addaction name="wireframeShadingAction"/>
-    <addaction name="solidWireframeShadingAction"/>
-    <addaction name="primitiveWireframeShadingAction"/>
-    <addaction name="separator"/>
-    <addaction name="normalsAction"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -598,73 +587,6 @@
    </property>
    <property name="shortcut">
     <string>Alt+F3</string>
-   </property>
-  </action>
-  <action name="phongShadingAction">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Phong Shading</string>
-   </property>
-   <property name="shortcut">
-    <string>Shift+F12</string>
-   </property>
-  </action>
-  <action name="flatShadingAction">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Flat Shading</string>
-   </property>
-  </action>
-  <action name="gouraudShadingAction">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>&amp;Gouraud Shading</string>
-   </property>
-  </action>
-  <action name="goochShadingAction">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>G&amp;ooch Shading</string>
-   </property>
-  </action>
-  <action name="wireframeShadingAction">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>W&amp;ireframe Shading</string>
-   </property>
-  </action>
-  <action name="solidWireframeShadingAction">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>S&amp;olidWireframe Shading</string>
-   </property>
-  </action>
-  <action name="primitiveWireframeShadingAction">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Pr&amp;imitiveWireframe Shading</string>
-   </property>
-  </action>
-  <action name="normalsAction">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="text">
-    <string>Normals</string>
    </property>
   </action>
  </widget>

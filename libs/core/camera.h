@@ -8,6 +8,7 @@
 
 class Program;
 class FrameBufferObject;
+class AbstractScenePainter;
 
 class CGSEE_API Camera : public Group
 {
@@ -18,6 +19,7 @@ public:
     virtual Camera * asCamera();
 
     virtual void draw( const Program & program, const glm::mat4 & transform) override;
+    virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform);
 
     const glm::ivec2 & viewport() const;
     void setViewport(const glm::ivec2 & size);
@@ -43,7 +45,7 @@ public:
 
     // updates camera matrices
     void update();
-    
+
     //
     glm::vec3 getEye();
     glm::vec3 getUp();

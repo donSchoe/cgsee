@@ -1,5 +1,5 @@
 #include "cgsee.h"
-#include "painter.h"
+#include "realisticpainter.h"
 
 #include <core/datacore/datablock.h>
 #include <core/assimploader.h>
@@ -15,9 +15,9 @@ CGSee::CGSee(int & argc, char ** argv)
 ,   m_viewer(nullptr)
 ,   m_painter(nullptr)
 {
-    
+
     m_registry = std::make_shared<DataBlockRegistry>();
-    
+
     m_viewer = new Viewer( m_registry );
     m_viewer->setWindowTitle(title());
     m_viewer->initialize(format());
@@ -28,7 +28,7 @@ CGSee::CGSee(int & argc, char ** argv)
     camera->setZFar (300.0f);
     m_viewer->setCamera(camera);
 
-    m_painter = new Painter(camera);
+    m_painter = new RealisticPainter(camera);
     m_viewer->setPainter(m_painter);
 
     AbstractNavigation * navigation = new ArcballNavigation(camera);

@@ -1,14 +1,16 @@
-
 #include <glm/gtc/matrix_transform.hpp>
 
 #include <QKeyEvent>
+#include <QString>
 #include <QPainter>
 #include <QImage>
 
 #include "abstractpainter.h"
+#include "fileassociatedshader.h"
 
 #include "abstractglparent.h"
 #include "camera.h"
+#include "program.h"
 #include "gpuquery.h"
 
 
@@ -17,7 +19,7 @@ AbstractPainter::AbstractPainter()
 :   m_initialized(false)
 {
 }
- 
+
 AbstractPainter::~AbstractPainter()
 {
 }
@@ -44,6 +46,25 @@ void AbstractPainter::resize(
     if(!(m_initialized = initialize()))
         qFatal("Painter initialization failed.");
 }
+
+
+Program *AbstractPainter::loadProgram(const QString &pathPrefix, int flags)
+{
+    Program *program = new Program;
+
+    if(flags & VERTEX_SHADER_BIT) {
+        program->attach(new FileAssociatedShader(GL_VERTEX_SHADER, pathPrefix + ".vert"));
+    }
+    if(flags & GEOMETRY_SHADER_BIT) {
+        program->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, pathPrefix + ".geo"));
+    }
+    if(flags & FRAGMENT_SHADER_BIT) {
+        program->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, pathPrefix + ".frag"));
+    }
+
+    return program;
+}
+
 
 
 const QImage AbstractPainter::capture(

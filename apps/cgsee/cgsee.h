@@ -5,7 +5,7 @@
 #include <core/abstractapplication.h>
 
 class Viewer;
-class Painter;
+class AbstractScenePainter;
 class DataBlockRegistry;
 class Camera;
 class AbstractNavigation;
@@ -20,5 +20,5 @@ public:
 protected:
     std::shared_ptr<DataBlockRegistry> m_registry;
     Viewer * m_viewer;
-    Painter * m_painter;
+    AbstractScenePainter * m_painter;
 };
