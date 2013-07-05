@@ -18,7 +18,6 @@
 #include <core/assimploader.h>
 #include <core/program.h>
 #include <core/screenquad.h>
-#include <core/grid.h>
 #include "core/navigation/arcballnavigation.h"
 #include "core/navigation/flightnavigation.h"
 
