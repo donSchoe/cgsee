@@ -7,7 +7,7 @@ class CGSEE_API MaterialAttribute
 {
 public:
 
-    MaterialAttribute(const QString &name);
+    MaterialAttribute(const QString &name = QString(""));
     virtual ~MaterialAttribute();
 
     virtual void bind(const Program &program) = 0;

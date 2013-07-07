@@ -6,6 +6,8 @@ set(SOURCES
 
     cgsee.h
     cgsee.cpp
+    fallbackrealisticmaterial.h
+    fallbackrealisticmaterial.cpp
     main.cpp
     realisticpainter.h
     realisticpainter.cpp

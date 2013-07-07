@@ -2,6 +2,7 @@
 #include <IL/il.h>
 #include <IL/ilu.h>
 #include <IL/ilut.h>
+#include <core/textureunitprovider.h>
 
 #include <QMetaType>
 #include "cgsee.h"
@@ -17,6 +18,7 @@ static void init() {
 
 static void shutdown() {
     // shutdown libraries
+    delete TextureUnitProvider::instance();
 }
 
 int main(int argc, char* argv[])

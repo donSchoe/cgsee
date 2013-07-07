@@ -1,4 +1,5 @@
- #include "material.h"
+#include "material.h"
+#include "core/program.h"
 #include <iostream>
 
 using namespace std;
@@ -20,7 +21,7 @@ void Material::addAttribute(MaterialAttribute *attribute)
     m_attributes.push_back(attribute);
 }
 
-bool Material::bind(const Program &program, const QString &name)
+bool Material::bind(Program &program, const QString &name)
 {
     for(MaterialAttribute *attribute : m_attributes) {
         if(attribute->name() == name) {
@@ -29,4 +30,11 @@ bool Material::bind(const Program &program, const QString &name)
         }
     }
     return false;
+}
+
+void Material::bindAll(Program &program)
+{
+    for(MaterialAttribute *attribute : m_attributes) {
+        attribute->bind(program);
+    }
 }

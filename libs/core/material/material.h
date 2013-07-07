@@ -4,6 +4,7 @@
 #include <list>
 #include "materialattribute.h"
 
+class Program;
 
 class Material
 {
@@ -15,7 +16,8 @@ public:
 
     template<typename T> T *attribute(const QString &name) const;
 
-    bool bind(const Program &program, const QString &name);
+    bool bind(Program &program, const QString &name);
+    void bindAll(Program &program);
 
 
 protected:

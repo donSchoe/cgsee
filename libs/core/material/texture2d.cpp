@@ -2,6 +2,7 @@
 #include "../gpuquery.h"
 #include <GL/gl.h>
 #include <iostream>
+#include <core/textureunitprovider.h>
 
 using namespace std;
 
@@ -20,12 +21,15 @@ Texture2D::~Texture2D()
 
 void Texture2D::bind(const Program &program)
 {
-    glActiveTexture(GL_TEXTURE0 + 1);
+    GLuint unit, id;
+    TextureUnitProvider::instance()->allocate(unit, id);
+
+    glActiveTexture(unit);
     glError();
 
     glBindTexture(GL_TEXTURE_2D, m_gTexId);
     glError();
 
-    program.setUniform(m_name, 1);
+    program.setUniform(m_name, id);
 }
 

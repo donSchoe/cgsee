@@ -2,6 +2,7 @@
 #include "scenegraph/group.h"
 #include "camera.h"
 #include "scenegraph/node.h"
+#include <core/textureunitprovider.h>
 
 AbstractScenePainter::AbstractScenePainter()
 : AbstractPainter()
@@ -36,6 +37,21 @@ Group * AbstractScenePainter::retainScene()
 Group & AbstractScenePainter::getScene() const
 {
     return *m_scene;
+}
+
+void AbstractScenePainter::draw(Group & group, const glm::mat4 & transform)
+{
+    TextureUnitProvider::instance()->reset();
+}
+
+void AbstractScenePainter::draw(PolygonalDrawable & drawable, const glm::mat4 & transform)
+{
+    TextureUnitProvider::instance()->reset();
+}
+
+void AbstractScenePainter::draw(Node & node, const glm::mat4 & transform)
+{
+    TextureUnitProvider::instance()->reset();
 }
 
 void AbstractScenePainter::sceneChanged(Group * scene)

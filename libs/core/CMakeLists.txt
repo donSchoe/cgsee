@@ -104,6 +104,8 @@ set(SOURCES
     shader.cpp
     timer.h
     timer.cpp
+    textureunitprovider.h
+    textureunitprovider.cpp
     plane.h
     plane.cpp
     viewfrustum.h
