@@ -187,3 +187,10 @@ void FrameBufferObject::resize() const
         glError();
     }
 }
+
+void FrameBufferObject::clear()
+{
+    bind();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    release();
+}

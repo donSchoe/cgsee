@@ -14,6 +14,7 @@
 class PolygonalGeometry;
 class DataBlockRegistry;
 class Program;
+class Material;
 class AbstractScenePainter;
 
 
@@ -24,18 +25,21 @@ public:
 
     // TODO: wieder rueckgaengig machen...
 //     PolygonalDrawable( DataBlockRegistry & registry, const QString & name );
-    PolygonalDrawable( const QString & name );
+    PolygonalDrawable(const QString & name);
     virtual ~PolygonalDrawable();
 
-    virtual void draw( const Program & program, const glm::mat4 & transform ) override;
+    virtual void draw(const Program & program, const glm::mat4 & transform) override;
     virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform);
 
     virtual const AxisAlignedBoundingBox boundingBox() const override;
 
-    void setGeometry( t_geometryP geometry );
+    void setMaterial(Material *material);
+    Material *material() const;
+
+    void setGeometry(t_geometryP geometry);
     t_geometryP geometry() { return m_geometry; }
 
-    void setMode( const GLenum mode ) { m_mode = mode; }
+    void setMode(const GLenum mode) { m_mode = mode; }
     inline const GLenum mode() const { return m_mode; }
 
 protected:
@@ -43,5 +47,6 @@ protected:
 
 protected:
     t_geometryP m_geometry;
+    Material *m_material;
     GLenum  m_mode;
 };

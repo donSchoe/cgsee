@@ -60,6 +60,21 @@ const glm::vec3 & AxisAlignedBoundingBox::urb() const
     return m_urb;
 }
 
+const std::array<glm::vec3, 8> AxisAlignedBoundingBox::allVertices() const
+{
+    std::array<glm::vec3, 8> allVertices = {
+        glm::vec3(m_llf.x, m_llf.y, m_llf.z),
+        glm::vec3(m_llf.x, m_llf.y, m_urb.z),
+        glm::vec3(m_llf.x, m_urb.y, m_llf.z),
+        glm::vec3(m_llf.x, m_urb.y, m_urb.z),
+        glm::vec3(m_urb.x, m_llf.y, m_llf.z),
+        glm::vec3(m_urb.x, m_llf.y, m_urb.z),
+        glm::vec3(m_urb.x, m_urb.y, m_llf.z),
+        glm::vec3(m_urb.x, m_urb.y, m_urb.z)
+    };
+    return allVertices;
+}
+
 const bool AxisAlignedBoundingBox::inside(const glm::vec3 & vertex) const
 {
     return vertex.x >= m_llf.x && vertex.x <= m_urb.x

@@ -15,7 +15,7 @@ public:
 
     template<typename T> T *attribute(const QString &name) const;
 
-    void bind(const Program &program);
+    bool bind(const Program &program, const QString &name);
 
 
 protected:

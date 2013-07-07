@@ -16,6 +16,7 @@ AbstractScenePainter::~AbstractScenePainter()
 
 void AbstractScenePainter::assignScene(Group * scene)
 {
+    this->sceneChanged(scene);
     if (m_scene)
         delete retainScene();
 
@@ -35,4 +36,8 @@ Group * AbstractScenePainter::retainScene()
 Group & AbstractScenePainter::getScene() const
 {
     return *m_scene;
+}
+
+void AbstractScenePainter::sceneChanged(Group * scene)
+{
 }

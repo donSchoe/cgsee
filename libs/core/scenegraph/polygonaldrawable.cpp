@@ -9,11 +9,9 @@
 
 #include "polygonalgeometry.h"
 
-static const QString TRANSFORM_UNIFORM( "transform" );
-
 // TODO: wieder rueckgaengig machen...
 // PolygonalDrawable::PolygonalDrawable( DataBlockRegistry & registry, const QString & name )
-PolygonalDrawable::PolygonalDrawable( const QString & name )
+PolygonalDrawable::PolygonalDrawable(const QString & name)
 :   Node( name )
 ,   m_geometry( nullptr )
 ,   m_mode( GL_TRIANGLES )
@@ -24,17 +22,17 @@ PolygonalDrawable::~PolygonalDrawable()
 {
 }
 
-void PolygonalDrawable::setGeometry( t_geometryP geometry )
+void PolygonalDrawable::setGeometry(t_geometryP geometry)
 {
     m_geometry = geometry;
 }
 
 const AxisAlignedBoundingBox PolygonalDrawable::boundingBox() const
 {
-    if(m_aabb.valid())
+    if( m_aabb.valid() )
         return m_aabb;
 
-    if(m_geometry == nullptr)
+    if( m_geometry == nullptr )
         return AxisAlignedBoundingBox();
 
     // TODO: Hier muss was effizienteres her! vertices() legt jedes mal eine Kopie an.
@@ -54,24 +52,30 @@ const AxisAlignedBoundingBox PolygonalDrawable::boundingBox() const
     return m_aabb;
 }
 
+void PolygonalDrawable::setMaterial(Material *material)
+{
+    m_material = material;
+}
+
+Material *PolygonalDrawable::material() const
+{
+    return m_material;
+}
+
+
 void PolygonalDrawable::invalidateBoundingBox()
 {
     return Node::invalidateBoundingBox();
 }
 
-void PolygonalDrawable::draw(
-    const Program & program
-,   const glm::mat4 & transform)
+void PolygonalDrawable::draw(const Program & program, const glm::mat4 & transform)
 {
-    if(!m_geometry || m_geometry->indices().empty())
+    if( !m_geometry || m_geometry->indices().empty() )
         return;
 
-    m_geometry->initialize( program );
+    m_geometry->initialize(program);
 
-    program.use();
-    program.setUniform(TRANSFORM_UNIFORM, transform);
-
-    glBindVertexArray( m_geometry->vao() );
+    glBindVertexArray(m_geometry->vao());
     glError();
 
     glEnable(GL_DEPTH_TEST);

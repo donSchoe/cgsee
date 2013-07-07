@@ -33,7 +33,7 @@ void DataCoreTest::initVertexList()
     qRegisterMetaType<glm::vec2>("glm::vec2");
     attributeSpec.append(AttributeSpec("position", "glm::vec3"));
     attributeSpec.append(AttributeSpec("normal", "glm::vec3"));
-    attributeSpec.append(AttributeSpec("texcoord", "glm::vec2"));
+    attributeSpec.append(AttributeSpec("texc", "glm::vec2"));
     vertexList->initialize(attributeSpec);
 }
 

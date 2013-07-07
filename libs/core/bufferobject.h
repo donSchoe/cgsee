@@ -34,6 +34,13 @@ public:
     ,   const GLenum type
     ,   const GLint size);
 
+    template <typename T>
+    void noData(
+        const T def
+    ,   const GLsizei count
+    ,   const GLenum type
+    ,   const GLint size);
+
     void bind();
     void bind(const GLint attributeLocation);
 
@@ -89,4 +96,24 @@ void BufferObject::data(
 
     glBufferData(m_target, m_count * sizeof(T), v, m_usage);
     glError();
+}
+
+template <typename T>
+void BufferObject::noData(
+    const T def
+,   const GLsizei count
+,   const GLenum type
+,   const GLint size)
+{
+    bind();
+
+    T* data = new T[count];
+    for(int t = 0; t < count; t++) {
+        data[t] = def;
+    }
+
+    glBufferData(m_target, m_count * sizeof(T), data, m_usage);
+    glError();
+
+    delete data;
 }

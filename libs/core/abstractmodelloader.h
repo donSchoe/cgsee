@@ -1,16 +1,18 @@
 
 #pragma once
 
+#include <memory>
 #include <QString>
 #include <QStringList>
 #include <core/declspec.h>
 
+class DataBlockRegistry;
 class Group;
 
 class CGSEE_API AbstractModelLoader
 {
 public:
-    AbstractModelLoader();
+    AbstractModelLoader(std::shared_ptr<DataBlockRegistry> registry = nullptr);
     virtual ~AbstractModelLoader();
 
     bool canLoad(const QString & extension) const;
@@ -28,5 +30,8 @@ public:
 protected:
     virtual QStringList loadableExtensions() const;
     virtual QStringList saveableExtensions() const;
+
+protected:
+    std::shared_ptr<DataBlockRegistry> m_registry;
 };
 

@@ -47,13 +47,16 @@ set(SOURCES
     scenegraph/polygonalgeometry.cpp
     scenegraph/scenetraverser.h
     scenegraph/scenetraverser.cpp
-    scenegraph/ISceneVisitor.h
+    scenegraph/SceneVisitorInterface.h
     scenegraph/drawvisitor.h
     scenegraph/drawvisitor.cpp
-    
+
     navigation/flightnavigation.cpp
     navigation/fpsnavigation.h
     navigation/fpsnavigation.cpp
+    scenegraph/cullingvisitor.h
+    scenegraph/cullingvisitor.cpp
+    
     
     aabb.h
     aabb.cpp
@@ -90,7 +93,6 @@ set(SOURCES
     mathmacros.h
     messagehandler.h
     messagehandler.cpp   
-
     objloader.h
     objloader.cpp
 
@@ -102,6 +104,10 @@ set(SOURCES
     shader.cpp
     timer.h
     timer.cpp
+    plane.h
+    plane.cpp
+    viewfrustum.h
+    viewfrustum.cpp
     vertexcacheoptimizer.h
     vertexcacheoptimizer.cpp
     vertexreuse.h

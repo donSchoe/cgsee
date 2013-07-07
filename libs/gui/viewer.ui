@@ -20,7 +20,7 @@
      <x>0</x>
      <y>0</y>
      <width>734</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="canvasMenu">
@@ -31,7 +31,11 @@
      <property name="title">
       <string>Select &amp;Frame Buffer</string>
      </property>
-     <addaction name="listOfFBOsAction"/>
+     <addaction name="fboColorAction"/>
+     <addaction name="fboNormalzAction"/>
+     <addaction name="fboShadowsAction"/>
+     <addaction name="fboShadowMapAction"/>
+     <addaction name="fboSSAOAction"/>
      <addaction name="separator"/>
      <addaction name="showFrameBuffersAction"/>
     </widget>
@@ -130,6 +134,12 @@
     <property name="title">
      <string>&amp;Shading</string>
     </property>
+    <addaction name="separator"/>
+    <addaction name="colorRenderingAction"/>
+    <addaction name="shadowMappingAction"/>
+    <addaction name="shadowBlurAction"/>
+    <addaction name="ssaoAction"/>
+    <addaction name="ssaoBlurAction"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -589,6 +599,112 @@
     <string>Alt+F3</string>
    </property>
   </action>
+  <action name="fboColorAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Color</string>
+   </property>
+  </action>
+  <action name="fboNormalzAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>NormalZ</string>
+   </property>
+  </action>
+  <action name="fboShadowMapAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>ShadowMap</string>
+   </property>
+  </action>
+  <action name="fboTempBufferAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>TempBuffer</string>
+   </property>
+  </action>
+  <action name="shadowMappingAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>ShadowMapping</string>
+   </property>
+  </action>
+  <action name="ssaoAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>SSAO</string>
+   </property>
+  </action>
+  <action name="colorRenderingAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Color</string>
+   </property>
+  </action>
+  <action name="fboShadowsAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Shadows</string>
+   </property>
+  </action>
+  <action name="fboSSAOAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>SSAO</string>
+   </property>
+  </action>
+  <action name="ssaoBlurAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>SSAO blur</string>
+   </property>
+  </action>
+  <action name="shadowBlurAction">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Shadow blur</string>
+   </property>
+ </action>
  </widget>
  <resources/>
  <connections/>

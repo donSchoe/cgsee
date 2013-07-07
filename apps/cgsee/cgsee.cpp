@@ -18,27 +18,27 @@ CGSee::CGSee(int & argc, char ** argv)
 
     m_registry = std::make_shared<DataBlockRegistry>();
 
-    m_viewer = new Viewer( m_registry );
+    m_viewer = new Viewer(m_registry);
     m_viewer->setWindowTitle(title());
     m_viewer->initialize(format());
 
     Camera * camera = new Camera();
     camera->setFovy (45.0f);
     camera->setZNear( 1.0f);
-    camera->setZFar (300.0f);
+    camera->setZFar (20.0f);
     m_viewer->setCamera(camera);
 
     m_painter = new RealisticPainter(camera);
     m_viewer->setPainter(m_painter);
 
     AbstractNavigation * navigation = new ArcballNavigation(camera);
-    navigation->reset(); // initialize view matrix
     m_viewer->setNavigation(navigation);
 
-    // AssimpLoader loader( registry );
     m_viewer->show();
 
-    // m_painter->assignScene(loader.importFromFile("data/mario.dae"));
+    AssimpLoader loader;
+    m_painter->assignScene(loader.importFromFile("data/ironman/Iron_Man.obj"));
+    navigation->sceneChanged(&m_painter->getScene());
 
 }
 

@@ -6,6 +6,7 @@
 
 class PolygonalDrawable;
 class Painter;
+class Material;
 class Program;
 
 class CGSEE_API Group : public Node
@@ -16,32 +17,36 @@ public:
 
     virtual Group * asGroup();
 
-    virtual void draw( const Program & program, const glm::mat4 & transform);
+    virtual void draw(const Program & program, const glm::mat4 & transform);
     virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform);
 
-    const bool contains( Node * node ) const;
+    const bool contains(Node * node) const;
 
-    void prepend( Group * group );
-    void prepend (PolygonalDrawable * drawable );
+    void prepend(Group * group);
+    void prepend (PolygonalDrawable * drawable);
 
-    void append( Group * group);
-    void append( PolygonalDrawable * drawable );
+    void append(Group * group);
+    void append(PolygonalDrawable * drawable);
 
-    void insert( const t_children::iterator & before, Group * group );
-    void insert( const t_children::iterator & before, PolygonalDrawable * drawable );
+    void insert(const t_children::iterator & before, Group * group);
+    void insert(const t_children::iterator & before, PolygonalDrawable * drawable);
 
+    void addManagedMaterial(Material *material);
 
     // both removals delete the node if parents are empty
     void removeFirst();
     void removeLast ();
 
-    const void remove( Node * node, const bool deleteIfParentsEmpty = true );
+    const void remove(Node * node, const bool deleteIfParentsEmpty = true);
 
     virtual const AxisAlignedBoundingBox boundingBox() const;
 
 protected:
-    void prepend( Node * node );
-    void append( Node * node );
+    void prepend(Node * node);
+    void append(Node * node);
 
-    void insert( const t_children::iterator & before, Node * node );
+    void insert(const t_children::iterator & before, Node * node);
+
+protected:
+    std::list<Material*> m_managedMaterials;
 };

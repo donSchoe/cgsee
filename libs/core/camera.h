@@ -9,6 +9,7 @@
 class Program;
 class FrameBufferObject;
 class AbstractScenePainter;
+class ViewFrustum;
 
 class CGSEE_API Camera : public Group
 {
@@ -18,7 +19,7 @@ public:
 
     virtual Camera * asCamera();
 
-    virtual void draw( const Program & program, const glm::mat4 & transform) override;
+    virtual void draw(const Program & program, const glm::mat4 & transform) override;
     virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform);
 
     const glm::ivec2 & viewport() const;
@@ -43,6 +44,8 @@ public:
 
     const float aspect() const;
 
+    ViewFrustum *viewFrustum() const;
+
     // updates camera matrices
     void update();
 
@@ -59,6 +62,8 @@ protected:
 
     glm::mat4 m_view;
     glm::mat4 m_projection;
+
+    ViewFrustum *m_viewFrustum;
 
     float m_fovy;
     float m_zNear;

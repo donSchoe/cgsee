@@ -9,7 +9,7 @@ DrawVisitor::DrawVisitor( AbstractScenePainter &painter, glm::mat4 t )
 {
 }
 
-bool DrawVisitor::operator() ( Node & node )
+bool DrawVisitor::operator() (Node & node)
 {
     node.drawDispatch( m_painter, m_transform );
     if( Node::RF_Relative == node.referenceFrame() )

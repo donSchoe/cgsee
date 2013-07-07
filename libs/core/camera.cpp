@@ -7,6 +7,7 @@
 #include "gpuquery.h"
 #include "framebufferobject.h"
 #include "abstractscenepainter.h"
+#include "core/viewfrustum.h"
 
 static const QString VIEWPORT_UNIFORM   ("viewport");
 static const QString VIEW_UNIFORM       ("view");
@@ -20,12 +21,12 @@ static const QString CAMERAPOSITION_UNIFORM ("cameraposition");
 
 Camera::Camera(const QString & name)
 :   Group(name)
+,   m_viewFrustum(new ViewFrustum(this))
 ,   m_fovy(0.f)
 ,   m_zNear(0.f)
 ,   m_zFar (0.f)
 ,   m_invalidated(true)
 {
-    // TODO: Sinn und Unsinn der Camera als Node (d.h. als Teil des Graphen)...
     m_rf = RF_Absolute;
 //     m_rf = RF_Relative;
 }
@@ -34,7 +35,7 @@ Camera::~Camera()
 {
 }
 
-void Camera::draw( const Program & program, const glm::mat4 & transform )
+void Camera::draw(const Program & program, const glm::mat4 & transform)
 {
     if(m_invalidated)
         update();
@@ -78,6 +79,8 @@ void Camera::update()
     setTransform(m_projection * m_view);
 
     m_invalidated = false;
+
+    m_viewFrustum->update();
 }
 
 const glm::ivec2 & Camera::viewport() const
@@ -157,6 +160,10 @@ void Camera::setZFar(const float z)
 
     m_zFar = z;
     invalidate();
+}
+
+ViewFrustum *Camera::viewFrustum() const {
+    return m_viewFrustum;
 }
 
 Camera * Camera::asCamera()

@@ -24,15 +24,15 @@ public:
     };
 
 public:
-    Node( const QString & name );
+    Node(const QString & name);
     virtual ~Node();
 
-    virtual void draw( const Program & program, const glm::mat4 & transform) = 0;
+    virtual void draw(const Program & program, const glm::mat4 & transform) = 0;
     virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform) = 0;
     virtual const AxisAlignedBoundingBox boundingBox() const = 0;
 
     const QString name() const;
-    void setName( const QString & name );
+    void setName(const QString & name);
 
     const t_parents & parents() const;
     t_parents & parents();

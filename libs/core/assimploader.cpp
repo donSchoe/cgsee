@@ -20,12 +20,10 @@ const char *NORMALS_TEX_NAME("normalsTex");
 const char *SHININESS_TEX_NAME("shininessTex");
 
 AssimpLoader::AssimpLoader(std::shared_ptr<DataBlockRegistry> registry)
-: AbstractModelLoader()
-, m_registry(registry)
+: AbstractModelLoader(registry)
 , m_importer(new Assimp::Importer())
 {
-    if( m_registry == nullptr )
-        m_registry = std::make_shared<DataBlockRegistry>();
+
 }
 
 AssimpLoader::~AssimpLoader()
@@ -119,9 +117,9 @@ Group * AssimpLoader::importFromFile(const QString & filePath)
 
     Group * group = parseNode(*scene, drawables, *(scene->mRootNode));
 
-//    for(auto material : m_materials) {
-//        group->addManagedMaterial(material);
-//    }
+    for(auto material : m_materials) {
+        group->addManagedMaterial(material);
+    }
 
     m_importer->FreeScene();
 
@@ -156,8 +154,9 @@ Group * AssimpLoader::parseNode(const aiScene & scene,
 void AssimpLoader::parseMeshes(aiMesh **meshes,
     const unsigned int numMeshes, QList<PolygonalDrawable *> &drawables) const
 {
-    for (unsigned int i = 0; i < numMeshes; i++)
+    for (unsigned int i = 0; i < numMeshes; i++) {
         drawables.insert(i, parseMesh(*meshes[i]));
+    }
 }
 
 void AssimpLoader::parseMaterials(aiMaterial **materials, const unsigned int numMaterials)
@@ -264,10 +263,11 @@ PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
         geometry->retrieveNormals();
 
     assert(mesh.mMaterialIndex < m_materials.size());
-//    geometry->setMaterial(m_materials[mesh.mMaterialIndex]);
 
     PolygonalDrawable * drawable = new PolygonalDrawable(mesh.mName.C_Str());
     drawable->setGeometry(geometry);
     drawable->setMode(GL_TRIANGLES);
+    drawable->setMaterial(m_materials[mesh.mMaterialIndex]);
+
     return drawable;
 }

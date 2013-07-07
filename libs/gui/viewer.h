@@ -68,6 +68,7 @@ public:
     void setTrackballManipulator();
     void setFpsManipulator();
     void uncheckManipulatorActions();
+    void uncheckFboActions();
 
 
 public slots:
@@ -98,6 +99,17 @@ protected slots:
 
     void on_reloadAllShadersAction_triggered();
 
+    void on_colorRenderingAction_triggered();
+    void on_shadowMappingAction_triggered();
+    void on_shadowBlurAction_triggered();
+    void on_ssaoAction_triggered();
+    void on_ssaoBlurAction_triggered();
+   
+    void on_fboColorAction_triggered();
+    void on_fboNormalzAction_triggered();
+    void on_fboShadowsAction_triggered();
+    void on_fboSSAOAction_triggered();
+    void on_fboShadowMapAction_triggered();
 
     void on_openFileDialogAction_triggered();
     void on_quitAction_triggered();
@@ -125,7 +137,6 @@ protected:
 
     void saveView(int i);
     void loadView(int i);
-
 
 protected:
     const std::unique_ptr<Ui_Viewer> m_ui;

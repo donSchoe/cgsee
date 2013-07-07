@@ -3,7 +3,7 @@
 #include "scenetraverser.h"
 
 
-void SceneTraverser::traverse( Node & node, std::function<bool (Node &)> visitor )
+void SceneTraverser::traverse(Node & node, std::function<bool (Node &)> visitor)
 {
     if( !visitor( node ) )
         return;
@@ -16,7 +16,7 @@ void SceneTraverser::traverse( Node & node, std::function<bool (Node &)> visitor
 }
 
 
-void ConstSceneTraverser::traverse( const Node & node, std::function<bool (const Node &)> visitor )
+void ConstSceneTraverser::traverse(const Node & node, std::function<bool (const Node &)> visitor)
 {
     if( !visitor( node ) )
         return;
