@@ -267,6 +267,7 @@ void RealisticPainter::setShaderProperties() {
 
 void RealisticPainter::paint()
 {
+    assert(TextureUnitProvider::instance()->allFree());
     AbstractScenePainter::paint();
 
     t_samplerByName sampler;
@@ -275,11 +276,16 @@ void RealisticPainter::paint()
 
     drawScene(m_camera, m_normalz, m_fboNormalz);
 
+    assert(TextureUnitProvider::instance()->allFree());
     assert(m_useColor);
-    if(m_useColor)
+
+    if(!m_useColor)
         drawScene(m_camera, m_programs[FLAT], m_fboColor);
     else
         m_fboColor->clear();
+//drawScene(m_camera, m_programs[FLAT], m_fboColor);
+
+
 
     if(m_useShadows)
         createShadows();
@@ -309,6 +315,7 @@ void RealisticPainter::paint()
     bindSampler(sampler, *m_flush);
     m_quad->draw(*m_flush, nullptr);
     releaseSampler(sampler);
+    assert(TextureUnitProvider::instance()->allFree());
 }
 
 void RealisticPainter::draw(Node & node, const glm::mat4 & transform)
@@ -318,7 +325,7 @@ void RealisticPainter::draw(Node & node, const glm::mat4 & transform)
 
 void RealisticPainter::draw(PolygonalDrawable & drawable, const glm::mat4 & transform)
 {
-    AbstractScenePainter::draw(drawable, transform);
+    TextureUnitProvider::instance()->push();
 
     assert(m_activeProgram);
 
@@ -340,6 +347,7 @@ void RealisticPainter::draw(PolygonalDrawable & drawable, const glm::mat4 & tran
     drawable.draw(*m_activeProgram, transform);
 
     m_activeProgram->release();
+    TextureUnitProvider::instance()->pop();
 }
 
 
@@ -456,6 +464,7 @@ void RealisticPainter::bindSampler(
     const t_samplerByName & samplers
 ,   const Program & program)
 {
+    TextureUnitProvider::instance()->push();
     glm::uint slot = 0;
     for(auto samplerKey : samplers.keys()) {
         samplers[samplerKey]->bindTexture2D(program, samplerKey, slot);
@@ -469,6 +478,7 @@ void RealisticPainter::releaseSampler(
     for(auto sampler : samplers) {
         sampler->releaseTexture2D();
     }
+    TextureUnitProvider::instance()->pop();
 }
 
 Camera * RealisticPainter::camera()

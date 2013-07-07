@@ -41,12 +41,12 @@ Group & AbstractScenePainter::getScene() const
 
 void AbstractScenePainter::draw(PolygonalDrawable & drawable, const glm::mat4 & transform)
 {
-    TextureUnitProvider::instance()->reset();
+
 }
 
 void AbstractScenePainter::draw(Node & node, const glm::mat4 & transform)
 {
-    TextureUnitProvider::instance()->reset();
+
 }
 
 void AbstractScenePainter::sceneChanged(Group * scene)

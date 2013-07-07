@@ -12,9 +12,19 @@ TextureUnitProvider *TextureUnitProvider::instance()
     return s_instance;
 }
 
-void TextureUnitProvider::reset()
+//void TextureUnitProvider::reset()
+//{
+//    m_cursor = 0;
+//}
+
+void TextureUnitProvider::push()
 {
-    m_cursor = 0;
+    m_stack.push(m_cursor);
+}
+
+void TextureUnitProvider::pop()
+{
+    m_cursor = m_stack.pop();
 }
 
 void TextureUnitProvider::allocate(GLuint &unit, GLuint &id)
@@ -26,6 +36,12 @@ void TextureUnitProvider::allocate(GLuint &unit, GLuint &id)
     id = m_cursor;
 
     m_cursor++;
+}
+
+
+bool TextureUnitProvider::allFree()
+{
+    return m_cursor == 0;
 }
 
 TextureUnitProvider::TextureUnitProvider()
