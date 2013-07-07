@@ -20,7 +20,7 @@ void TextureUnitProvider::reset()
 void TextureUnitProvider::allocate(GLuint &unit, GLuint &id)
 {
     // TODO: Ensure more tex-units are available
-    assert(m_cursor < 8);
+    assert(m_cursor < 16);
 
     unit = GL_TEXTURE0 + m_cursor;
     id = m_cursor;

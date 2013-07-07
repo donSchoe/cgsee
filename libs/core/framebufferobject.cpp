@@ -3,6 +3,7 @@
 
 #include "gpuquery.h"
 #include "program.h"
+#include "textureunitprovider.h"
 
 using namespace std;
 
@@ -92,13 +93,24 @@ void FrameBufferObject::bindTexture2D(
     if(!isTexture())
         initialize();
 
-    glActiveTexture(GL_TEXTURE0 + slot);
+//    glActiveTexture(GL_TEXTURE0 + slot);
+//    glError();
+//
+//    glBindTexture(GL_TEXTURE_2D, m_texture);
+//    glError();
+//
+//    program.setUniform(uniform, slot);
+
+    GLuint unit, id;
+    TextureUnitProvider::instance()->allocate(unit, id);
+
+    glActiveTexture(unit);
     glError();
 
     glBindTexture(GL_TEXTURE_2D, m_texture);
     glError();
 
-    program.setUniform(uniform, slot);
+    program.setUniform(uniform, id);
 }
 
 void FrameBufferObject::releaseTexture2D() const

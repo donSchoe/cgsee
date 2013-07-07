@@ -71,6 +71,7 @@ RealisticPainter::RealisticPainter(Camera * camera):
 , m_blurv(nullptr)
 , m_blurh(nullptr)
 , m_fboColor(nullptr)
+, m_fboNormalz(nullptr)
 , m_fboTemp(nullptr)
 , m_fboShadows(nullptr)
 , m_fboSSAO(nullptr)
@@ -154,8 +155,6 @@ const bool RealisticPainter::initialize()
     m_programs[GOURAUD]->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/shaders/phongLighting.glsl"));
     m_programs[PHONG]->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/shaders/phongLighting.glsl"));
 
-    m_fboNormalz = new FrameBufferObject(GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
-
 
     FileAssociatedShader * depth_util = new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/depth_util.frag");
 
@@ -164,6 +163,9 @@ const bool RealisticPainter::initialize()
     m_lightsource->attach(depth_util);
 
     m_shadowMapping = loadProgram("data/shaders/shadows/shadowmapping", FRAGMENT_SHADER_BIT | VERTEX_SHADER_BIT);
+    m_shadowMapping->attach(depth_util);
+
+    m_normalz = loadProgram("data/shaders/normalz", FRAGMENT_SHADER_BIT | VERTEX_SHADER_BIT);
     m_shadowMapping->attach(depth_util);
 
     FileAssociatedShader * screenQuadShader = new FileAssociatedShader(GL_VERTEX_SHADER, "data/shaders/screenquad.vert");
@@ -271,52 +273,47 @@ void RealisticPainter::paint()
 
     m_camera->update();
 
-    m_fboNormalz->clear();
-    drawScene(m_camera, m_activeProgram, m_fboNormalz);
+    drawScene(m_camera, m_normalz, m_fboNormalz);
 
-//    if(m_useColor)
-//        drawScene(m_camera, m_activeProgram, m_fboColor);
-//    else
-//        m_fboColor->clear();
-//
-//    if(m_useShadows)
-//        createShadows();
-//
-//    if(m_useShadows && m_blurShadows)
-//        addBlur(m_fboShadows);
-//
-//    if(m_useSSAO)
-//        createSSAO();
-//
-//    if(m_useSSAO && m_blurSSAO)
-//        addBlur(m_fboSSAO);
-//
-//
-//    sampler.clear();
-//    sampler["source"] = *m_fboActiveBuffer;
-//    if(*m_fboActiveBuffer == m_fboColor) {
-//        sampler["shadows"] = m_fboShadows;
-//        sampler["ssao"] = m_fboSSAO;
-//    } else { // dont render effects
-//        m_fboTemp->clear();
-//        sampler["shadows"] = m_fboTemp;
-//        sampler["ssao"] = m_fboTemp;
-//    }
+    assert(m_useColor);
+    if(m_useColor)
+        drawScene(m_camera, m_programs[FLAT], m_fboColor);
+    else
+        m_fboColor->clear();
+
+    if(m_useShadows)
+        createShadows();
+
+    if(m_useShadows && m_blurShadows)
+        addBlur(m_fboShadows);
+
+    if(m_useSSAO)
+        createSSAO();
+
+    if(m_useSSAO && m_blurSSAO)
+        addBlur(m_fboSSAO);
+
 
     sampler.clear();
-    sampler["source"] = m_fboNormalz;
-    m_fboTemp->clear();
-    sampler["shadows"] = m_fboTemp;
-    sampler["ssao"] = m_fboTemp;
+    sampler["source"] = *m_fboActiveBuffer;
+    if(*m_fboActiveBuffer == m_fboColor) {
+        sampler["shadows"] = m_fboShadows;
+        sampler["ssao"] = m_fboSSAO;
+    } else { // dont render effects
+        m_fboTemp->clear();
+        sampler["shadows"] = m_fboTemp;
+        sampler["ssao"] = m_fboTemp;
+    }
+
 
     bindSampler(sampler, *m_flush);
     m_quad->draw(*m_flush, nullptr);
     releaseSampler(sampler);
 }
 
-void RealisticPainter::draw(Group & group, const glm::mat4 & transform)
+void RealisticPainter::draw(Node & node, const glm::mat4 & transform)
 {
-    AbstractScenePainter::draw(group, transform);
+    node.draw(*m_activeProgram, transform);
 }
 
 void RealisticPainter::draw(PolygonalDrawable & drawable, const glm::mat4 & transform)
@@ -341,15 +338,14 @@ void RealisticPainter::draw(PolygonalDrawable & drawable, const glm::mat4 & tran
     }
 
     drawable.draw(*m_activeProgram, transform);
+
+    m_activeProgram->release();
 }
 
-void RealisticPainter::draw(Node & node, const glm::mat4 & transform)
-{
-    AbstractScenePainter::draw(node, transform);
-}
 
 void RealisticPainter::drawScene(Camera * camera, Program * program, FrameBufferObject * fbo)
 {
+    m_activeProgram = program;
     fbo->bind();
     SceneTraverser traverser;
     DrawVisitor drawVisitor(*this, camera->transform());

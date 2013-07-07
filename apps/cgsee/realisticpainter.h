@@ -34,7 +34,6 @@ public:
     virtual ~RealisticPainter();
 
     virtual void paint();
-    virtual void draw(Group & group, const glm::mat4 & transform);
     virtual void draw(PolygonalDrawable & drawable, const glm::mat4 & transform);
     virtual void draw(Node & node, const glm::mat4 & transform);
 
@@ -77,6 +76,7 @@ protected:
     Program * m_SSAO;
     Program * m_blurv;
     Program * m_blurh;
+    Program * m_normalz;
     FrameBufferObject * m_fboColor;
     FrameBufferObject * m_fboTemp;
     FrameBufferObject * m_fboSSAO;
