@@ -4,7 +4,6 @@
 #include <string>
 #include <QString>
 #include <GL/glew.h>
-#include <GL/glext.h>
 #include <GL/gl.h>
 #include "../declspec.h"
 

@@ -209,7 +209,7 @@ void RealisticPainter::setUniforms()
         m_activeProgram->setUniform(LIGHTDIR_UNIFORM, glm::vec3(0.0,0.0,7.5));
         m_activeProgram->setUniform(LIGHTDIR_UNIFORM2, glm::vec3(0.0,-8.0,0.0));
 
-        m_activeProgram->setUniform(LIGHTAMBIENTGLOBAL_UNIFORM, glm::vec4(0.4));
+        m_activeProgram->setUniform(LIGHTAMBIENTGLOBAL_UNIFORM, glm::vec4(0.2));
 
         glm::mat4 lightMat;
         lightMat[0] = glm::vec4(0.2,0.2,0.2,1.0);    //ambient
@@ -274,42 +274,39 @@ void RealisticPainter::paint()
 
     m_camera->update();
 
-    drawScene(m_camera, m_normalz, m_fboNormalz);
+    //drawScene(m_camera, m_normalz, m_fboNormalz);
 
     assert(TextureUnitProvider::instance()->allFree());
     assert(m_useColor);
 
-    if(!m_useColor)
+    if(m_useColor)
         drawScene(m_camera, m_programs[FLAT], m_fboColor);
     else
         m_fboColor->clear();
-//drawScene(m_camera, m_programs[FLAT], m_fboColor);
-
-
 
     if(m_useShadows)
         createShadows();
-
-    if(m_useShadows && m_blurShadows)
-        addBlur(m_fboShadows);
-
-    if(m_useSSAO)
-        createSSAO();
-
-    if(m_useSSAO && m_blurSSAO)
-        addBlur(m_fboSSAO);
+//
+//    if(m_useShadows && m_blurShadows)
+//        addBlur(m_fboShadows);
+//
+//    if(m_useSSAO)
+//        createSSAO();
+//
+//    if(m_useSSAO && m_blurSSAO)
+//        addBlur(m_fboSSAO);
 
 
     sampler.clear();
     sampler["source"] = *m_fboActiveBuffer;
-    if(*m_fboActiveBuffer == m_fboColor) {
-        sampler["shadows"] = m_fboShadows;
-        sampler["ssao"] = m_fboSSAO;
-    } else { // dont render effects
+//    if(*m_fboActiveBuffer == m_fboColor) {
+//        sampler["shadows"] = m_fboShadows;
+//        sampler["ssao"] = m_fboSSAO;
+//    } else { // dont render effects
         m_fboTemp->clear();
         sampler["shadows"] = m_fboTemp;
         sampler["ssao"] = m_fboTemp;
-    }
+//    }
 
 
     bindSampler(sampler, *m_flush);

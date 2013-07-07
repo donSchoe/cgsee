@@ -5,6 +5,8 @@
 #include <GL/gl.h>
 #include <assert.h>
 #include <iostream>
+#include <QImage>
+#include <QGLWidget>
 #include <IL/il.h>
 
 using namespace std;
@@ -24,6 +26,12 @@ Texture2D *TextureLoader::loadTexture2D(const QString &path)
     auto i = m_loadedTextures.find(path);
 
     if(i == m_loadedTextures.end()) {
+//        QImage img;
+
+//        if(!img.load(path)) {
+//            return nullptr;
+//        }
+//        img = QGLWidget::convertToGLFormat(img);
         ilGenImages(1, &iTexture);
         ilBindImage(iTexture);
 
@@ -53,13 +61,16 @@ Texture2D *TextureLoader::loadTexture2D(const QString &path)
         glGenTextures(1, &gTexture); glError();
 
         glBindTexture(GL_TEXTURE_2D, gTexture); glError();
+//        glTexImage2D(   GL_TEXTURE_2D, 0, GL_RGBA,
+//                        img.width(), img.height(),
+//                        0, GL_RGBA, GL_UNSIGNED_BYTE,  img.bits()); glError();
+        glTexImage2D(   GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT),
+                        ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
+                        0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,  ilGetData()); glError();
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR); glError();
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); glError();
 
-        glTexImage2D(   GL_TEXTURE_2D, 0, ilGetInteger(IL_IMAGE_FORMAT),
-                        ilGetInteger(IL_IMAGE_WIDTH), ilGetInteger(IL_IMAGE_HEIGHT),
-                        0, ilGetInteger(IL_IMAGE_FORMAT), GL_UNSIGNED_BYTE,  ilGetData()); glError();
 
         ilDeleteImage(iTexture);
         ilBindImage(0);
