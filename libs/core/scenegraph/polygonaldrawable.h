@@ -29,7 +29,6 @@ public:
     virtual ~PolygonalDrawable();
 
     virtual void draw(const Program & program, const glm::mat4 & transform) override;
-    virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform);
 
     virtual const AxisAlignedBoundingBox boundingBox() const override;
 

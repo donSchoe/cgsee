@@ -39,16 +39,8 @@ Group & AbstractScenePainter::getScene() const
     return *m_scene;
 }
 
-void AbstractScenePainter::draw(PolygonalDrawable & drawable, const glm::mat4 & transform)
-{
-
-}
-
-void AbstractScenePainter::draw(Node & node, const glm::mat4 & transform)
-{
-
-}
-
 void AbstractScenePainter::sceneChanged(Group * scene)
 {
+
 }
+

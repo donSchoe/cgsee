@@ -93,6 +93,8 @@ set(SOURCES
     mathmacros.h
     messagehandler.h
     messagehandler.cpp   
+    
+    
     objloader.h
     objloader.cpp
 
@@ -108,6 +110,10 @@ set(SOURCES
     textureunitprovider.cpp
     plane.h
     plane.cpp
+	
+	rendering/renderpass.h	
+	rendering/renderpass.cpp	
+	    
     viewfrustum.h
     viewfrustum.cpp
     vertexcacheoptimizer.h

@@ -9,6 +9,8 @@ set(SOURCES
     fallbackrealisticmaterial.h
     fallbackrealisticmaterial.cpp
     main.cpp
+    realisticcomposer.h
+    realisticcomposer.cpp
     realisticpainter.h
     realisticpainter.cpp
 )

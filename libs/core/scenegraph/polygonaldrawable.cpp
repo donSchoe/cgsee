@@ -92,9 +92,4 @@ void PolygonalDrawable::draw(const Program & program, const glm::mat4 & transfor
     glError();
 }
 
-void PolygonalDrawable::drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform)
-{
-    painter.draw(*this, transform);
-}
-
 

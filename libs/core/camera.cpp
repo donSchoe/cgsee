@@ -54,10 +54,6 @@ void Camera::draw(const Program & program, const glm::mat4 & transform)
     program.setUniform(CAMERAPOSITION_UNIFORM, getEye());
 }
 
-void Camera::drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform)
-{
-    painter.draw(*this, transform);
-}
 
 void Camera::invalidate()
 {

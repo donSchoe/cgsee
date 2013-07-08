@@ -20,7 +20,6 @@ public:
     virtual Camera * asCamera();
 
     virtual void draw(const Program & program, const glm::mat4 & transform) override;
-    virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform);
 
     const glm::ivec2 & viewport() const;
     void setViewport(const glm::ivec2 & size);

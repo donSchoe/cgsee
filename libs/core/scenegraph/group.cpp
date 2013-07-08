@@ -25,10 +25,6 @@ void Group::draw(const Program & program, const glm::mat4 & transform)
 
 }
 
-void Group::drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform)
-{
-
-}
 
 const bool Group::contains(Node * node) const
 {

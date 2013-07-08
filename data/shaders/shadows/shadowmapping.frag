@@ -18,11 +18,11 @@ out vec4 fragColor;
 
 float linearize(float depth);
 
-float average_blocker_depth(vec2 coord, float zReceiver) {
+float average_blocker_depth(vec2 coord, float zReceiver, float viewportsize) {
     float zSum = 0.0;
     int numBlockers = 0;
     for(int i=0; i<sample_count; i++){
-        float zBlocker = texture(shadowMap, coord + samples[i]*searchWidth).z;
+        float zBlocker = texture(shadowMap, coord + samples[i] * searchWidth / viewportsize).z;
         if (zBlocker < zReceiver){
             zSum += zBlocker;
             numBlockers++;
@@ -34,19 +34,22 @@ float average_blocker_depth(vec2 coord, float zReceiver) {
 void main()
 {
     vec2 uv = gl_FragCoord.xy / viewport;
-
+    
 	vec4 coord = shadowCoord / shadowCoord.w;
     
     float z = linearize(coord.z) - zOffset;
 
-    float zBlocker = average_blocker_depth(coord.xy, z);
+    float viewportsize = (viewport.x+viewport.y)/2.0;
+
+    float zBlocker = average_blocker_depth(coord.xy, z, viewportsize);
 
     if(zBlocker == 0.0) {
         fragColor = vec4(1);
         return;
     }
 
-    float penumbra = (z - zBlocker) / zBlocker * lightSize;
+
+    float penumbra = (z - zBlocker) / zBlocker * lightSize / viewportsize;
     float shadow = 0.0;
     float x,y;
     for (int i=0; i<sample_count; i++) { 

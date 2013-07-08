@@ -228,6 +228,7 @@ void Viewer::on_captureAsImageAdvancedAction_triggered()
 void Viewer::on_reloadAllShadersAction_triggered()
 {
     FileAssociatedShader::reloadAll();
+    painter()->postShaderRelinked();
     m_qtCanvas->repaint();
 }
 

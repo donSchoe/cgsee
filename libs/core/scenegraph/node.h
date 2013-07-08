@@ -28,7 +28,6 @@ public:
     virtual ~Node();
 
     virtual void draw(const Program & program, const glm::mat4 & transform) = 0;
-    virtual void drawDispatch(AbstractScenePainter &painter, const glm::mat4 & transform) = 0;
     virtual const AxisAlignedBoundingBox boundingBox() const = 0;
 
     const QString name() const;
