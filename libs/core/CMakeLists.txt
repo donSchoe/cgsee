@@ -34,6 +34,24 @@ set(SOURCES
     datacore/registertypeshere.h
     datacore/vertexlist_impl.inl
     datacore/datablock_impl.inl
+    
+    scenegraph/node.h
+    scenegraph/node.cpp
+    scenegraph/group.h
+    scenegraph/group.cpp
+    scenegraph/polygonaldrawable.h
+    scenegraph/polygonaldrawable.cpp
+    scenegraph/polygonalgeometry.h
+    scenegraph/polygonalgeometry.cpp
+    scenegraph/scenetraverser.h
+    scenegraph/scenetraverser.cpp
+    scenegraph/SceneVisitorInterface.h
+    scenegraph/drawvisitor.h
+    scenegraph/drawvisitor.cpp
+
+    scenegraph/cullingvisitor.h
+    scenegraph/cullingvisitor.cpp
+    
     abstracttimer.h
     assimploader.h
     assimploader.cpp
@@ -55,8 +73,6 @@ set(SOURCES
     glformat.cpp
     gpuquery.h
     gpuquery.cpp
-    group.h
-    group.cpp
     messagehandler.h
     messagehandler.cpp
     mathmacros.h
@@ -68,14 +84,9 @@ set(SOURCES
     navigation/flightnavigation.cpp
     navigation/fpsnavigation.h
     navigation/fpsnavigation.cpp
-    node.h
-    node.cpp
     objloader.h
     objloader.cpp
-    polygonaldrawable.h
-    polygonaldrawable.cpp
-    polygonalgeometry.h
-    polygonalgeometry.cpp
+
     program.h
     program.cpp
     screenquad.h
@@ -84,6 +95,10 @@ set(SOURCES
     shader.cpp
     timer.h
     timer.cpp
+    plane.h
+    plane.cpp
+    viewfrustum.h
+    viewfrustum.cpp
     vertexcacheoptimizer.h
     vertexcacheoptimizer.cpp
     vertexreuse.h

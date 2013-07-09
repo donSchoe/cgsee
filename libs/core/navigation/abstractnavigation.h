@@ -42,6 +42,8 @@ public:
 
     void setCanvas(QWidget * canvas);
     void setViewPort(const int width, const int height);
+
+    void rescaleScene(Group * scene);
     void sceneChanged(Group * scene);
 
     glm::mat4 defaultView();

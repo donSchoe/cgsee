@@ -3,7 +3,6 @@
 uniform mat4 transform;
 uniform mat4 LightSourceTransform;
 uniform mat4 invCameraTransform;
-uniform mat4 biasMatrix;
 
 in vec3 a_vertex;
 in vec3 a_normal;
@@ -16,5 +15,5 @@ void main(void)
 {
     normal = a_normal;
 	gl_Position = transform * vec4(a_vertex, 1.0);
-	shadowCoord = biasMatrix * LightSourceTransform * invCameraTransform * transform * vec4(a_vertex, 1.0);
+	shadowCoord = LightSourceTransform * invCameraTransform * transform * vec4(a_vertex, 1.0);
 }

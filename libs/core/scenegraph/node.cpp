@@ -4,6 +4,8 @@
 
 Node::Node(const QString & name)
 :   m_name(name)
+,   m_parents()
+,   m_children()
 ,   m_rf(RF_Relative)
 ,   m_transform(glm::mat4(1))
 {
@@ -31,6 +33,11 @@ const Node::t_parents & Node::parents() const
 Node::t_parents & Node::parents()
 {
     return m_parents;
+}
+
+const Node::t_children & Node::children() const
+{
+    return m_children;
 }
 
 void Node::invalidateBoundingBox()
@@ -70,9 +77,4 @@ void Node::setReferenceFrame(const e_ReferenceFrame referenceFrame)
 
     m_rf = referenceFrame;
     invalidateBoundingBox();
-}
-
-Group * Node::asGroup()
-{
-    return nullptr;
 }

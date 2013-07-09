@@ -2,6 +2,7 @@
 
 #include <cstring>
 #include <sstream>
+#include <memory>
 
 #include <QString>
 
@@ -10,23 +11,25 @@
 #include "abstractmodelloader.h"
 
 
+class DataBlockRegistry;
 class Group;
 class PolygonalDrawable;
 
 class CGSEE_API ObjLoader : public AbstractModelLoader
 {
 public:
-    ObjLoader();
+    ObjLoader( std::shared_ptr<DataBlockRegistry> registry );
     virtual ~ObjLoader();
 
-    virtual QStringList namedLoadableTypes() const;
-    virtual Group * importFromFile(const QString & filePath) const;
+    virtual QStringList namedLoadableTypes() const override;
+    virtual Group * importFromFile(const QString & filePath) const override;
 
 protected:
-    virtual QStringList loadableExtensions() const;
+    virtual QStringList loadableExtensions() const override;
 
 protected:
-
+    std::shared_ptr<DataBlockRegistry> m_registry;
+    
     struct ObjGroup
     {
         std::string name;
@@ -70,10 +73,12 @@ protected:
 
 
 protected:
-    static Group * toGroup(const t_objects & objects);
+    static Group * toGroup(const t_objects & objects, std::shared_ptr<DataBlockRegistry> registry);
     static PolygonalDrawable * createPolygonalDrawable(
         const ObjObject & object
-    ,   const ObjGroup & group);
+    ,   const ObjGroup & group
+    ,   std::shared_ptr<DataBlockRegistry> registry
+    );
 
     static void parseV(
         std::istringstream & line

@@ -3,11 +3,12 @@
 #include <glm/glm.hpp>
 
 #include "declspec.h"
-#include "group.h"
+#include "scenegraph/group.h"
 
 
 class Program;
 class FrameBufferObject;
+class ViewFrustum;
 
 class CGSEE_API Camera : public Group
 {
@@ -17,13 +18,7 @@ public:
 
     virtual Camera * asCamera();
 
-    virtual void draw(
-        const Program & program
-    ,   FrameBufferObject * target = nullptr);
-    virtual void draw(
-        const Program & program
-    ,   const glm::mat4 & transform);
-
+    virtual void draw( const Program & program, const glm::mat4 & transform) override;
 
     const glm::ivec2 & viewport() const;
     void setViewport(const glm::ivec2 & size);
@@ -46,6 +41,8 @@ public:
     void setZFar(const float z);
 
     const float aspect() const;
+    
+    ViewFrustum *viewFrustum() const;
 
     // updates camera matrices
     void update();
@@ -63,6 +60,8 @@ protected:
 
     glm::mat4 m_view;
     glm::mat4 m_projection;
+
+    ViewFrustum *m_viewFrustum;
 
     float m_fovy;
     float m_zNear;

@@ -72,7 +72,7 @@ void AbstractNavigation::mouseDoubleClickEvent(QMouseEvent * event) { }
 void AbstractNavigation::wheelEvent(QWheelEvent * event)
 {
     m_fovy += (event->delta() * 0.1); //sensitivity
-    m_fovy = glm::clamp(m_fovy, 0.0f, 180.0f);
+    m_fovy = glm::clamp(m_fovy, 1.0f, 180.0f);
     updateCamera();
 }
 
@@ -220,7 +220,7 @@ glm::mat4 AbstractNavigation::topRightView()
 void AbstractNavigation::sceneChanged(Group * scene)
 {
     AxisAlignedBoundingBox bb = scene->boundingBox();
-    
+
     m_BBRadius = bb.radius();
     
     m_frontView = glm::lookAt(bb.center() + glm::vec3(0.f, 0.f, bb.radius()*2.5), bb.center(), glm::vec3(0.f, 1.f, 0.f));
@@ -234,4 +234,14 @@ float AbstractNavigation::getBBRadius(){
 
 void AbstractNavigation::setBBRadius(float radius){
     m_BBRadius = radius;
+}
+
+// Workaround to avoid invisible objects due to wrong clipping planes
+// all scenes are scaled to a radius of 5
+void AbstractNavigation::rescaleScene( Group * scene )
+{
+    AxisAlignedBoundingBox bb = scene->boundingBox();
+
+    glm::mat4 scale_matrix = glm::scale(glm::vec3(5.0f / bb.radius()));
+    scene->setTransform(scale_matrix * scene->transform());
 }

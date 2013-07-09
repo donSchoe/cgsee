@@ -1,13 +1,15 @@
 
 #include "assimploader.h"
-#include "group.h"
-#include "polygonalgeometry.h"
-#include "polygonaldrawable.h"
+#include "datacore/datablock.h"
+#include "scenegraph/group.h"
+#include "scenegraph/polygonalgeometry.h"
+#include "scenegraph/polygonaldrawable.h"
 
-AssimpLoader::AssimpLoader()
-: AbstractModelLoader()
+AssimpLoader::AssimpLoader(std::shared_ptr<DataBlockRegistry> registry)
+: AbstractModelLoader(registry)
 , m_importer(new Assimp::Importer())
 {
+
 }
 
 AssimpLoader::~AssimpLoader()
@@ -128,7 +130,7 @@ void AssimpLoader::parseMeshes(aiMesh **meshes,
 
 PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
 {
-    PolygonalGeometry * geometry = new PolygonalGeometry(QString(mesh.mName.C_Str()) + " geometry");
+    auto geometry = std::make_shared<PolygonalGeometry>(m_registry);
     
     const bool usesNormalIndices(mesh.mNormals != NULL);
     
@@ -157,11 +159,11 @@ PolygonalDrawable * AssimpLoader::parseMesh(const aiMesh & mesh) const
                 geometry->setIndex(currentIndex++, mesh.mFaces[i].mIndices[j]);
     }
     
-    geometry->setMode(GL_TRIANGLES);
     if (!usesNormalIndices)
         geometry->retrieveNormals();
     
     PolygonalDrawable * drawable = new PolygonalDrawable(mesh.mName.C_Str());
     drawable->setGeometry(geometry);
+    drawable->setMode(GL_TRIANGLES);
     return drawable;
 }

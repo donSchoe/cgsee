@@ -5,8 +5,7 @@ out vec4 fragColor;
 
 in vec3 normal;
 
-uniform float znear;
-uniform float zfar;
+float linearize(float depth);
 
 void main()
 {
@@ -14,14 +13,7 @@ void main()
 	n *= 0.5;
 	n += 0.5;
 
-	float z = gl_FragCoord.z; 
-
-	// d = (2.0 * zfar * znear / (zfar + znear - (zfar - znear) * (2.0 * z- 1.0)));
-	// normalized to [0,1]
-	// d = (d - znear) / (zfar - znear);
-
-	// simplyfied with wolfram alpha
-	z = - znear * z / (zfar * z - zfar - znear * z);
+	float z = linearize(gl_FragCoord.z);
 
 	fragColor = vec4(n, z);
 }

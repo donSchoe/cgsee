@@ -33,6 +33,7 @@ class FileExplorer;
 class Viewer;
 class AbstractModelLoader;
 class Group;
+class DataBlockRegistry;
 
 
 class CGSEE_API Viewer : public QMainWindow
@@ -41,6 +42,7 @@ class CGSEE_API Viewer : public QMainWindow
 
 public:
     Viewer(
+        std::shared_ptr<DataBlockRegistry> registry = nullptr,
         QWidget * parent = nullptr
     ,   Qt::WindowFlags flags = nullptr);
 
@@ -106,6 +108,7 @@ protected slots:
     void on_normalsAction_triggered();
     void on_colorRenderingAction_triggered();
     void on_shadowMappingAction_triggered();
+    void on_shadowBlurAction_triggered();
     void on_ssaoAction_triggered();
     void on_ssaoBlurAction_triggered();
    
@@ -143,7 +146,6 @@ protected:
 
     void saveView(int i);
     void loadView(int i);
-
 
 protected:
     const std::unique_ptr<Ui_Viewer> m_ui;

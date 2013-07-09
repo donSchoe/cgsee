@@ -1,10 +1,14 @@
 
 #include "abstractpainter.h"
-#include "group.h"
+#include "datacore/datablock.h"
+#include "scenegraph/group.h"
 #include "abstractmodelloader.h"
 
-AbstractModelLoader::AbstractModelLoader()
+AbstractModelLoader::AbstractModelLoader(std::shared_ptr<DataBlockRegistry> registry)
+: m_registry(registry)
 {
+    if( m_registry == nullptr )
+       m_registry = std::make_shared<DataBlockRegistry>();
 }
 
 AbstractModelLoader::~AbstractModelLoader()

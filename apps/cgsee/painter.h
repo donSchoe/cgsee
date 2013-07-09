@@ -2,11 +2,16 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
+#include <memory>
+
 #include <QString>
 #include <QMap>
 
 #include <core/abstractscenepainter.h>
 
+
+
+class DataBlockRegistry;
 class Camera;
 class Group;
 class ScreenQuad;
@@ -40,6 +45,7 @@ protected:
 
     typedef QMap<QString, FrameBufferObject *> t_samplerByName;
 
+    void drawScene(Camera * camera, Program * program, FrameBufferObject * fbo);
     void createShadows();
     void createSSAO();
     void addBlur(FrameBufferObject * fbo);
@@ -53,7 +59,8 @@ protected:
     static void releaseSampler(
         const t_samplerByName & sampler);
     void sceneChanged(Group * scene);
-protected:
+    void setShaderProperties();
+protected:  
     ScreenQuad * m_quad;
 
     Program * m_normalz;
@@ -94,7 +101,9 @@ protected:
     Camera * m_lightcam;
     bool m_useColor;
     bool m_useShadows;
+    bool m_blurShadows;
     bool m_useSSAO;
     bool m_blurSSAO;
     bool m_useGrid;
+    static const glm::mat4 biasMatrix;
 };

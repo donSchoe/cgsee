@@ -42,6 +42,7 @@ namespace
 
 
 Viewer::Viewer(
+    std::shared_ptr<DataBlockRegistry> registry,
     QWidget  * parent,
     Qt::WindowFlags flags)
 
@@ -54,8 +55,9 @@ Viewer::Viewer(
 ,   m_dockExplorer(new QDockWidget(tr("Explorer")))
 ,   m_navigator(new FileNavigator(m_dockNavigator))
 ,   m_explorer(new FileExplorer(m_dockExplorer))
-,   m_loader(new AssimpLoader())
+,   m_loader(new AssimpLoader( registry ))
 {
+
     m_ui->setupUi(this);
     
     QSettings::setDefaultFormat(QSettings::IniFormat);
@@ -252,6 +254,7 @@ void Viewer::on_loadFile(const QString & path)
     if (!scene)
         QMessageBox::critical(this, "Loading failed", "The loader was not able to load from \n" + path);
     else {
+        this->m_qtCanvas->navigation()->rescaleScene(scene);
         this->painter()->assignScene(scene);
         this->m_qtCanvas->navigation()->sceneChanged(scene);
         this->m_qtCanvas->update();
@@ -331,21 +334,27 @@ void Viewer::on_shadowMappingAction_triggered()
     m_qtCanvas->repaint();
 }
 
+void Viewer::on_shadowBlurAction_triggered()
+{
+    m_qtCanvas->painter()->setEffect(3, m_ui->ssaoBlurAction->isChecked());
+    m_qtCanvas->repaint();
+}
+
 void Viewer::on_ssaoAction_triggered()
 {
-    m_qtCanvas->painter()->setEffect(3, m_ui->ssaoAction->isChecked());
+    m_qtCanvas->painter()->setEffect(4, m_ui->ssaoAction->isChecked());
     m_qtCanvas->repaint();
 }
 
 void Viewer::on_ssaoBlurAction_triggered()
 {
-    m_qtCanvas->painter()->setEffect(4, m_ui->ssaoBlurAction->isChecked());
+    m_qtCanvas->painter()->setEffect(5, m_ui->ssaoBlurAction->isChecked());
     m_qtCanvas->repaint();
 }
 
 void Viewer::on_toggleGrid_triggered()
 {
-    m_qtCanvas->painter()->setEffect(5, m_ui->toggleGrid->isChecked());
+    m_qtCanvas->painter()->setEffect(6, m_ui->toggleGrid->isChecked());
     m_qtCanvas->repaint();
 }
 void Viewer::uncheckFboActions() {

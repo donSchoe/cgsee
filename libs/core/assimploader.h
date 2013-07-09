@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <memory>
 #include <QString>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -10,6 +11,7 @@
 #include "common.h"
 #include "abstractmodelloader.h"
 
+class DataBlockRegistry;
 class Group;
 class PolygonalDrawable;
 struct aiNode;
@@ -19,7 +21,7 @@ struct aiMesh;
 class CGSEE_API AssimpLoader : public AbstractModelLoader
 {
 public:
-    AssimpLoader();
+    AssimpLoader(std::shared_ptr<DataBlockRegistry> registry = nullptr);
     virtual ~AssimpLoader();
     
     virtual QStringList namedLoadableTypes() const;

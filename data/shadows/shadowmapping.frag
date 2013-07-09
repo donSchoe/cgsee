@@ -1,22 +1,22 @@
 #version 150 core
 
 uniform ivec2 viewport;
-uniform float znear;
-uniform float zfar;
 uniform vec2 samples[128];
 uniform int sample_count;
 
-const float lightSize =   0.015; // make uniform
-const float searchWidth = 0.01; // make uniform
-const float zOffset = 0.002; // make uniform
+uniform float lightSize;
+uniform float searchWidth;
+uniform float zOffset;
 
 uniform sampler2D shadowMap;
 
 //in vec4 fragCoord;
-in vec4 normal;
+in vec3 normal;
 in vec4 shadowCoord;
 
 out vec4 fragColor;
+
+float linearize(float depth);
 
 float average_blocker_depth(vec2 coord, float zReceiver) {
     float zSum = 0.0;
@@ -37,8 +37,7 @@ void main()
 
 	vec4 coord = shadowCoord / shadowCoord.w;
     
-    float z = coord.z - zOffset;
-    z = - znear * z / (zfar * z - zfar - znear * z);
+    float z = linearize(coord.z) - zOffset;
 
     float zBlocker = average_blocker_depth(coord.xy, z);
 
