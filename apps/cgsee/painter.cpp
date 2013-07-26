@@ -20,6 +20,7 @@
 #include <core/assimploader.h>
 #include <core/program.h>
 #include <core/screenquad.h>
+#include <core/grid.h>
 #include "core/navigation/arcballnavigation.h"
 #include "core/navigation/flightnavigation.h"
 
@@ -46,6 +47,7 @@ const glm::mat4 Painter::biasMatrix (
 Painter::Painter(Camera * camera)
 :   AbstractScenePainter()
 ,   m_quad(nullptr)
+,   m_gridGeometry(nullptr)
 ,   m_grid(nullptr)
 ,   m_normals(nullptr)
 ,   m_normalz(nullptr)
@@ -116,6 +118,7 @@ Painter::Painter(Camera * camera)
 Painter::~Painter()
 {
     delete m_quad;
+    delete m_gridGeometry;
     delete m_normals;
     delete m_normalz;
     delete m_lightsource;
@@ -149,6 +152,7 @@ const bool Painter::initialize()
     }
 
     m_quad = new ScreenQuad();
+    m_gridGeometry = new Grid();
 
     FileAssociatedShader * depth_util = new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/depth_util.frag");
 
@@ -244,10 +248,10 @@ const bool Painter::initialize()
     //GRID
     m_grid = new Program();
     m_grid->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/grid.frag"));
- //   m_pgrid->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/grid.geo"));
+   // m_grid->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/grid.geo"));
     m_grid->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/grid.vert"));
 
-    //set UNIFORMS for selected shader
+    
     m_useProgram = m_flat;
     setUniforms();
     setShaderProperties();
@@ -354,6 +358,7 @@ void Painter::paint()
 
     drawScene(m_camera, m_normalz, m_fboNormalz);
 
+    
     if(m_useColor)
         drawScene(m_camera, m_useProgram, m_fboColor);
     else
@@ -370,6 +375,8 @@ void Painter::paint()
 
     if(m_useSSAO && m_blurSSAO) 
         addBlur(m_fboSSAO);
+    
+    m_gridGeometry->draw(*m_grid, m_fboGrid);
     
     if(m_useGrid)
          drawScene(m_camera, m_grid, m_fboGrid);

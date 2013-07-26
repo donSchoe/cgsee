@@ -15,6 +15,7 @@ class DataBlockRegistry;
 class Camera;
 class Group;
 class ScreenQuad;
+class Grid;
 class Program;
 class FrameBufferObject;
 
@@ -62,6 +63,7 @@ protected:
     void setShaderProperties();
 protected:  
     ScreenQuad * m_quad;
+    Grid * m_gridGeometry;
 
     Program * m_normalz;
     Program * m_normals;

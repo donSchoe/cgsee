@@ -71,6 +71,8 @@ set(SOURCES
     geometryoptimizer.h
     glformat.h
     glformat.cpp
+    grid.h
+    grid.cpp
     gpuquery.h
     gpuquery.cpp
     messagehandler.h

@@ -14,4 +14,8 @@ void main()
 
     fragColor = sign(1-x1-z1)*vec4(1,1,1,1);
 
+    if (fragColor == vec4(1,1,1,1)){
+    	fragColor = vec4(1,1,1,1);
+    }
+    	
 }
