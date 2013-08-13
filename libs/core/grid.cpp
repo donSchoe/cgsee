@@ -7,6 +7,7 @@
 #include "shader.h"
 #include "gpuquery.h"
 
+static const QString TRANSFORM_UNIFORM( "transform" );
 
 Grid::Grid()
 :   m_vao(-1)
@@ -73,9 +74,10 @@ void Grid::initialize(const Program & program) const
     glError();
 }
 
-void Grid::draw( const Program & program, FrameBufferObject * target) const
+void Grid::draw( const Program & program, FrameBufferObject * target, glm::mat4 transform) const
 {
     program.use();
+    program.setUniform(TRANSFORM_UNIFORM, transform);
     
     if(-1 == m_vao)
         initialize(program);

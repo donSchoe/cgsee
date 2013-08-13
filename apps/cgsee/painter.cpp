@@ -376,10 +376,10 @@ void Painter::paint()
     if(m_useSSAO && m_blurSSAO) 
         addBlur(m_fboSSAO);
     
-    m_gridGeometry->draw(*m_grid, m_fboGrid);
+    m_gridGeometry->draw(*m_grid, m_fboGrid, m_camera->transform());
     
-    if(m_useGrid)
-         drawScene(m_camera, m_grid, m_fboGrid);
+//    if(m_useGrid)
+//         drawScene(m_camera, m_grid, m_fboGrid);
  
     sampler.clear();
     sampler["source"] = *m_fboActiveBuffer;

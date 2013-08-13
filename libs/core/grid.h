@@ -1,6 +1,8 @@
 
 #pragma once
 
+#include <glm/gtc/matrix_transform.hpp>
+
 #include <GL/glew.h>
 
 #include "declspec.h"
@@ -18,7 +20,8 @@ public:
     
     void draw(
               const Program & program
-              ,   FrameBufferObject * target = nullptr)  const;
+              ,   FrameBufferObject * target = nullptr
+              , glm::mat4 transform = glm::mat4(0))  const;
     
 protected:
     void initialize(const Program & program) const;
@@ -28,4 +31,6 @@ protected:
     mutable BufferObject * m_vertexBO;
     mutable BufferObject * m_indicesBO;
     mutable BufferObject * m_normalBO;
+    
+    glm::mat4 m_transform;
 };
