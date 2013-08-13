@@ -269,8 +269,10 @@ void Painter::paint()
     else
         m_fboColor->clear();
 
-    m_gridGeometry->draw(*m_grid, m_fboGrid, m_camera->transform());
-    
+    if(m_useGrid)
+        m_gridGeometry->draw(*m_grid, m_fboGrid, m_camera->transform());
+    else
+        m_fboGrid->clear();
 
     for (RenderingPass * pass : m_passes) {
         pass->applyIfActive();
@@ -332,7 +334,7 @@ void Painter::setShading(char shader)
         case 's': m_useProgram = m_solidWireframe; std::printf("\nWireframeSolid Shading\n\n"); break;
         case 'r': m_useProgram = m_primitiveWireframe; std::printf("\nprimitive Wireframe Shading\n\n"); break;
         case 'n': m_useProgram = m_normals; std::printf("\nNormals\n\n"); break;
-        case 'm': m_useProgram = m_grid, std::printf("\nNormals\n\n"); break;
+        case 'm': m_useProgram = m_grid, std::printf("\n`Grid\n\n"); break;
     }
 
     setUniforms();
@@ -362,7 +364,7 @@ void Painter::setEffect(int effect, bool value)
         case 3: m_shadowBlur->setActive(value); std::printf("\nShadow blur toggled\n"); break;
         case 4: m_ssao->setActive(value); std::printf("\nSSAO toggled\n"); break;
         case 5: m_ssaoBlur->setActive(value); std::printf("\nSSAO blur toggled\n"); break;
-//        case 6: m_useGrid = active; std::printf("\n Grid toggled\n"); break;
+        case 6: m_useGrid = value; std::printf("\n Grid toggled\n"); break;
     }
 }
 

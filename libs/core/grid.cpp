@@ -33,14 +33,13 @@ void Grid::initialize(const Program & program) const
     // By default, counterclockwise polygons are taken to be front-facing.
     // http://www.opengl.org/sdk/docs/man/xhtml/glFrontFace.xml
     
-    static const GLfloat vertices[24] =
+    static const GLfloat vertices[20] =
     {
         0, 0, 0, 5,  //0
         5, 0, 0, 0, //1
         0,  0, 5,  0, //2
         -5, 0, 0, 0, //3
         0 , 0, -5,  0, //4
-        0, 1, 0 , 0
     };
 
     
@@ -62,7 +61,7 @@ void Grid::initialize(const Program & program) const
     if(!m_vertexBO)
     {
         m_vertexBO = new BufferObject(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-	    m_vertexBO->data<GLfloat>(vertices, 24, GL_FLOAT, 4);
+	    m_vertexBO->data<GLfloat>(vertices, 20, GL_FLOAT, 4);
     }
     
     // bind all buffers to their attributes
