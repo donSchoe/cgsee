@@ -31,6 +31,8 @@ void main()
         return;
     }
 
+    float radius = filterRadius / ((viewport.x+viewport.y)/2.0);
+
     vec3 origin = vec3(v_uv, normalz_value.a);
     vec3 normal = normalize(normalz_value.xyz * 2.0 - 1.0);
  
@@ -44,7 +46,7 @@ void main()
     for (int i = 0; i < sample_count; ++i) {
         // get sample position:
         vec3 sample = tbn * kernel[i];
-        sample = sample * filterRadius + origin;
+        sample = sample * radius + origin;
 
         // project sample position:  --- I dont know what the purpose of this is
         //vec4 offset = vec4(sample, 1.0);
@@ -56,7 +58,7 @@ void main()
         float sampleDepth = texture(normalz, sample.xy).a;
       
         // range check & accumulate:
-        float rangeCheck = abs(origin.z - sampleDepth) < filterRadius ? 1.0 : 0.0;
+        float rangeCheck = abs(origin.z - sampleDepth) < radius ? 1.0 : 0.0;
         occlusion += (sampleDepth <= sample.z - zOffset ? 1.0 : 0.0) * rangeCheck;
     }
     fragcolor = vec4(1.0 - (occlusion / sample_count));

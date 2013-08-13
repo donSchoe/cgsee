@@ -41,3 +41,5 @@ Group & AbstractScenePainter::getScene() const
 void AbstractScenePainter::sceneChanged(Group * scene)
 {
 }
+
+

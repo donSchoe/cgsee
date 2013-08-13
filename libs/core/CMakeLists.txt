@@ -78,6 +78,7 @@ set(SOURCES
     messagehandler.h
     messagehandler.cpp
     mathmacros.h
+    
     navigation/abstractnavigation.h
     navigation/abstractnavigation.cpp
     navigation/arcballnavigation.h
@@ -86,6 +87,7 @@ set(SOURCES
     navigation/flightnavigation.cpp
     navigation/fpsnavigation.h
     navigation/fpsnavigation.cpp
+    
     objloader.h
     objloader.cpp
 
@@ -99,6 +101,22 @@ set(SOURCES
     timer.cpp
     plane.h
     plane.cpp
+    
+    rendering/blureffect.h
+    rendering/blureffect.cpp
+    rendering/defaultpass.h   
+    rendering/defaultpass.cpp
+    rendering/lightsource.h
+    rendering/lightsource.cpp
+    rendering/normalzpass.h   
+    rendering/normalzpass.cpp
+    rendering/renderingpass.h
+    rendering/renderingpass.cpp
+    rendering/shadowmapping.h
+    rendering/shadowmapping.cpp
+    rendering/ssaoeffect.h   
+    rendering/ssaoeffect.cpp
+    
     viewfrustum.h
     viewfrustum.cpp
     vertexcacheoptimizer.h

@@ -9,8 +9,6 @@
 
 #include <core/abstractscenepainter.h>
 
-
-
 class DataBlockRegistry;
 class Camera;
 class Group;
@@ -18,6 +16,8 @@ class ScreenQuad;
 class Grid;
 class Program;
 class FrameBufferObject;
+class RenderingPass;
+class LightSourcePass;
 
 class Painter : public AbstractScenePainter
 {
@@ -31,47 +31,32 @@ public:
     virtual void setFrameBuffer(int frameBuffer);
     virtual void setEffect( int effect, bool active );
 
-
-    virtual void resize(
-        const int width
-    ,   const int height);
+    virtual void resize(const int width, const int height);
+    virtual void postShaderRelinked() override;
+    
 protected:
     virtual const bool initialize() override;
     virtual Camera * camera() override;
 
 protected:
-    void postShaderRelinked();
-    
     void setUniforms();
 
     typedef QMap<QString, FrameBufferObject *> t_samplerByName;
 
     void drawScene(Camera * camera, Program * program, FrameBufferObject * fbo);
-    void createShadows();
-    void createSSAO();
-    void addBlur(FrameBufferObject * fbo);
-    
+
     void addGrid(FrameBufferObject * fbo);
 
-    static void bindSampler(
-        const t_samplerByName & sampler
-    ,   const Program & program);
+    static void bindSampler(const t_samplerByName & sampler, const Program & program);
 
-    static void releaseSampler(
-        const t_samplerByName & sampler);
+    static void releaseSampler(const t_samplerByName & sampler);
     void sceneChanged(Group * scene);
-    void setShaderProperties();
+
 protected:  
     ScreenQuad * m_quad;
     Grid * m_gridGeometry;
 
-    Program * m_normalz;
     Program * m_normals;
-    Program * m_lightsource;
-    Program * m_shadowMapping;
-    Program * m_SSAO;
-    Program * m_blurv;
-    Program * m_blurh;
     Program * m_wireframe;
     Program * m_primitiveWireframe;
     Program * m_solidWireframe;
@@ -81,31 +66,25 @@ protected:
     Program * m_gooch;
     Program * m_grid;
     Program * m_useProgram;
+    Program * m_flush;
     
     FrameBufferObject * m_fboColor;
     FrameBufferObject * m_fboTemp;
-    FrameBufferObject * m_fboSSAO;
-    FrameBufferObject * m_fboShadows;
-    FrameBufferObject * m_fboNormalz;
-    FrameBufferObject * m_fboShadowMap;
+    FrameBufferObject * m_fboActiveBuffer;
     FrameBufferObject * m_fboGrid;
-    FrameBufferObject ** m_fboActiveBuffer;
 
-    std::vector<glm::vec3> m_kernel;
-    std::vector<glm::vec3> m_noise;
-    std::vector<glm::vec2> m_shadow_samples;
-
-    glm::vec3 camPos;
-
-    Program * m_flush;
+    RenderingPass * m_normalz;
+    LightSourcePass * m_lightsource;
+    RenderingPass * m_shadows;
+    RenderingPass * m_shadowBlur;
+    RenderingPass * m_ssao;
+    RenderingPass * m_ssaoBlur;
+    
+    QList<RenderingPass*> m_passes;
 
     Camera * m_camera;
-    Camera * m_lightcam;
+    
     bool m_useColor;
-    bool m_useShadows;
-    bool m_blurShadows;
-    bool m_useSSAO;
-    bool m_blurSSAO;
     bool m_useGrid;
-    static const glm::mat4 biasMatrix;
+
 };
