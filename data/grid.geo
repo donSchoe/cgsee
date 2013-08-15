@@ -1,26 +1,33 @@
 #version 150 core
 
-layout(triangles) in;
-layout(triangle_strip, max_vertices = 3) out;
+layout (triangles) in;
+layout (line_strip, max_vertices = 200) out;
 
-in vec3 _normal[3];
-out vec3 normal;
+uniform mat4 transform;
 
-in vec3 _position[3];
-out vec3 position;
+const vec3 hbase[2] =vec3[2](vec3(50,0,0), vec3(-50,0,0));
+const vec3 vbase[2] =vec3[2](vec3(0,0,50), vec3(0,0,-50));
 
 void main(void) {
 
-    normal=normalize( (_normal[0] + _normal[1] + _normal[2])/3 );
+    int number = 0;
+    for(int k; k < 50; k++){
+    	for(int i = 0; i < hbase.length(); i++){
+    		gl_Position = transform * (vec4(hbase[i],1) + k * vec4(0,0,1,0) - vec4(0,0,25,0));
+    	//	gl_Position.z *= 50;
+    		EmitVertex();
 
-    position=vec3(0.0);
-    gl_Position=vec4(0.0);
+    	}
+    	EndPrimitive();
+	} 
 
-    for(int i = 0; i < 3; i++) {
-        position = _position[i];
-        gl_Position=gl_in[i].gl_Position;;
-        EmitVertex();
-    }
+	   for(int k; k < 50; k++){
+    	for(int i = 0; i < vbase.length(); i++){
+    		gl_Position = transform * (vec4(vbase[i],1) + k * vec4(1,0,0,0) -vec4(25,0,0,0));
+    	//	gl_Position.z *= 50;
+    		EmitVertex();
 
-    EndPrimitive();
+    	}
+    	EndPrimitive();
+	}       
 }

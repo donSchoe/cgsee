@@ -33,18 +33,16 @@ void Grid::initialize(const Program & program) const
     // By default, counterclockwise polygons are taken to be front-facing.
     // http://www.opengl.org/sdk/docs/man/xhtml/glFrontFace.xml
     
-    static const GLfloat vertices[20] =
+    static const GLfloat vertices[6] =
     {
-        0, 0, 0, 5,  //0
-        5, 0, 0, 0, //1
-        0,  0, 5,  0, //2
-        -5, 0, 0, 0, //3
-        0 , 0, -5,  0, //4
+       0, 0, 1,
+       0, 0,-1,
+        
     };
 
     
-    static const GLubyte indices[12] = {
-         0,1,2, 0,2,3, 0,3,4, 0,4,1 };
+    static const GLubyte indices[3] = {
+        0,1,0};
     
     glGenVertexArrays(1, &m_vao);
     glError();
@@ -55,13 +53,13 @@ void Grid::initialize(const Program & program) const
     if(!m_indicesBO)
     {
         m_indicesBO = new BufferObject(GL_ELEMENT_ARRAY_BUFFER, GL_STATIC_DRAW);
-        m_indicesBO->data<GLubyte>(indices, 12, GL_UNSIGNED_BYTE, 3);
+        m_indicesBO->data<GLubyte>(indices, 3, GL_UNSIGNED_BYTE, 3);
     }
     
     if(!m_vertexBO)
     {
         m_vertexBO = new BufferObject(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
-	    m_vertexBO->data<GLfloat>(vertices, 20, GL_FLOAT, 4);
+	    m_vertexBO->data<GLfloat>(vertices, 6, GL_FLOAT, 3);
     }
     
     // bind all buffers to their attributes

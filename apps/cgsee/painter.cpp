@@ -168,7 +168,7 @@ const bool Painter::initialize()
     //GRID
     m_grid = new Program();
     m_grid->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/grid.frag"));
-   // m_grid->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/grid.geo"));
+    m_grid->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/grid.geo"));
     m_grid->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/grid.vert"));
 
     
@@ -200,7 +200,7 @@ const bool Painter::initialize()
     m_passes.append(m_ssao);
     m_passes.append(m_ssaoBlur);
 
-    m_fboActiveBuffer = m_fboColor;
+    m_fboActiveBuffer = m_fboGrid;
 
     return true;
 }
@@ -334,7 +334,6 @@ void Painter::setShading(char shader)
         case 's': m_useProgram = m_solidWireframe; std::printf("\nWireframeSolid Shading\n\n"); break;
         case 'r': m_useProgram = m_primitiveWireframe; std::printf("\nprimitive Wireframe Shading\n\n"); break;
         case 'n': m_useProgram = m_normals; std::printf("\nNormals\n\n"); break;
-        case 'm': m_useProgram = m_grid, std::printf("\n`Grid\n\n"); break;
     }
 
     setUniforms();

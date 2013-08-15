@@ -6,16 +6,5 @@ out vec4 fragColor;
 
 void main()
 {
-	float x = fract(position.x);
-	float z = fract(position.z);
-
-    float x1 = step (0.99,x);
-    float z1 = step (0.99,z);
-
-    fragColor = sign(1-x1-z1)*vec4(1,1,1,1);
-
-    if (fragColor == vec4(1,1,1,1)){
-    	fragColor = vec4(1,1,1,1);
-    }
-    	
+    fragColor = vec4(0.75,0.75,0.75,0.75);   	
 }
