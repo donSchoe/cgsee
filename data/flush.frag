@@ -9,9 +9,9 @@ uniform sampler2D ssao;
 uniform sampler2D grid;
 
 
-void main()
-{
-	
-		fragcolor = texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv)) *  texture(grid, v_uv);
-	
+void main(){
+	if (texture(grid, v_uv).a < texture(source, v_uv).a)
+		fragcolor =  texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv));
+	else 
+		fragcolor = texture(grid, v_uv);
 }
