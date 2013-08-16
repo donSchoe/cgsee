@@ -5,29 +5,32 @@ layout (line_strip, max_vertices = 200) out;
 
 uniform mat4 transform;
 
-const vec3 hbase[2] =vec3[2](vec3(50,0,0), vec3(-50,0,0));
-const vec3 vbase[2] =vec3[2](vec3(0,0,50), vec3(0,0,-50));
+
+
+const vec4 horizontalDirection 	= vec4(0, 0, 1, 0);
+const vec4 verticalDirection 	= vec4(1, 0, 0, 0);
+
+const int lines = 19;
 
 void main(void) {
+	float halflines = floor(lines/2);
+	vec3 horizontalBase[2] =	vec3[2](vec3(halflines,0,0), vec3(-halflines,0,0));
+	vec3 verticalBase[2]   =	vec3[2](vec3(0,0,halflines), vec3(0,0,-halflines));
 
-    int number = 0;
-    for(int k; k < 50; k++){
-    	for(int i = 0; i < hbase.length(); i++){
-    		gl_Position = transform * (vec4(hbase[i],1) + k * vec4(0,0,1,0) - vec4(0,0,25,0));
-    	//	gl_Position.z *= 50;
-    		EmitVertex();
+	for(int k; k < lines; k++){
 
-    	}
-    	EndPrimitive();
-	} 
+	 	//draw horizontal lines
+    	gl_Position = transform * (vec4(horizontalBase[0],1) + k * horizontalDirection - halflines * horizontalDirection);
+    	EmitVertex();
+    	gl_Position = transform * (vec4(horizontalBase[1],1) + k * horizontalDirection - halflines* horizontalDirection);
+    	EmitVertex();
+    	EndPrimitive(); 
 
-	   for(int k; k < 50; k++){
-    	for(int i = 0; i < vbase.length(); i++){
-    		gl_Position = transform * (vec4(vbase[i],1) + k * vec4(1,0,0,0) -vec4(25,0,0,0));
-    	//	gl_Position.z *= 50;
-    		EmitVertex();
-
-    	}
-    	EndPrimitive();
-	}       
+    	//draw vertical lines
+    	gl_Position = transform * (vec4(verticalBase[0],1) + k * verticalDirection - halflines * verticalDirection);
+    	EmitVertex();
+    	gl_Position = transform * (vec4(verticalBase[1],1) + k * verticalDirection - halflines * verticalDirection);
+    	EmitVertex();
+    	EndPrimitive(); 
+    }
 }

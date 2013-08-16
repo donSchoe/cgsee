@@ -200,7 +200,7 @@ const bool Painter::initialize()
     m_passes.append(m_ssao);
     m_passes.append(m_ssaoBlur);
 
-    m_fboActiveBuffer = m_fboGrid;
+    m_fboActiveBuffer = m_fboColor;
 
     return true;
 }
