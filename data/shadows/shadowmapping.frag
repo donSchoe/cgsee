@@ -11,7 +11,6 @@ uniform float zOffset;
 uniform sampler2D shadowMap;
 
 //in vec4 fragCoord;
-in vec3 normal;
 in vec4 shadowCoord;
 
 out vec4 fragColor;
