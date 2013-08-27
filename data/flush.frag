@@ -10,10 +10,10 @@ uniform sampler2D grid;
 uniform sampler2D depth;
 
 void main(){
-	// if (texture(source,v_uv).a == 1.0)
-		// fragcolor =  texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv)) * texture(grid, v_uv);
-	// else
-	// 	fragcolor =  texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv));
+	// shorter version, according to glreference card this should work, but mix(vec4,vec4,bool) is yet unsupported
+	// vec4 gridcolor = mix(vec4(1), texture(grid,v_uv), lessThan(texture(depth,v_uv).a, texture(grid,v_uv).a));
+	// fragcolor =  texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv)) * gridcolor;
+
 	if (texture(depth,v_uv).a > texture(grid,v_uv).a)
 		fragcolor =  texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv)) * texture(grid, v_uv);
 	else
