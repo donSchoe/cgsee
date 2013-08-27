@@ -18,6 +18,7 @@ class Program;
 class FrameBufferObject;
 class RenderingPass;
 class LightSourcePass;
+class DepthPass;
 
 class Painter : public AbstractScenePainter
 {
@@ -75,6 +76,7 @@ protected:
 
     RenderingPass * m_normalz;
     LightSourcePass * m_lightsource;
+    DepthPass * m_depth;
     RenderingPass * m_shadows;
     RenderingPass * m_shadowBlur;
     RenderingPass * m_ssao;

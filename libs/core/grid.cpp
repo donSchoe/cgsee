@@ -2,12 +2,21 @@
 #include "grid.h"
 
 #include "bufferobject.h"
+#include "camera.h"
 #include "framebufferobject.h"
 #include "program.h"
 #include "shader.h"
 #include "gpuquery.h"
 
 static const QString TRANSFORM_UNIFORM( "transform" );
+static const QString VIEWPORT_UNIFORM   ("viewport");
+static const QString VIEW_UNIFORM       ("view");
+static const QString PROJECTION_UNIFORM ("projection");
+
+static const QString ZNEAR_UNIFORM      ("znear");
+static const QString ZFAR_UNIFORM       ("zfar");
+
+static const QString CAMERAPOSITION_UNIFORM ("cameraposition");
 
 Grid::Grid()
 :   m_vao(-1)
@@ -71,10 +80,14 @@ void Grid::initialize(const Program & program) const
     glError();
 }
 
-void Grid::draw( const Program & program, FrameBufferObject * target, glm::mat4 transform) const
+void Grid::draw( const Program & program, FrameBufferObject * target, Camera * camera) 
 {
     program.use();
-    program.setUniform(TRANSFORM_UNIFORM, transform);
+    program.setUniform(TRANSFORM_UNIFORM, camera->transform());
+    program.setUniform(VIEWPORT_UNIFORM, camera->viewport());
+    program.setUniform(VIEW_UNIFORM, camera->view());
+    program.setUniform(ZNEAR_UNIFORM, camera->zNear());
+    program.setUniform(ZFAR_UNIFORM, camera->zFar());
     
     if(-1 == m_vao)
         initialize(program);

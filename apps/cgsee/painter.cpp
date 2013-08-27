@@ -27,6 +27,7 @@
 #include "core/rendering/shadowmapping.h"
 #include "core/rendering/normalzpass.h"
 #include "core/rendering/lightsource.h"
+#include "core/rendering/depth.h"
 
 
 //for phong, flat and gouraud
@@ -169,6 +170,7 @@ const bool Painter::initialize()
     m_grid = new Program();
     m_grid->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/grid.frag"));
     m_grid->attach(new FileAssociatedShader(GL_GEOMETRY_SHADER, "data/grid.geo"));
+    m_grid->attach(depth_util);
     m_grid->attach(new FileAssociatedShader(GL_VERTEX_SHADER, "data/grid.vert"));
 
     
@@ -183,11 +185,11 @@ const bool Painter::initialize()
     m_fboColor = new FrameBufferObject(GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
     m_fboTemp = new FrameBufferObject(GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
     
-    m_fboGrid = new FrameBufferObject(
-                                      GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
+    m_fboGrid = new FrameBufferObject(GL_RGBA32F, GL_RGBA, GL_FLOAT, GL_COLOR_ATTACHMENT0, true);
 
     m_normalz = new NormalzPass(m_camera, depth_util);
     m_lightsource = new LightSourcePass(m_camera, depth_util);
+    m_depth = new DepthPass(m_camera, depth_util);
     m_shadows = new ShadowMappingPass(m_camera, depth_util, m_lightsource);
     m_shadowBlur = new BlurEffect(m_camera, m_quad, screenQuadShader, m_shadows, m_fboTemp);
     m_ssao = new SSAOEffect(m_camera, m_quad, screenQuadShader, m_normalz->output());
@@ -195,6 +197,7 @@ const bool Painter::initialize()
     
     m_passes.append(m_normalz);
     m_passes.append(m_lightsource);
+    m_passes.append(m_depth);
     m_passes.append(m_shadows);
     m_passes.append(m_shadowBlur);
     m_passes.append(m_ssao);
@@ -270,7 +273,7 @@ void Painter::paint()
         m_fboColor->clear();
 
     if(m_useGrid)
-        m_gridGeometry->draw(*m_grid, m_fboGrid, m_camera->transform());
+        m_gridGeometry->draw(*m_grid, m_fboGrid, m_camera);
     else
         m_fboGrid->clear();
 
@@ -284,11 +287,13 @@ void Painter::paint()
         sampler["shadows"] = m_shadows->output();
         sampler["ssao"] = m_ssao->output();
         sampler["grid"] = m_fboGrid;
+        sampler["depth"] = m_depth->output();
     } else { // dont render effects
         m_fboTemp->clear();
         sampler["shadows"] = m_fboTemp;
         sampler["ssao"] = m_fboTemp;
         sampler["grid"] = m_fboTemp;
+        sampler["depth"] = m_fboTemp;
     }
 
     bindSampler(sampler, *m_flush);

@@ -1,8 +1,6 @@
 
 #pragma once
 
-#include <glm/gtc/matrix_transform.hpp>
-
 #include <GL/glew.h>
 
 #include "declspec.h"
@@ -11,6 +9,7 @@
 class BufferObject;
 class Program;
 class FrameBufferObject;
+class Camera;
 
 class CGSEE_API Grid
 {
@@ -21,7 +20,7 @@ public:
     void draw(
               const Program & program
               ,   FrameBufferObject * target = nullptr
-              , glm::mat4 transform = glm::mat4(0))  const;
+              , Camera * camera = nullptr);
     
 protected:
     void initialize(const Program & program) const;
@@ -32,5 +31,4 @@ protected:
     mutable BufferObject * m_indicesBO;
     mutable BufferObject * m_normalBO;
     
-    glm::mat4 m_transform;
 };
