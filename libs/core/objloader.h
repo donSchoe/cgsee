@@ -22,14 +22,14 @@ public:
     virtual ~ObjLoader();
 
     virtual QStringList namedLoadableTypes() const override;
-    virtual Group * importFromFile(const QString & filePath) const override;
+    virtual Group * importFromFile(const QString & filePath);
 
 protected:
     virtual QStringList loadableExtensions() const override;
 
 protected:
     std::shared_ptr<DataBlockRegistry> m_registry;
-    
+
     struct ObjGroup
     {
         std::string name;

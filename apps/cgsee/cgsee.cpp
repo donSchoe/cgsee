@@ -15,9 +15,9 @@ CGSee::CGSee(int & argc, char ** argv)
 ,   m_viewer(nullptr)
 ,   m_painter(nullptr)
 {
-    
+
     m_registry = std::make_shared<DataBlockRegistry>();
-    
+
     m_viewer = new Viewer(m_registry);
     m_viewer->setWindowTitle(title());
     m_viewer->initialize(format());
@@ -35,16 +35,17 @@ CGSee::CGSee(int & argc, char ** argv)
     m_viewer->setNavigation(navigation);
 
     m_viewer->show();
+    m_viewer->on_loadFile("data/space_frigate_6/space_frigate_6.3DS");
 
-    AssimpLoader loader;
-    m_painter->assignScene(loader.importFromFile("data/shadow_test.obj"));
-    navigation->sceneChanged(&m_painter->getScene());
+//    AssimpLoader loader;
+//    m_painter->assignScene(loader.importFromFile("data/shadow_test.obj"));
+//    navigation->sceneChanged(&m_painter->getScene());
 
 }
 
 CGSee::~CGSee()
 {
-    // NOTE: painter must be destroyed before viewer, since viewer deletes context, 
+    // NOTE: painter must be destroyed before viewer, since viewer deletes context,
     // and painter deinitializes all opengl handles...
 
     delete m_painter;

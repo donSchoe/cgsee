@@ -30,7 +30,7 @@ CullingVisitor::~CullingVisitor()
 
 bool CullingVisitor::operator() (Node &node) {
     bool returnValue;
-    node.draw(*m_program, m_transform);
+    node.draw(*m_program, nullptr, m_transform);
     if (m_cull) {
         switch (m_viewFrustum->contains(node.boundingBox(), m_transform)) {
         case ViewFrustum::e_insideFrustum::INSIDE_FRUSTUM:

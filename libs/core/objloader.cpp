@@ -39,7 +39,7 @@ QStringList ObjLoader::loadableExtensions() const
     return QStringList("obj");
 }
 
-Group * ObjLoader::importFromFile(const QString & filePath) const
+Group * ObjLoader::importFromFile(const QString & filePath)
 {
     // http://en.wikipedia.org/wiki/Wavefront_.obj_file
     // http://en.wikibooks.org/wiki/OpenGL_Programming/Modern_OpenGL_Tutorial_Load_OBJ

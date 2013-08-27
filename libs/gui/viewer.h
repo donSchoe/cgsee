@@ -54,13 +54,13 @@ public:
 
    void setNavigation(AbstractNavigation * navigation);
     AbstractNavigation * navigation();
-    
+
     void setPainter(AbstractScenePainter * painter);
     AbstractScenePainter * painter();
 
     void setCamera(Camera * camera);
     Camera * camera();
-    
+
     void keyPressEvent(QKeyEvent * event);
     void keyReleaseEvent (QKeyEvent *event);
 
@@ -84,7 +84,7 @@ public slots:
     void on_actionBottomView_triggered();
     void on_actionTopRightView_triggered();
 
-    void on_actionSave_1_triggered();   
+    void on_actionSave_1_triggered();
     void on_actionSave_2_triggered();
     void on_actionSave_3_triggered();
     void on_actionSave_4_triggered();
@@ -92,6 +92,8 @@ public slots:
     void on_actionLoad_2_triggered();
     void on_actionLoad_3_triggered();
     void on_actionLoad_4_triggered();
+
+    void on_loadFile(const QString & path);
 
 protected slots:
     void on_captureAsImageAction_triggered();
@@ -111,7 +113,7 @@ protected slots:
     void on_shadowBlurAction_triggered();
     void on_ssaoAction_triggered();
     void on_ssaoBlurAction_triggered();
-   
+
     void on_fboColorAction_triggered();
     void on_fboNormalzAction_triggered();
     void on_fboShadowsAction_triggered();
@@ -121,8 +123,6 @@ protected slots:
     void on_openFileDialogAction_triggered();
     void on_quitAction_triggered();
 
-    void on_loadFile(const QString & path);
-    
     void on_toggleNavigator_triggered();
     void on_toggleExplorer_triggered();
 protected:

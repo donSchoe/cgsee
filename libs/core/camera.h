@@ -18,7 +18,7 @@ public:
 
     virtual Camera * asCamera();
 
-    virtual void draw( const Program & program, const glm::mat4 & transform) override;
+    virtual void draw( const Program & program, RenderingPass *renderingpass, const glm::mat4 & transform) override;
 
     const glm::ivec2 & viewport() const;
     void setViewport(const glm::ivec2 & size);
@@ -41,12 +41,12 @@ public:
     void setZFar(const float z);
 
     const float aspect() const;
-    
+
     ViewFrustum *viewFrustum() const;
 
     // updates camera matrices
     void update();
-    
+
     //
     glm::vec3 getEye();
     glm::vec3 getUp();

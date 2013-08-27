@@ -74,6 +74,7 @@ install(FILES ${CMAKE_BINARY_DIR}/revision DESTINATION .)
 # THIRD PARTIES
 
 find_package(OpenGL REQUIRED)
+find_package(DEVIL REQUIRED)
 find_package(GLM REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(ASSIMP REQUIRED)
@@ -100,6 +101,7 @@ include_directories(
     ${CMAKE_BINARY_DIR} # for Meta.h
     ${OPENGL_INCLUDE_DIR}
     ${GLM_INCLUDE_PATH}
+    ${DEVIL_INCLUDE_DIR}
     ${GLEW_INCLUDE_PATH}
     ${ASSIMP_INCLUDE_PATH}
     ${CMAKE_SOURCE_DIR}/libs)

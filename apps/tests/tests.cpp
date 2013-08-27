@@ -19,7 +19,7 @@ void populateVListFrom(t_VertexListP vList, iter_type start, iter_type end, QStr
 {
     typedef typename std::iterator_traits<iter_type>::value_type attributeType;
 
-    vList->setVertexAttributes<attributeType>(0, std::distance(start, end), attrName, 
+    vList->setVertexAttributes<attributeType>(0, std::distance(start, end), attrName,
         [&](int i, attributeType& value)
         {
             value = *start++;
@@ -33,7 +33,7 @@ void DataCoreTest::initVertexList()
     qRegisterMetaType<glm::vec2>("glm::vec2");
     attributeSpec.append(AttributeSpec("position", "glm::vec3"));
     attributeSpec.append(AttributeSpec("normal", "glm::vec3"));
-    attributeSpec.append(AttributeSpec("texcoord", "glm::vec2"));
+    attributeSpec.append(AttributeSpec("texc", "glm::vec2"));
     vertexList->initialize(attributeSpec);
 }
 

@@ -8,7 +8,6 @@ uniform sampler2D shadows;
 uniform sampler2D ssao;
 
 
-void main()
-{
-	fragcolor = texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv));
+void main() {
+	fragcolor =texture(source, v_uv) * min(texture(shadows, v_uv) + 0.2, texture(ssao, v_uv));
 }

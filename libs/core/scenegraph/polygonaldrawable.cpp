@@ -5,6 +5,7 @@
 #include <core/aabb.h>
 #include <core/bufferobject.h>
 #include <core/program.h>
+#include <core/rendering/renderingpass.h>
 
 #include "polygonalgeometry.h"
 
@@ -40,7 +41,7 @@ const AxisAlignedBoundingBox PolygonalDrawable::boundingBox() const
 //     for( const auto & pos : m_geometry->vertices() ){
 //         m_aabb.extend( pos );
 //     }
-   
+
     t_VertexListP myVList = m_geometry->vertices();
     AxisAlignedBoundingBox & aabb = m_aabb;
     myVList->foreachVertexAttribute<glm::vec3>(0, myVList->size(), "position", nullptr,
@@ -53,20 +54,33 @@ const AxisAlignedBoundingBox PolygonalDrawable::boundingBox() const
     return m_aabb;
 }
 
+void PolygonalDrawable::setMaterial(Material *material)
+{
+    m_material = material;
+}
+
+Material *PolygonalDrawable::material() const
+{
+    return m_material;
+}
+
 void PolygonalDrawable::invalidateBoundingBox()
 {
     return Node::invalidateBoundingBox();
 }
 
-void PolygonalDrawable::draw(const Program & program, const glm::mat4 & transform)
+void PolygonalDrawable::draw(const Program & program, RenderingPass *renderingpass, const glm::mat4 & transform)
 {
     if( !m_geometry || m_geometry->indices().empty() )
         return;
-
+    if(renderingpass != nullptr)
+        renderingpass->preRenderHook(*this);
     m_geometry->initialize(program);
 
     program.use();
     program.setUniform(TRANSFORM_UNIFORM, transform);
+
+
 
     glBindVertexArray(m_geometry->vao());
     glError();
@@ -74,7 +88,7 @@ void PolygonalDrawable::draw(const Program & program, const glm::mat4 & transfor
     glEnable(GL_DEPTH_TEST);
 //     glEnable(GL_CULL_FACE);
 //     glCullFace(GL_BACK);
- 
+
     for( const auto & bo : m_geometry->elementArrayBOs() )
         bo->draw( mode() );
 
@@ -85,4 +99,6 @@ void PolygonalDrawable::draw(const Program & program, const glm::mat4 & transfor
     glError();
 
     program.release();
+    if(renderingpass != nullptr)
+        renderingpass->postRenderHook(*this);
 }

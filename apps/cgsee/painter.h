@@ -32,24 +32,23 @@ public:
 
     virtual void resize(const int width, const int height);
     virtual void postShaderRelinked() override;
-    
+
 protected:
     virtual const bool initialize() override;
     virtual Camera * camera() override;
 
 protected:
-    void setUniforms();
 
     typedef QMap<QString, FrameBufferObject *> t_samplerByName;
 
-    void drawScene(Camera * camera, Program * program, FrameBufferObject * fbo);
+//    void drawScene(Camera * camera, Program * program, FrameBufferObject * fbo);
 
     static void bindSampler(const t_samplerByName & sampler, const Program & program);
 
     static void releaseSampler(const t_samplerByName & sampler);
     void sceneChanged(Group * scene);
 
-protected:  
+protected:
     ScreenQuad * m_quad;
     Program * m_normals;
     Program * m_wireframe;
@@ -66,6 +65,7 @@ protected:
     FrameBufferObject * m_fboActiveBuffer;
 
     RenderingPass * m_normalz;
+    RenderingPass * m_realistic;
     LightSourcePass * m_lightsource;
     RenderingPass * m_shadows;
     RenderingPass * m_shadowBlur;

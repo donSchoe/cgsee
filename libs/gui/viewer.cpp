@@ -57,15 +57,14 @@ Viewer::Viewer(
 ,   m_explorer(new FileExplorer(m_dockExplorer))
 ,   m_loader(new AssimpLoader( registry ))
 {
-
     m_ui->setupUi(this);
-    
+
     QSettings::setDefaultFormat(QSettings::IniFormat);
     QSettings s;
-    
+
     restoreGeometry(s.value(SETTINGS_GEOMETRY).toByteArray());
     restoreState(s.value(SETTINGS_STATE).toByteArray());
-    
+
     restoreViews(s);
     initializeExplorer();
 };
@@ -78,7 +77,7 @@ void Viewer::initializeExplorer()
     this->initializeDockWidgets(m_dockExplorer, m_explorer, Qt::BottomDockWidgetArea);
 
     m_explorer->setAllLoadableTypes(m_loader->allLoadableTypes());
-        
+
     QObject::connect(
         m_navigator, SIGNAL(clickedDirectory(const QString &)),
         m_explorer, SLOT(setRoot(const QString &)));
@@ -102,9 +101,9 @@ void Viewer::initializeDockWidgets(QDockWidget * dockWidget, QWidget * widget, Q
 {
     dockWidget->setWidget(widget);
     this->addDockWidget(area, dockWidget);
-    
+
 #ifdef __APPLE__
-    /** 
+    /**
      THIS IS A BUG WORKAROUND
      The bug lies somewhere in Canvas::Canvas().
      When called in Viewer::createQtContext(), the widgets get messed up.
@@ -112,7 +111,7 @@ void Viewer::initializeDockWidgets(QDockWidget * dockWidget, QWidget * widget, Q
     static int count = 0;
     dockWidget->setFloating(true);
     dockWidget->setAllowedAreas(Qt::NoDockWidgetArea);
-    
+
     dockWidget->move(QPoint(20, 40 + count++ * (dockWidget->height() + 35)));
 #endif
 }
@@ -161,7 +160,7 @@ const GLXContext Viewer::createQtContext(const GLFormat & format)
     const GLXContext qtContextHandle = currentContextHandle();
 #endif
 
-    // NOTE: might work even if no context was returned. 
+    // NOTE: might work even if no context was returned.
     // This just double checks...
 
     if(nullptr == qtContextHandle)
@@ -234,15 +233,15 @@ void Viewer::on_reloadAllShadersAction_triggered()
 
 void Viewer::on_openFileDialogAction_triggered()
 {
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"), 
-        QDir::homePath(), m_loader->namedLoadableTypes().join(";;"), 
+    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+        QDir::homePath(), m_loader->namedLoadableTypes().join(";;"),
         0, QFileDialog::HideNameFilterDetails);
     if (fileName.isEmpty())
         return;
-    
+
     on_loadFile(fileName);
 }
-    
+
 void Viewer::on_quitAction_triggered()
 {
     QApplication::quit();
@@ -250,8 +249,10 @@ void Viewer::on_quitAction_triggered()
 
 void Viewer::on_loadFile(const QString & path)
 {
+    qDebug() << "Loading with " << (void*)m_loader;
+    qDebug() << "WTF";
     Group * scene = m_loader->importFromFile(path);
-    if (!scene)
+    if (scene == nullptr)
         QMessageBox::critical(this, "Loading failed", "The loader was not able to load from \n" + path);
     else {
         this->m_qtCanvas->navigation()->rescaleScene(scene);
@@ -441,14 +442,14 @@ void Viewer::on_flightManipulatorAction_triggered() {
     m_ui->flightManipulatorAction->setChecked(true);
     qDebug("Flight navigation, use WASD and arrow keys");
 }
-    
+
 void Viewer::on_trackballManipulatorAction_triggered() {
     setNavigation(new ArcballNavigation(m_camera));
     uncheckManipulatorActions();
     m_ui->trackballManipulatorAction->setChecked(true);
     qDebug("Arcball navigation, use left and right mouse buttons");
 }
-    
+
 void Viewer::on_fpsManipulatorAction_triggered() {
     setNavigation(new FpsNavigation(m_camera));
     uncheckManipulatorActions();

@@ -13,9 +13,12 @@ Group::~Group()
 {
     while(!m_children.empty())
         removeLast();
+    for(auto material : m_managedMaterials) {
+        delete material;
+    }
 }
 
-void Group::draw(const Program & program, const glm::mat4 & transform)
+void Group::draw(const Program & program, RenderingPass *renderingpass, const glm::mat4 & transform)
 {
 }
 
@@ -43,6 +46,10 @@ void Group::insert(const Group::t_children::iterator & before, Node * node)
         node->parents().insert(this);
 
     m_children.insert(before, node);
+}
+
+void Group::addManagedMaterial(Material *material) {
+    m_managedMaterials.push_back(material);
 }
 
 void Group::prepend(Group * group)

@@ -55,7 +55,7 @@ QStringList AbstractModelLoader::allSaveableTypes() const
     return extensions;
 }
 
-Group * AbstractModelLoader::importFromFile(const QString & filePath) const
+Group * AbstractModelLoader::importFromFile(const QString & filePath)
 {
     return nullptr;
 }

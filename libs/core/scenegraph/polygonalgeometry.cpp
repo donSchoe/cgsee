@@ -23,7 +23,7 @@ PolygonalGeometry::PolygonalGeometry(std::shared_ptr<DataBlockRegistry> registry
     QList<AttributeSpec> attrSpec;
     attrSpec.append(AttributeSpec("position", "glm::vec3"));
     attrSpec.append(AttributeSpec("normal", "glm::vec3"));
-    attrSpec.append(AttributeSpec("texcoord", "glm::vec2"));
+    attrSpec.append(AttributeSpec("texc", "glm::vec2"));
     m_datablock->initialize(attrSpec);
 }
 
@@ -88,7 +88,7 @@ t_vec2s PolygonalGeometry::texcs() const
     t_VertexListP myVList = qobject_cast<t_VertexListP>(m_registry->getDataBlockByName(m_vertListHandle));
     assert(myVList);
     temp.resize(myVList->size());
-    myVList->foreachVertexAttribute<glm::vec2>(0, myVList->size(), "texcoord", nullptr,
+    myVList->foreachVertexAttribute<glm::vec2>(0, myVList->size(), "texc", nullptr,
         [&temp](int i, const glm::vec2 & pos)
         {
             temp[i] = pos;
@@ -101,7 +101,7 @@ void PolygonalGeometry::setTexC(int i, const glm::vec2& data)
 {
     t_VertexListP myVList = qobject_cast<t_VertexListP>(m_registry->getDataBlockByName(m_vertListHandle));
     assert(myVList);
-    *(myVList->getVertexAttribute<glm::vec2>(i, "texcoord")) = data;
+    *(myVList->getVertexAttribute<glm::vec2>(i, "texc")) = data;
 }
 
 t_uints PolygonalGeometry::indices() const
@@ -130,7 +130,7 @@ void PolygonalGeometry::retrieveNormals()
     if(myVList->isAttributeUsed("normal"))
         qDebug("Normals will be replaced.");
 
-    inds->foreachTriangle<glm::vec3>(0, inds->size(), "position", 
+    inds->foreachTriangle<glm::vec3>(0, inds->size(), "position",
         [&](int i, const glm::vec3& v1, const glm::vec3& v2, const glm::vec3& v3)
         {
             glm::vec3 a = glm::normalize(v3-v1);
@@ -161,14 +161,14 @@ void PolygonalGeometry::initialize(const Program & program)
 {
     if(!m_arrayBOsByAttribute.empty() && !m_elementArrayBOs.empty())
         return;
-    
+
     deleteBuffers();
 
     glGenVertexArrays(1, &m_vao);
     glError();
-    glBindVertexArray(m_vao);                                                                  
+    glBindVertexArray(m_vao);
     glError();
-    
+
     // Apply vertex deduplication
 
     applyOptimizer(new VertexReuse()); // TODO: That's just bad!
@@ -186,7 +186,7 @@ void PolygonalGeometry::initialize(const Program & program)
 
     BufferObject * vertexBO = new BufferObject(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
     vertexBO->data<glm::vec3>(copyVertices(), GL_FLOAT, 3);
-    
+
     m_arrayBOsByAttribute["a_vertex"] = vertexBO;
 
     // TODO: the geometry should provide this information.
@@ -199,6 +199,11 @@ void PolygonalGeometry::initialize(const Program & program)
         m_arrayBOsByAttribute["a_normal"] = normalBO;
     }
 
+    if(!texcs().isEmpty()) {
+        BufferObject * texcsBO = new BufferObject(GL_ARRAY_BUFFER, GL_STATIC_DRAW);
+        texcsBO->data<glm::vec2>(texcs(), GL_FLOAT, 2);
+        m_arrayBOsByAttribute["a_texc"] = texcsBO;
+    }
     // bind all buffers to their attributes
 
     t_bufferObjectsByAttribute::const_iterator i(m_arrayBOsByAttribute.begin());
@@ -225,7 +230,7 @@ void PolygonalGeometry::deleteBuffers()
     }
 }
 
-void PolygonalGeometry::applyOptimizer( GeometryOptimizer * opt ) 
+void PolygonalGeometry::applyOptimizer( GeometryOptimizer * opt )
 {
         t_VertexListP vertexData = qobject_cast<t_VertexListP>(m_registry->getDataBlockByName(m_vertListHandle));
         t_VertexIndexListP indices = qobject_cast<VertexIndexList*>(m_registry->getDataBlockByName(m_indicesHandle));

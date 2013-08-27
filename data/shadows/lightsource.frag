@@ -7,7 +7,8 @@ float linearize(float depth);
 
 void main()
 {
-	float z = linearize(gl_FragCoord.z); 
+    float z = linearize(gl_FragCoord.z);
 
 	fragColor = vec4(z);
 }
+

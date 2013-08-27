@@ -9,6 +9,7 @@
 
 
 class Program;
+class RenderingPass;
 
 class CGSEE_API Node
 {
@@ -26,7 +27,7 @@ public:
     Node(const QString & name);
     virtual ~Node();
 
-    virtual void draw(const Program & program, const glm::mat4 & transform) = 0;
+    virtual void draw(const Program & program, RenderingPass *renderingpass, const glm::mat4 & transform) = 0;
     virtual const AxisAlignedBoundingBox boundingBox() const = 0;
 
     const QString name() const;
@@ -36,13 +37,13 @@ public:
     t_parents & parents();
 
     const t_children & children() const;
-    
+
     const glm::mat4 & transform() const;
     void setTransform(const glm::mat4 & transform);
 
     const e_ReferenceFrame referenceFrame() const;
     void setReferenceFrame(const e_ReferenceFrame referenceFrame);
-    
+
 //     bool isCircularDependentTo( const Node & other ) const;
 
 protected:

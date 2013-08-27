@@ -10,9 +10,9 @@ public:
 
     virtual void sceneChanged(Group * scene) override;
     virtual void resize(const int width, const int height) override;
-
+//
     glm::mat4 transform();
-
+//
 protected:
     virtual void render() override;
 

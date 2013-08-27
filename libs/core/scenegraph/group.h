@@ -1,6 +1,7 @@
 #pragma once
 
 #include <core/declspec.h>
+#include <core/material/material.h>
 
 #include "node.h"
 
@@ -15,7 +16,7 @@ public:
 
     virtual Group * asGroup();
 
-    virtual void draw(const Program & program, const glm::mat4 & transform);
+    virtual void draw(const Program & program, RenderingPass * renderingpass, const glm::mat4 & transform);
 
     const bool contains(Node * node) const;
 
@@ -28,6 +29,7 @@ public:
     void insert(const t_children::iterator & before, Group * group);
     void insert(const t_children::iterator & before, PolygonalDrawable * drawable);
 
+    void addManagedMaterial(Material *material);
 
     // both removals delete the node if parents are empty
     void removeFirst();
@@ -42,4 +44,7 @@ protected:
     void append(Node * node);
 
     void insert(const t_children::iterator & before, Node * node);
+
+protected:
+    std::list<Material*> m_managedMaterials;
 };

@@ -3,6 +3,10 @@
 #include <core/fileassociatedshader.h>
 
 #include "normalzpass.h"
+#include <core/camera.h>
+#include <core/framebufferobject.h>
+#include <core/scenegraph/scenetraverser.h>
+#include <core/scenegraph/drawvisitor.h>
 
 NormalzPass::NormalzPass(Camera * camera, FileAssociatedShader * depth_util)
 :   DefaultPass(camera)

@@ -28,6 +28,11 @@ void RenderingPass::setActive(bool value)
         clearFbos();
 }
 
+void RenderingPass::apply()
+{
+    render();
+}
+
 void RenderingPass::applyIfActive()
 {
     if (m_active)
@@ -40,11 +45,19 @@ void RenderingPass::drawScene(Camera * camera, Program * program,  FrameBufferOb
 {
     fbo->bind();
     SceneTraverser traverser;
-    DrawVisitor drawVisitor(program, camera->transform());
+    DrawVisitor drawVisitor(program, this, camera->transform());
     traverser.traverse(*camera, drawVisitor);
     fbo->release();
 }
 
 void RenderingPass::sceneChanged(Group * scene)
 {
+}
+
+void RenderingPass::preRenderHook(PolygonalDrawable &drawable) {
+
+}
+
+void RenderingPass::postRenderHook(PolygonalDrawable &drawable) {
+
 }

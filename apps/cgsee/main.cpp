@@ -1,4 +1,8 @@
 #include <glm/glm.hpp>
+#include <IL/il.h>
+#include <IL/ilu.h>
+#include <IL/ilut.h>
+#include <core/textureunitprovider.h>
 
 #include <QMetaType>
 #include "cgsee.h"
@@ -7,12 +11,15 @@ static void init() {
     qRegisterMetaType<glm::vec3>("glm::vec3");
     qRegisterMetaType<glm::vec2>("glm::vec2");
 
-    // e.g. init libraries such as DevIL here
+    // Init libs
+    ilInit();
 }
 
 static void shutdown() {
     // shutdown libraries
+    delete TextureUnitProvider::instance();
 }
+
 
 int main(int argc, char* argv[])
 {

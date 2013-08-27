@@ -34,6 +34,17 @@ set(SOURCES
     datacore/registertypeshere.h
     datacore/vertexlist_impl.inl
     datacore/datablock_impl.inl
+
+    material/fallbackrealisticmaterial.h
+    material/fallbackrealisticmaterial.cpp
+    material/material.cpp
+    material/material.h
+    material/materialattribute.cpp
+    material/materialattribute.h
+    material/texture2d.h
+    material/texture2d.cpp
+    material/textureloader.h
+    material/textureloader.cpp
     
     scenegraph/node.h
     scenegraph/node.cpp
@@ -97,6 +108,8 @@ set(SOURCES
     shader.cpp
     timer.h
     timer.cpp
+    textureunitprovider.cpp
+    textureunitprovider.h
     plane.h
     plane.cpp
     
@@ -108,6 +121,8 @@ set(SOURCES
     rendering/lightsource.cpp
     rendering/normalzpass.h   
     rendering/normalzpass.cpp
+    rendering/realisticpass.h   
+    rendering/realisticpass.cpp
     rendering/renderingpass.h
     rendering/renderingpass.cpp
     rendering/shadowmapping.h
@@ -138,6 +153,7 @@ qt5_use_modules(${target} Widgets OpenGL)
 target_link_libraries(${target}
     ${ASSIMP_LIBRARY}
     ${OPENGL_LIBRARIES}
+    ${DEVIL_LIBRARY}
     ${GLEW_LIBRARY}
     ${EXTRA_LIBS}
 )

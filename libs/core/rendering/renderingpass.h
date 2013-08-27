@@ -6,6 +6,7 @@ class Camera;
 class Group;
 class Program;
 class FrameBufferObject;
+class PolygonalDrawable;
 class FileAssociatedShader;
 
 class CGSEE_API RenderingPass
@@ -17,6 +18,7 @@ public:
     bool isActive();
     void setActive(bool value);
 
+    void apply();
     void applyIfActive();
 
     virtual void setUniforms() = 0;
@@ -25,6 +27,9 @@ public:
     virtual FrameBufferObject * output() = 0;
     virtual void clearFbos() = 0;
     virtual void sceneChanged(Group * scene);
+
+    virtual void preRenderHook(PolygonalDrawable &drawable);
+    virtual void postRenderHook(PolygonalDrawable &drawable);
 
 protected:
     virtual void render() = 0;

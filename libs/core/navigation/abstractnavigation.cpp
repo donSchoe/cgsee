@@ -4,6 +4,8 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/transform.hpp>
 
+#include <GL/glew.h>
+#include <GL/gl.h>
 #include <QGLWidget>
 
 #include "abstractnavigation.h"
@@ -13,7 +15,7 @@ const float AbstractNavigation::TIMER_MS = 1000.f / 60.f;
 
 static const float DURATION = 333.f;
 
-AbstractNavigation::AbstractNavigation(Camera * camera) 
+AbstractNavigation::AbstractNavigation(Camera * camera)
     : m_width(camera->viewport().x)
     , m_height(camera->viewport().y)
     , m_BBRadius(0)
@@ -29,7 +31,7 @@ AbstractNavigation::AbstractNavigation(Camera * camera)
 }
 
 
-AbstractNavigation::~AbstractNavigation() 
+AbstractNavigation::~AbstractNavigation()
 {
 }
 
@@ -90,7 +92,7 @@ void AbstractNavigation::setCanvas(QWidget * canvas)
 
 
 /**
-* starts the timer. if it's called multiple times, you need 
+* starts the timer. if it's called multiple times, you need
 * to make the same number of stop calls to stop it.
 */
 void AbstractNavigation::startTimer()
@@ -102,7 +104,7 @@ void AbstractNavigation::startTimer()
 }
 
 /**
-* counts how often the timer was requested and only 
+* counts how often the timer was requested and only
 * stop if all requests were stopped.
 */
 void AbstractNavigation::stopTimer()
@@ -144,7 +146,7 @@ void AbstractNavigation::finishTransition()
     m_animation_active = false;
     stopTimer();
     m_viewmatrix = glm::translate(m_new_pos) * glm::mat4_cast(m_new_rotation);
-    setFromMatrix(m_viewmatrix); 
+    setFromMatrix(m_viewmatrix);
     updateCamera();
 }
 
@@ -154,25 +156,25 @@ void AbstractNavigation::onTimerEvent() { }
 bool AbstractNavigation::isTimerRunning()
 {
     return m_timer.isActive();
-}                          
-                           
+}
+
 void AbstractNavigation::loadView(const glm::mat4 & new_viewmatrix)
-{                          
+{
     m_old_rotation = glm::quat_cast(m_viewmatrix);
     m_new_rotation = glm::quat_cast(new_viewmatrix);
 
     m_old_pos = glm::column(m_viewmatrix, 3).xyz;
     m_new_pos = glm::column(new_viewmatrix, 3).xyz;
-    
+
     m_animation_progress = 0;
     m_animation_active = true;
-    
+
     if(!isTimerRunning()) {
         startTimer();
     }
 }
 
-void AbstractNavigation::setFromMatrix(const glm::mat4 & view) 
+void AbstractNavigation::setFromMatrix(const glm::mat4 & view)
 {
     m_viewmatrix = view;
 }
@@ -214,7 +216,7 @@ glm::mat4 AbstractNavigation::bottomview()
 
 glm::mat4 AbstractNavigation::topRightView()
 {
-    return frontview() * glm::rotate(30.f, glm::vec3(1,0,0)) *  glm::rotate(45.f, glm::vec3(0,1,0)); 
+    return frontview() * glm::rotate(30.f, glm::vec3(1,0,0)) *  glm::rotate(45.f, glm::vec3(0,1,0));
 }
 
 void AbstractNavigation::sceneChanged(Group * scene)
@@ -222,7 +224,7 @@ void AbstractNavigation::sceneChanged(Group * scene)
     AxisAlignedBoundingBox bb = scene->boundingBox();
 
     m_BBRadius = bb.radius();
-    
+
     m_frontView = glm::lookAt(bb.center() + glm::vec3(0.f, 0.f, bb.radius()*2.5), bb.center(), glm::vec3(0.f, 1.f, 0.f));
     setFromMatrix(topRightView());
     updateCamera();

@@ -1,12 +1,14 @@
 
 #include "glm/gtc/matrix_transform.hpp"
 
+#include <iostream>
 #include <core/camera.h>
 #include <core/program.h>
 #include <core/fileassociatedshader.h>
 #include <core/scenegraph/group.h>
 
 #include "lightsource.h"
+
 
 LightSourcePass::LightSourcePass(Camera * camera, FileAssociatedShader * depth_util)
 :   DefaultPass(camera)
@@ -15,8 +17,11 @@ LightSourcePass::LightSourcePass(Camera * camera, FileAssociatedShader * depth_u
     m_lightcam = new Camera();
     m_lightcam->setViewport(camera->viewport());
     m_lightcam->setFovy(camera->fovy());
+    m_lightcam->setView(camera->view());
     m_lightcam->setZFar(camera->zFar());
     m_lightcam->setZNear(camera->zNear());
+    m_lightcam->update();
+   // m_lightcam = camera;
 
     m_program->attach(new FileAssociatedShader(GL_FRAGMENT_SHADER, "data/shadows/lightsource.frag"));
     m_program->attach(depth_util);
