@@ -18,7 +18,7 @@ void main(void) {
 	vec3 horizontalBase[2] =	vec3[2](vec3(halflines,0,0), vec3(-halflines,0,0));
 	vec3 verticalBase[2]   =	vec3[2](vec3(0,0,halflines), vec3(0,0,-halflines));
 
-	for(int k; k <= lines * sublines; k++){
+	for(int k = 0; k <= lines * sublines; k++){
 
         if (mod(k,sublines) == 0)
             gl_PrimitiveID = 1;
