@@ -14,7 +14,7 @@ void main(){
 	// vec4 gridcolor = mix(vec4(1), texture(grid,v_uv), lessThan(texture(depth,v_uv).a, texture(grid,v_uv).a));
 	// fragcolor =  texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv)) * gridcolor;
 
-	if (texture(depth,v_uv).a > texture(grid,v_uv).a)
+	if (texture(depth,v_uv).a - 0.01 > texture(grid,v_uv).a)
 		fragcolor =  texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv)) * texture(grid, v_uv);
 	else
 		fragcolor =  texture(source, v_uv) * min(texture(shadows, v_uv)+0.2, texture(ssao, v_uv));
